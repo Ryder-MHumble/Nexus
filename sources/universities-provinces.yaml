@@ -1,0 +1,153 @@
+dimension: universities
+dimension_name: 对高校
+description: 高校相关信源 - provincial
+default_keyword_filter:
+- 人工智能
+- AI
+- 人事
+- 任命
+- 院长
+- 校长
+- 院士
+- 科技
+- 成果
+sources:
+- id: beijing_jw
+  name: 北京市教委-政务公开
+  group: provincial
+  url: https://jw.beijing.gov.cn/xxgk/
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: ul.zwg.z-mylist.a-hov-c li
+    title: a
+    link: a
+    date: em
+    date_format: '%Y-%m-%d'
+  base_url: https://jw.beijing.gov.cn
+  detail_selectors:
+    content: div.TRS_UEDITOR
+  keyword_filter:
+  - 人工智能
+  - AI
+  - 人事
+  - 校长
+  - 院士
+  - 高校
+  tags:
+  - education
+  - beijing
+  - policy
+- id: shanghai_jw
+  name: 上海市教委-本市新闻
+  group: provincial
+  url: https://edu.sh.gov.cn/xwzx_bsxw/
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: ul.list-cell2.border_b li
+    title: a
+    link: a
+    date: span.listTime
+    date_format: '%Y.%m.%d'
+  base_url: https://edu.sh.gov.cn
+  keyword_filter:
+  - 人工智能
+  - AI
+  - 人事
+  - 校长
+  - 院士
+  - 高校
+  detail_selectors:
+    content: '#ivs_content'
+  tags:
+  - education
+  - shanghai
+  - policy
+- id: zhejiang_jyt
+  name: 浙江省教育厅-教育动态
+  group: provincial
+  url: https://jyt.zj.gov.cn/
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: '#Education-list ul li'
+    title: a
+    link: a
+    date: span
+    date_format: '%Y-%m-%d'
+  base_url: https://jyt.zj.gov.cn
+  keyword_filter:
+  - 人工智能
+  - AI
+  - 人事
+  - 校长
+  - 院士
+  - 高校
+  - 大学
+  detail_selectors:
+    content: '#zoom'
+  tags:
+  - education
+  - zhejiang
+  - policy
+- id: jiangsu_jyt
+  name: 江苏省教育厅
+  group: provincial
+  url: https://jyt.jiangsu.gov.cn/
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: div.listL ul.list li.cf
+    title: a
+    link: a
+  base_url: https://jyt.jiangsu.gov.cn
+  keyword_filter:
+  - 人工智能
+  - AI
+  - 人事
+  - 校长
+  - 院士
+  - 高校
+  - 大学
+  detail_selectors:
+    content: '#zoom'
+  tags:
+  - education
+  - jiangsu
+  - policy
+- id: guangdong_jyt
+  name: 广东省教育厅-教育新闻
+  group: provincial
+  url: https://edu.gd.gov.cn/
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: div.gdjyxw ul.list li
+    title: a
+    link: a
+  base_url: https://edu.gd.gov.cn
+  keyword_filter:
+  - 人工智能
+  - AI
+  - 人事
+  - 校长
+  - 院士
+  - 高校
+  - 大学
+  detail_selectors:
+    content: div.article
+  tags:
+  - education
+  - guangdong
+  - policy

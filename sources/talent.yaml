@@ -1,0 +1,162 @@
+dimension: "talent"
+dimension_name: "对人才"
+description: "AI人才动向、人才指数排名、学者追踪"
+
+default_keyword_filter:
+  - "人工智能"
+  - "AI"
+  - "人才"
+  - "学者"
+  - "院士"
+  - "杰青"
+  - "优青"
+  - "长江学者"
+  - "教授"
+  - "博导"
+  - "千人计划"
+  - "科学家"
+  - "研究员"
+  - "智能"
+  - "计算机"
+
+sources:
+  # === A. 人才追踪 ===
+  - id: "csrankings"
+    name: "CSRankings"
+    group: "tracking"
+    url: "https://csrankings.org/"
+    crawl_method: "static"
+    schedule: "monthly"
+    priority: 2
+    is_enabled: false  # React SPA, no static HTML data (table#ranking not in SSR output)
+    selectors:
+      list_item: "table#ranking tbody tr"
+      title: "td a"
+      link: "td a"
+    base_url: "https://csrankings.org"
+    tags: ["ranking", "academic"]
+
+  - id: "semantic_scholar_ai"
+    name: "Semantic Scholar-AI论文"
+    group: "tracking"
+    url: "https://api.semanticscholar.org/"
+    crawl_method: "static"
+    crawler_class: "semantic_scholar"
+    search_query: "artificial intelligence"
+    max_results: 20
+    schedule: "weekly"
+    priority: 2
+    is_enabled: true  # Custom API parser, works but rate-limited (429); retry on next schedule
+    tags: ["academic", "papers"]
+
+  - id: "nsfc_talent"
+    name: "NSFC杰青/优青公示"
+    group: "policy"
+    url: "https://www.nsfc.gov.cn/publish/portal0/tab434/"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 1
+    is_enabled: false  # URL 404 - NSFC has changed site structure
+    selectors:
+      list_item: "ul.list li"
+      title: "a"
+      link: "a"
+      date: "span"
+      date_format: "%Y-%m-%d"
+    base_url: "https://www.nsfc.gov.cn"
+    keyword_filter:
+      - "公示"
+      - "杰出青年"
+      - "优秀青年"
+      - "人才"
+      - "评审"
+    tags: ["talent", "nsfc", "funding"]
+
+  - id: "moe_talent"
+    name: "教育部人才计划公示"
+    group: "policy"
+    url: "https://www.moe.gov.cn/jyb_xxgk/s5743/s5744/"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 1
+    is_enabled: true
+    selectors:
+      list_item: "ul#list li"
+      title: "a"
+      link: "a"
+      date: "span"
+      date_format: "%Y-%m-%d"
+    base_url: "https://www.moe.gov.cn/jyb_xxgk/s5743/s5744/"
+    keyword_filter:
+      - "长江学者"
+      - "人才"
+      - "公示"
+      - "评审"
+      - "名单"
+      - "学位"
+      - "教师"
+    detail_selectors:
+      content: "div.TRS_Editor"
+    tags: ["talent", "moe", "education"]
+
+  - id: "nature_index"
+    name: "Nature Index"
+    group: "tracking"
+    url: "https://www.nature.com/nature-index/"
+    crawl_method: "static"
+    schedule: "monthly"
+    priority: 2
+    is_enabled: true
+    keyword_filter: []  # All nature-index articles are relevant
+    selectors:
+      list_item: "article"
+      title: "a"
+      link: "a"
+      date: "time"
+    base_url: "https://www.nature.com"
+    detail_selectors:
+      content: "div.c-article-body"
+    tags: ["ranking", "academic", "nature"]
+
+  - id: "wrsa_talent"
+    name: "欧美同学会"
+    group: "policy"
+    url: "https://www.wrsa.net/"
+    crawl_method: "static"
+    schedule: "monthly"
+    priority: 3
+    is_enabled: true
+    selectors:
+      list_item: "div.news_div1 li"
+      title: "a"
+      link: "a"
+    base_url: "https://www.wrsa.net"
+    keyword_filter:
+      - "回国"
+      - "人才"
+      - "AI"
+      - "人工智能"
+      - "引进"
+    detail_selectors:
+      content: "#Content"
+    tags: ["talent", "overseas"]
+
+  - id: "aminer_ai"
+    name: "AMiner-AI学者"
+    group: "tracking"
+    url: "https://www.aminer.cn/"
+    crawl_method: "static"
+    schedule: "weekly"
+    priority: 2
+    is_enabled: false  # JS SPA (3KB HTML shell), no static content available
+    selectors:
+      list_item: "div.article-item"
+      title: "a.title"
+      link: "a.title"
+    base_url: "https://www.aminer.cn"
+    keyword_filter:
+      - "AI"
+      - "人工智能"
+      - "学者"
+      - "排名"
+    tags: ["academic", "aminer", "ranking"]

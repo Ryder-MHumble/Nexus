@@ -1,0 +1,133 @@
+dimension: scholars
+dimension_name: 高校师资
+sources:
+- id: ict_cas_faculty
+  name: 中科院计算技术研究所-研究员
+  group: cas_ict
+  university: 中国科学院
+  department: 计算技术研究所
+  url: http://www.ict.ac.cn/yjdw/yjy2020/
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  base_url: http://www.ict.ac.cn
+  faculty_selectors:
+    list_item: ul li
+    name: h5 a:last-child
+    link: h5 a:last-child
+    photo: h5 img
+  tags:
+  - faculty
+  - ict
+  - cas
+  - ai
+  detail_selectors:
+    basic_info: dl.fl.w100.swwls_lm_imgtextlist_dl
+    bio: dl.fl.w100.swwls_lm_imgtextlist_dl dd
+    research_sections: div.fl.w100.swwls_ryxl_mod1
+    research_areas: div.fl.w100.swwls_ryxl_mod1 p
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education
+- id: casia_faculty
+  name: 中科院自动化研究所-研究员
+  group: cas_ia
+  university: 中国科学院
+  department: 自动化研究所
+  url: http://www.ia.cas.cn/rcdw/yjy/
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  base_url: http://www.ia.cas.cn/rcdw/yjy/
+  request_delay: 1.0
+  faculty_selectors:
+    list_item: ul.row li
+    name: div.name
+    link: a
+    photo: img
+  detail_selectors:
+    photo: div.gunius-top img
+    position: ul.gunius-item li:first-child span
+    label_prefix_sections:
+      email: '电子邮件:'
+    heading_sections:
+      bio: ^个人简历$
+      research_areas: ^研究方向$
+  tags:
+  - faculty
+  - casia
+  - cas
+  - ai
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education
+- id: iscas_academician
+  name: 中科院软件研究所-院士专家
+  group: cas_iscas
+  university: 中国科学院
+  department: 软件研究所
+  url: http://www.iscas.ac.cn/rcdw2016/yszj2016/
+  crawler_class: iscas_scholar
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  base_url: http://www.iscas.ac.cn
+  request_delay: 0.5
+  faculty_selectors:
+    list_item: div.text p
+    name: text_prefix_pattern:^([\u4e00-\u9fff]{2,4})院士
+  tags:
+  - faculty
+  - iscas
+  - cas
+  - cs
+- id: iscas_researcher
+  name: 中科院软件研究所-研究员
+  group: cas_iscas
+  university: 中国科学院
+  department: 软件研究所
+  url: http://www.iscas.ac.cn/rcdw2016/yjyzgjgcs2016/
+  crawler_class: iscas_scholar
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  base_url: http://www.iscas.ac.cn
+  request_delay: 0.5
+  faculty_selectors:
+    list_item: div.text p
+  tags:
+  - faculty
+  - iscas
+  - cas
+  - cs
+- id: iscas_associate_researcher
+  name: 中科院软件研究所-副研究员
+  group: cas_iscas
+  university: 中国科学院
+  department: 软件研究所
+  url: http://www.iscas.ac.cn/rcdw2016/fyjygjgcs2016/
+  crawler_class: iscas_scholar
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  base_url: http://www.iscas.ac.cn
+  request_delay: 0.5
+  faculty_selectors:
+    list_item: div.text p
+  tags:
+  - faculty
+  - iscas
+  - cas
+  - cs

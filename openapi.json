@@ -1,0 +1,3459 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Information Crawler API",
+    "summary": "中关村人工智能研究院 — 信息监测系统",
+    "description": "## 概述\n\n信息监测系统 API，自动爬取 **129 个信源**（105 个启用），覆盖 **9 个维度**，为中关村人工智能研究院提供全方位的信息监测与商业智能服务。\n\n## 功能模块\n\n| 模块 | 说明 |\n|------|------|\n| **文章管理** | 全量文章的查询、搜索、统计 |\n| **信源管理** | 129 个信源的配置、状态监控、手动触发 |\n| **维度视图** | 9 大维度的文章聚合浏览 |\n| **政策智能** | 规则引擎 + LLM 二级管线，政策机会挖掘 |\n| **人事情报** | 任免信息自动提取，LLM 相关性分析 |\n| **系统健康** | 数据库、调度器、爬取健康度监控 |\n\n## 维度说明\n\n- `national_policy` — 国家政策（国务院、部委）\n- `beijing_policy` — 北京政策（市/区政府）\n- `technology` — 技术动态（ArXiv、GitHub Trending、Hacker News 等）\n- `talent` — 人才政策\n- `industry` — 产业动态\n- `universities` — 高校动态（46 所高校 AI 院系）\n- `events` — 活动会议\n- `personnel` — 人事变动\n- `twitter` — Twitter/X KOL 动态\n\n## 技术栈\n\nFastAPI + SQLAlchemy(async) + PostgreSQL(Supabase) + APScheduler + httpx + BeautifulSoup4 + Playwright",
+    "contact": {
+      "name": "中关村人工智能研究院",
+      "url": "https://www.zgcaiia.com/"
+    },
+    "license": {
+      "name": "Internal Use"
+    },
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/v1/articles/": {
+      "get": {
+        "tags": [
+          "articles"
+        ],
+        "summary": "文章列表",
+        "description": "查询文章列表，支持按维度、信源、关键词、日期范围过滤，以及字段排序和分页。",
+        "operationId": "list_articles_api_v1_articles__get",
+        "parameters": [
+          {
+            "name": "dimension",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by dimension",
+              "title": "Dimension"
+            },
+            "description": "Filter by dimension"
+          },
+          {
+            "name": "source_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by source ID",
+              "title": "Source Id"
+            },
+            "description": "Filter by source ID"
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Keyword filter in title/content",
+              "title": "Keyword"
+            },
+            "description": "Keyword filter in title/content"
+          },
+          {
+            "name": "date_from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Start date (ISO format)",
+              "title": "Date From"
+            },
+            "description": "Start date (ISO format)"
+          },
+          {
+            "name": "date_to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "End date (ISO format)",
+              "title": "Date To"
+            },
+            "description": "End date (ISO format)"
+          },
+          {
+            "name": "sort_by",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Sort field",
+              "default": "crawled_at",
+              "title": "Sort By"
+            },
+            "description": "Sort field"
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Sort order: asc or desc",
+              "default": "desc",
+              "title": "Order"
+            },
+            "description": "Sort order: asc or desc"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Page number",
+              "default": 1,
+              "title": "Page"
+            },
+            "description": "Page number"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Items per page",
+              "default": 20,
+              "title": "Page Size"
+            },
+            "description": "Items per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedResponse_ArticleBrief_"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/articles/search": {
+      "get": {
+        "tags": [
+          "articles"
+        ],
+        "summary": "全文搜索",
+        "description": "在文章标题和正文中进行关键词搜索，参数与列表接口相同。",
+        "operationId": "search_articles_api_v1_articles_search_get",
+        "parameters": [
+          {
+            "name": "dimension",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by dimension",
+              "title": "Dimension"
+            },
+            "description": "Filter by dimension"
+          },
+          {
+            "name": "source_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by source ID",
+              "title": "Source Id"
+            },
+            "description": "Filter by source ID"
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Keyword filter in title/content",
+              "title": "Keyword"
+            },
+            "description": "Keyword filter in title/content"
+          },
+          {
+            "name": "date_from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Start date (ISO format)",
+              "title": "Date From"
+            },
+            "description": "Start date (ISO format)"
+          },
+          {
+            "name": "date_to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "End date (ISO format)",
+              "title": "Date To"
+            },
+            "description": "End date (ISO format)"
+          },
+          {
+            "name": "sort_by",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Sort field",
+              "default": "crawled_at",
+              "title": "Sort By"
+            },
+            "description": "Sort field"
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Sort order: asc or desc",
+              "default": "desc",
+              "title": "Order"
+            },
+            "description": "Sort order: asc or desc"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Page number",
+              "default": 1,
+              "title": "Page"
+            },
+            "description": "Page number"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Items per page",
+              "default": 20,
+              "title": "Page Size"
+            },
+            "description": "Items per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedResponse_ArticleBrief_"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/articles/stats": {
+      "get": {
+        "tags": [
+          "articles"
+        ],
+        "summary": "文章统计",
+        "description": "获取文章聚合统计，默认按维度分组。可选按信源分组。",
+        "operationId": "get_stats_api_v1_articles_stats_get",
+        "parameters": [
+          {
+            "name": "group_by",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "dimension",
+              "title": "Group By"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ArticleStats"
+                  },
+                  "title": "Response Get Stats Api V1 Articles Stats Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/articles/{article_id}": {
+      "get": {
+        "tags": [
+          "articles"
+        ],
+        "summary": "文章详情",
+        "description": "根据文章 ID 获取完整文章内容，包含正文和额外元数据。",
+        "operationId": "get_article_api_v1_articles__article_id__get",
+        "parameters": [
+          {
+            "name": "article_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Article Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArticleDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "文章不存在",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "articles"
+        ],
+        "summary": "更新文章",
+        "description": "更新文章元数据，如标记已读状态或设置重要度评分。",
+        "operationId": "update_article_api_v1_articles__article_id__patch",
+        "parameters": [
+          {
+            "name": "article_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Article Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArticleUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArticleDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "文章不存在",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sources/": {
+      "get": {
+        "tags": [
+          "sources"
+        ],
+        "summary": "信源列表",
+        "description": "查询所有信源及其状态信息，可按维度过滤。",
+        "operationId": "list_sources_api_v1_sources__get",
+        "parameters": [
+          {
+            "name": "dimension",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Dimension"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SourceResponse"
+                  },
+                  "title": "Response List Sources Api V1 Sources  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sources/{source_id}": {
+      "get": {
+        "tags": [
+          "sources"
+        ],
+        "summary": "信源详情",
+        "description": "根据信源 ID 获取详细配置和运行状态。",
+        "operationId": "get_source_api_v1_sources__source_id__get",
+        "parameters": [
+          {
+            "name": "source_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Source Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "信源不存在",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "sources"
+        ],
+        "summary": "启用/禁用信源",
+        "description": "更新信源的启用状态。禁用后调度器将不再为该信源创建爬取任务。",
+        "operationId": "update_source_api_v1_sources__source_id__patch",
+        "parameters": [
+          {
+            "name": "source_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Source Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SourceUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "信源不存在",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sources/{source_id}/logs": {
+      "get": {
+        "tags": [
+          "sources"
+        ],
+        "summary": "爬取日志",
+        "description": "获取指定信源的最近爬取日志，默认返回最近 20 条。",
+        "operationId": "get_source_logs_api_v1_sources__source_id__logs_get",
+        "parameters": [
+          {
+            "name": "source_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Source Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CrawlLogResponse"
+                  },
+                  "title": "Response Get Source Logs Api V1 Sources  Source Id  Logs Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sources/{source_id}/trigger": {
+      "post": {
+        "tags": [
+          "sources"
+        ],
+        "summary": "手动触发爬取",
+        "description": "立即触发指定信源的一次爬取任务，不影响定时调度。",
+        "operationId": "trigger_crawl_api_v1_sources__source_id__trigger_post",
+        "parameters": [
+          {
+            "name": "source_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Source Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "信源不存在",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "调度器未运行",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/health/": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "summary": "系统健康检查",
+        "description": "检查数据库连接和调度器运行状态，用于监控和部署健康探针。",
+        "operationId": "health_check_api_v1_health__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/health/crawl-status": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "summary": "爬取健康概览",
+        "description": "获取全局爬取健康度统计，包括健康/告警/失败的信源数和近 24 小时活跃度。",
+        "operationId": "crawl_status_api_v1_health_crawl_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CrawlHealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dimensions/": {
+      "get": {
+        "tags": [
+          "dimensions"
+        ],
+        "summary": "维度列表",
+        "description": "列出全部 9 个维度，返回每个维度的文章数量和最后更新时间。",
+        "operationId": "list_dimensions_api_v1_dimensions__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dimensions/{dimension}": {
+      "get": {
+        "tags": [
+          "dimensions"
+        ],
+        "summary": "维度文章",
+        "description": "获取指定维度下的文章列表，支持关键词搜索、排序和分页。\n\n可用维度: `national_policy`, `beijing_policy`, `technology`, `talent`, `industry`, `universities`, `events`, `personnel`, `twitter`",
+        "operationId": "get_dimension_articles_api_v1_dimensions__dimension__get",
+        "parameters": [
+          {
+            "name": "dimension",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dimension"
+            }
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Keyword"
+            }
+          },
+          {
+            "name": "sort_by",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "crawled_at",
+              "title": "Sort By"
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "desc",
+              "title": "Order"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Page Size"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedResponse_ArticleBrief_"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/intel/policy/feed": {
+      "get": {
+        "tags": [
+          "intel",
+          "policy-intel"
+        ],
+        "summary": "政策动态 Feed",
+        "description": "获取政策情报动态列表。支持按分类、重要性、匹配度过滤，以及关键词搜索。\n\n数据经过规则引擎 + LLM 二级管线处理，包含匹配度评分、资金信息、AI 洞察等富化字段。",
+        "operationId": "get_policy_feed_api_v1_intel_policy_feed_get",
+        "parameters": [
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "政策分类: 国家政策 / 北京政策 / 领导讲话 / 政策机会",
+              "title": "Category"
+            },
+            "description": "政策分类: 国家政策 / 北京政策 / 领导讲话 / 政策机会"
+          },
+          {
+            "name": "importance",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "重要性级别: 紧急 / 重要 / 关注 / 一般",
+              "title": "Importance"
+            },
+            "description": "重要性级别: 紧急 / 重要 / 关注 / 一般"
+          },
+          {
+            "name": "min_match_score",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 100,
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "最低匹配度得分",
+              "title": "Min Match Score"
+            },
+            "description": "最低匹配度得分"
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "关键词搜索（标题/摘要/来源/标签）",
+              "title": "Keyword"
+            },
+            "description": "关键词搜索（标题/摘要/来源/标签）"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "description": "返回条数上限",
+              "default": 50,
+              "title": "Limit"
+            },
+            "description": "返回条数上限"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "偏移量",
+              "default": 0,
+              "title": "Offset"
+            },
+            "description": "偏移量"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PolicyFeedResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/intel/policy/opportunities": {
+      "get": {
+        "tags": [
+          "intel",
+          "policy-intel"
+        ],
+        "summary": "政策机会看板",
+        "description": "获取政策申报机会列表，用于情报看板展示。包含资金规模、截止日期、匹配度评分、紧急状态等关键字段。",
+        "operationId": "get_policy_opportunities_api_v1_intel_policy_opportunities_get",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "状态过滤: urgent / active / tracking",
+              "title": "Status"
+            },
+            "description": "状态过滤: urgent / active / tracking"
+          },
+          {
+            "name": "min_match_score",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 100,
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "最低匹配度得分",
+              "title": "Min Match Score"
+            },
+            "description": "最低匹配度得分"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "description": "返回条数上限",
+              "default": 50,
+              "title": "Limit"
+            },
+            "description": "返回条数上限"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "偏移量",
+              "default": 0,
+              "title": "Offset"
+            },
+            "description": "偏移量"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PolicyOpportunitiesResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/intel/policy/stats": {
+      "get": {
+        "tags": [
+          "intel",
+          "policy-intel"
+        ],
+        "summary": "政策统计",
+        "description": "获取已处理政策数据的汇总统计信息。",
+        "operationId": "get_policy_stats_api_v1_intel_policy_stats_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/intel/personnel/feed": {
+      "get": {
+        "tags": [
+          "intel",
+          "personnel-intel"
+        ],
+        "summary": "人事动态 Feed",
+        "description": "获取人事情报动态列表（文章级别）。每条记录对应一篇人事相关文章，包含从文章中自动提取的任免变动列表。",
+        "operationId": "get_personnel_feed_api_v1_intel_personnel_feed_get",
+        "parameters": [
+          {
+            "name": "importance",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "重要性级别: 紧急 / 重要 / 关注 / 一般",
+              "title": "Importance"
+            },
+            "description": "重要性级别: 紧急 / 重要 / 关注 / 一般"
+          },
+          {
+            "name": "min_match_score",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 100,
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "最低匹配度得分",
+              "title": "Min Match Score"
+            },
+            "description": "最低匹配度得分"
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "关键词搜索（标题/姓名/职务）",
+              "title": "Keyword"
+            },
+            "description": "关键词搜索（标题/姓名/职务）"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "description": "返回条数上限",
+              "default": 50,
+              "title": "Limit"
+            },
+            "description": "返回条数上限"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "偏移量",
+              "default": 0,
+              "title": "Offset"
+            },
+            "description": "偏移量"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonnelFeedResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/intel/personnel/changes": {
+      "get": {
+        "tags": [
+          "intel",
+          "personnel-intel"
+        ],
+        "summary": "结构化任免变动",
+        "description": "获取结构化的人事任免变动列表，每条记录对应一个人员的一次任免动作。支持按部门、任免类型过滤。",
+        "operationId": "get_personnel_changes_api_v1_intel_personnel_changes_get",
+        "parameters": [
+          {
+            "name": "department",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "按部门过滤",
+              "title": "Department"
+            },
+            "description": "按部门过滤"
+          },
+          {
+            "name": "action",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "任免类型: 任命 / 免去",
+              "title": "Action"
+            },
+            "description": "任免类型: 任命 / 免去"
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "关键词搜索（姓名/职务/部门）",
+              "title": "Keyword"
+            },
+            "description": "关键词搜索（姓名/职务/部门）"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "description": "返回条数上限",
+              "default": 50,
+              "title": "Limit"
+            },
+            "description": "返回条数上限"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "偏移量",
+              "default": 0,
+              "title": "Offset"
+            },
+            "description": "偏移量"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonnelChangesResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/intel/personnel/stats": {
+      "get": {
+        "tags": [
+          "intel",
+          "personnel-intel"
+        ],
+        "summary": "人事统计",
+        "description": "获取人事数据的汇总统计信息。",
+        "operationId": "get_personnel_stats_api_v1_intel_personnel_stats_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/intel/personnel/enriched-feed": {
+      "get": {
+        "tags": [
+          "intel",
+          "personnel-intel"
+        ],
+        "summary": "LLM 富化人事动态",
+        "description": "获取经 LLM 分析富化后的人事变动列表。相比基础 Feed，额外包含：\n\n- **relevance**: 与研究院业务的相关性得分（0-100）\n- **group**: action（需行动）/ watch（关注即可）\n- **actionSuggestion**: LLM 建议的行动方案\n- **background**: 人员背景信息\n- **aiInsight**: AI 综合分析洞察",
+        "operationId": "get_enriched_feed_api_v1_intel_personnel_enriched_feed_get",
+        "parameters": [
+          {
+            "name": "group",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "分组过滤: action（需行动）/ watch（关注即可）",
+              "title": "Group"
+            },
+            "description": "分组过滤: action（需行动）/ watch（关注即可）"
+          },
+          {
+            "name": "importance",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "重要性级别: 紧急 / 重要 / 关注 / 一般",
+              "title": "Importance"
+            },
+            "description": "重要性级别: 紧急 / 重要 / 关注 / 一般"
+          },
+          {
+            "name": "min_relevance",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 100,
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "最低相关性得分",
+              "title": "Min Relevance"
+            },
+            "description": "最低相关性得分"
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "关键词搜索（姓名/职务/部门/备注）",
+              "title": "Keyword"
+            },
+            "description": "关键词搜索（姓名/职务/部门/备注）"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "description": "返回条数上限",
+              "default": 50,
+              "title": "Limit"
+            },
+            "description": "返回条数上限"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "偏移量",
+              "default": 0,
+              "title": "Offset"
+            },
+            "description": "偏移量"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonnelEnrichedFeedResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/intel/personnel/enriched-stats": {
+      "get": {
+        "tags": [
+          "intel",
+          "personnel-intel"
+        ],
+        "summary": "富化数据统计",
+        "description": "获取 LLM 富化人事数据的汇总统计，包括按部门/类型分布和高相关性记录数。",
+        "operationId": "get_enriched_stats_api_v1_intel_personnel_enriched_stats_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonnelEnrichedStatsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ArticleBrief": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id",
+            "description": "文章唯一 ID",
+            "examples": [
+              1024
+            ]
+          },
+          "source_id": {
+            "type": "string",
+            "title": "Source Id",
+            "description": "所属信源 ID",
+            "examples": [
+              "tech_arxiv"
+            ]
+          },
+          "dimension": {
+            "type": "string",
+            "title": "Dimension",
+            "description": "所属维度",
+            "examples": [
+              "technology"
+            ]
+          },
+          "url": {
+            "type": "string",
+            "title": "Url",
+            "description": "文章原始链接",
+            "examples": [
+              "https://arxiv.org/abs/2401.12345"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "title": "Title",
+            "description": "文章标题",
+            "examples": [
+              "Large Language Models for Code Generation: A Survey"
+            ]
+          },
+          "author": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Author",
+            "description": "作者",
+            "examples": [
+              "张三"
+            ]
+          },
+          "published_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Published At",
+            "description": "发布时间（ISO 8601）"
+          },
+          "crawled_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Crawled At",
+            "description": "爬取时间（ISO 8601）"
+          },
+          "tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Tags",
+            "description": "标签列表",
+            "default": [],
+            "examples": [
+              [
+                "AI",
+                "LLM",
+                "政策"
+              ]
+            ]
+          },
+          "is_read": {
+            "type": "boolean",
+            "title": "Is Read",
+            "description": "是否已读",
+            "default": false
+          },
+          "importance": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Importance",
+            "description": "重要度评分（0-100）",
+            "examples": [
+              85
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "source_id",
+          "dimension",
+          "url",
+          "title",
+          "crawled_at"
+        ],
+        "title": "ArticleBrief",
+        "description": "文章摘要信息，用于列表展示。"
+      },
+      "ArticleDetail": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id",
+            "description": "文章唯一 ID",
+            "examples": [
+              1024
+            ]
+          },
+          "source_id": {
+            "type": "string",
+            "title": "Source Id",
+            "description": "所属信源 ID",
+            "examples": [
+              "tech_arxiv"
+            ]
+          },
+          "dimension": {
+            "type": "string",
+            "title": "Dimension",
+            "description": "所属维度",
+            "examples": [
+              "technology"
+            ]
+          },
+          "url": {
+            "type": "string",
+            "title": "Url",
+            "description": "文章原始链接",
+            "examples": [
+              "https://arxiv.org/abs/2401.12345"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "title": "Title",
+            "description": "文章标题",
+            "examples": [
+              "Large Language Models for Code Generation: A Survey"
+            ]
+          },
+          "author": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Author",
+            "description": "作者",
+            "examples": [
+              "张三"
+            ]
+          },
+          "published_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Published At",
+            "description": "发布时间（ISO 8601）"
+          },
+          "crawled_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Crawled At",
+            "description": "爬取时间（ISO 8601）"
+          },
+          "tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Tags",
+            "description": "标签列表",
+            "default": [],
+            "examples": [
+              [
+                "AI",
+                "LLM",
+                "政策"
+              ]
+            ]
+          },
+          "is_read": {
+            "type": "boolean",
+            "title": "Is Read",
+            "description": "是否已读",
+            "default": false
+          },
+          "importance": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Importance",
+            "description": "重要度评分（0-100）",
+            "examples": [
+              85
+            ]
+          },
+          "content": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Content",
+            "description": "文章正文（HTML 或纯文本）"
+          },
+          "extra": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Extra",
+            "description": "额外元数据（JSON），不同信源可能包含不同字段",
+            "default": {},
+            "examples": [
+              {
+                "pdf_url": "https://arxiv.org/pdf/2401.12345"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "source_id",
+          "dimension",
+          "url",
+          "title",
+          "crawled_at"
+        ],
+        "title": "ArticleDetail",
+        "description": "文章详情，包含正文内容和额外字段。"
+      },
+      "ArticleStats": {
+        "properties": {
+          "group": {
+            "type": "string",
+            "title": "Group",
+            "description": "分组名称（维度名或信源 ID）",
+            "examples": [
+              "technology"
+            ]
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count",
+            "description": "该分组下的文章总数",
+            "examples": [
+              342
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "group",
+          "count"
+        ],
+        "title": "ArticleStats",
+        "description": "文章统计信息。"
+      },
+      "ArticleUpdate": {
+        "properties": {
+          "is_read": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Is Read",
+            "description": "标记为已读/未读"
+          },
+          "importance": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Importance",
+            "description": "设置重要度评分（0-100）",
+            "examples": [
+              90
+            ]
+          }
+        },
+        "type": "object",
+        "title": "ArticleUpdate",
+        "description": "文章更新请求体。"
+      },
+      "CrawlHealthResponse": {
+        "properties": {
+          "total_sources": {
+            "type": "integer",
+            "title": "Total Sources",
+            "description": "信源总数",
+            "examples": [
+              129
+            ]
+          },
+          "enabled_sources": {
+            "type": "integer",
+            "title": "Enabled Sources",
+            "description": "启用的信源数",
+            "examples": [
+              105
+            ]
+          },
+          "healthy": {
+            "type": "integer",
+            "title": "Healthy",
+            "description": "健康的信源数（最近成功）",
+            "examples": [
+              98
+            ]
+          },
+          "warning": {
+            "type": "integer",
+            "title": "Warning",
+            "description": "告警的信源数（偶发失败）",
+            "examples": [
+              5
+            ]
+          },
+          "failing": {
+            "type": "integer",
+            "title": "Failing",
+            "description": "失败的信源数（连续失败）",
+            "examples": [
+              2
+            ]
+          },
+          "last_24h_crawls": {
+            "type": "integer",
+            "title": "Last 24H Crawls",
+            "description": "过去 24 小时的爬取任务数",
+            "examples": [
+              312
+            ]
+          },
+          "last_24h_new_articles": {
+            "type": "integer",
+            "title": "Last 24H New Articles",
+            "description": "过去 24 小时新增文章数",
+            "examples": [
+              876
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "total_sources",
+          "enabled_sources",
+          "healthy",
+          "warning",
+          "failing",
+          "last_24h_crawls",
+          "last_24h_new_articles"
+        ],
+        "title": "CrawlHealthResponse",
+        "description": "全局爬取健康度概览。"
+      },
+      "CrawlLogResponse": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id",
+            "description": "日志 ID",
+            "examples": [
+              5678
+            ]
+          },
+          "source_id": {
+            "type": "string",
+            "title": "Source Id",
+            "description": "信源 ID",
+            "examples": [
+              "tech_arxiv"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "description": "爬取状态: success / partial / failed",
+            "examples": [
+              "success"
+            ]
+          },
+          "items_total": {
+            "type": "integer",
+            "title": "Items Total",
+            "description": "本次解析到的条目总数",
+            "examples": [
+              25
+            ]
+          },
+          "items_new": {
+            "type": "integer",
+            "title": "Items New",
+            "description": "新增入库的条目数",
+            "examples": [
+              12
+            ]
+          },
+          "error_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Message",
+            "description": "错误信息（成功时为 null）"
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Started At",
+            "description": "任务开始时间"
+          },
+          "finished_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finished At",
+            "description": "任务结束时间"
+          },
+          "duration_seconds": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration Seconds",
+            "description": "耗时（秒）",
+            "examples": [
+              3.45
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "source_id",
+          "status",
+          "items_total",
+          "items_new",
+          "started_at"
+        ],
+        "title": "CrawlLogResponse",
+        "description": "单次爬取任务的日志记录。"
+      },
+      "ErrorResponse": {
+        "properties": {
+          "detail": {
+            "type": "string",
+            "title": "Detail",
+            "description": "错误详情",
+            "examples": [
+              "Article not found"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "detail"
+        ],
+        "title": "ErrorResponse"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "PaginatedResponse_ArticleBrief_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ArticleBrief"
+            },
+            "type": "array",
+            "title": "Items",
+            "description": "当前页的数据列表"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total",
+            "description": "符合条件的总记录数",
+            "examples": [
+              156
+            ]
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page",
+            "description": "当前页码（从 1 开始）",
+            "examples": [
+              1
+            ]
+          },
+          "page_size": {
+            "type": "integer",
+            "title": "Page Size",
+            "description": "每页条数",
+            "examples": [
+              20
+            ]
+          },
+          "total_pages": {
+            "type": "integer",
+            "title": "Total Pages",
+            "description": "总页数",
+            "examples": [
+              8
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "page",
+          "page_size",
+          "total_pages"
+        ],
+        "title": "PaginatedResponse[ArticleBrief]"
+      },
+      "PersonnelChange": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "人员姓名",
+            "examples": [
+              "李某某"
+            ]
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "任命",
+              "免去"
+            ],
+            "title": "Action",
+            "description": "任免类型"
+          },
+          "position": {
+            "type": "string",
+            "title": "Position",
+            "description": "职务",
+            "examples": [
+              "人工智能研究中心主任"
+            ]
+          },
+          "department": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Department",
+            "description": "所属部门/机构",
+            "examples": [
+              "科技部"
+            ]
+          },
+          "date": {
+            "type": "string",
+            "title": "Date",
+            "description": "任免日期",
+            "examples": [
+              "2024-01-15"
+            ]
+          },
+          "source_article_id": {
+            "type": "string",
+            "title": "Source Article Id",
+            "description": "来源文章 ID",
+            "examples": [
+              "art_20240115_001"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "action",
+          "position",
+          "date",
+          "source_article_id"
+        ],
+        "title": "PersonnelChange",
+        "description": "单条人事任免记录。"
+      },
+      "PersonnelChangeEnriched": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id",
+            "description": "记录 ID",
+            "examples": [
+              "enr_20240115_001"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "人员姓名",
+            "examples": [
+              "李某某"
+            ]
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "任命",
+              "免去",
+              "动态"
+            ],
+            "title": "Action",
+            "description": "变动类型: 任命 / 免去 / 动态（非明确任免的人事新闻）"
+          },
+          "position": {
+            "type": "string",
+            "title": "Position",
+            "description": "职务",
+            "examples": [
+              "人工智能研究中心主任"
+            ]
+          },
+          "department": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Department",
+            "description": "所属部门/机构",
+            "examples": [
+              "科技部"
+            ]
+          },
+          "date": {
+            "type": "string",
+            "title": "Date",
+            "description": "日期",
+            "examples": [
+              "2024-01-15"
+            ]
+          },
+          "source": {
+            "type": "string",
+            "title": "Source",
+            "description": "来源",
+            "examples": [
+              "中国政府网"
+            ]
+          },
+          "sourceUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sourceurl",
+            "description": "原文链接"
+          },
+          "relevance": {
+            "type": "integer",
+            "title": "Relevance",
+            "description": "与研究院业务的相关性得分（0-100，LLM 评估）",
+            "default": 0,
+            "examples": [
+              85
+            ]
+          },
+          "importance": {
+            "type": "string",
+            "enum": [
+              "紧急",
+              "重要",
+              "关注",
+              "一般"
+            ],
+            "title": "Importance",
+            "description": "重要性级别（LLM 评估）",
+            "default": "一般"
+          },
+          "group": {
+            "type": "string",
+            "enum": [
+              "action",
+              "watch"
+            ],
+            "title": "Group",
+            "description": "分组: action（需行动）/ watch（关注即可）",
+            "default": "watch"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note",
+            "description": "LLM 生成的简要说明"
+          },
+          "actionSuggestion": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actionsuggestion",
+            "description": "LLM 建议的行动方案"
+          },
+          "background": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Background",
+            "description": "人员背景信息（LLM 补充）"
+          },
+          "signals": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Signals",
+            "description": "关键信号词",
+            "default": [],
+            "examples": [
+              [
+                "AI领域",
+                "中关村",
+                "新任命"
+              ]
+            ]
+          },
+          "aiInsight": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aiinsight",
+            "description": "AI 综合分析洞察"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "action",
+          "position",
+          "date",
+          "source"
+        ],
+        "title": "PersonnelChangeEnriched",
+        "description": "LLM 富化后的人事变动记录，包含相关性分析和行动建议。"
+      },
+      "PersonnelChangesResponse": {
+        "properties": {
+          "generated_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Generated At",
+            "description": "数据生成时间",
+            "examples": [
+              "2024-01-15T10:30:00"
+            ]
+          },
+          "item_count": {
+            "type": "integer",
+            "title": "Item Count",
+            "description": "返回的记录数",
+            "examples": [
+              30
+            ]
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/PersonnelChange"
+            },
+            "type": "array",
+            "title": "Items",
+            "description": "人事变动列表"
+          }
+        },
+        "type": "object",
+        "required": [
+          "item_count",
+          "items"
+        ],
+        "title": "PersonnelChangesResponse",
+        "description": "结构化人事变动列表响应。"
+      },
+      "PersonnelEnrichedFeedResponse": {
+        "properties": {
+          "generated_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Generated At",
+            "description": "数据生成时间",
+            "examples": [
+              "2024-01-15T10:30:00"
+            ]
+          },
+          "total_count": {
+            "type": "integer",
+            "title": "Total Count",
+            "description": "总记录数",
+            "examples": [
+              45
+            ]
+          },
+          "action_count": {
+            "type": "integer",
+            "title": "Action Count",
+            "description": "需行动的记录数",
+            "default": 0,
+            "examples": [
+              8
+            ]
+          },
+          "watch_count": {
+            "type": "integer",
+            "title": "Watch Count",
+            "description": "仅关注的记录数",
+            "default": 0,
+            "examples": [
+              37
+            ]
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/PersonnelChangeEnriched"
+            },
+            "type": "array",
+            "title": "Items",
+            "description": "富化后的人事变动列表"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total_count",
+          "items"
+        ],
+        "title": "PersonnelEnrichedFeedResponse",
+        "description": "LLM 富化人事动态响应。"
+      },
+      "PersonnelEnrichedStatsResponse": {
+        "properties": {
+          "total_changes": {
+            "type": "integer",
+            "title": "Total Changes",
+            "description": "变动总数",
+            "examples": [
+              45
+            ]
+          },
+          "action_count": {
+            "type": "integer",
+            "title": "Action Count",
+            "description": "需行动数",
+            "examples": [
+              8
+            ]
+          },
+          "watch_count": {
+            "type": "integer",
+            "title": "Watch Count",
+            "description": "仅关注数",
+            "examples": [
+              37
+            ]
+          },
+          "by_department": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "By Department",
+            "description": "按部门统计",
+            "default": {},
+            "examples": [
+              {
+                "工信部": 2,
+                "教育部": 3,
+                "科技部": 5
+              }
+            ]
+          },
+          "by_action": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "By Action",
+            "description": "按变动类型统计",
+            "default": {},
+            "examples": [
+              {
+                "任命": 25,
+                "免去": 15,
+                "动态": 5
+              }
+            ]
+          },
+          "high_relevance_count": {
+            "type": "integer",
+            "title": "High Relevance Count",
+            "description": "高相关性记录数（relevance >= 70）",
+            "default": 0,
+            "examples": [
+              12
+            ]
+          },
+          "generated_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Generated At",
+            "description": "数据生成时间",
+            "examples": [
+              "2024-01-15T10:30:00"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "total_changes",
+          "action_count",
+          "watch_count"
+        ],
+        "title": "PersonnelEnrichedStatsResponse",
+        "description": "LLM 富化人事数据统计。"
+      },
+      "PersonnelFeedItem": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id",
+            "description": "记录 ID",
+            "examples": [
+              "per_20240115_001"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "title": "Title",
+            "description": "文章标题",
+            "examples": [
+              "科技部发布最新人事任免通知"
+            ]
+          },
+          "date": {
+            "type": "string",
+            "title": "Date",
+            "description": "发布日期",
+            "examples": [
+              "2024-01-15"
+            ]
+          },
+          "source": {
+            "type": "string",
+            "title": "Source",
+            "description": "来源",
+            "examples": [
+              "中国政府网"
+            ]
+          },
+          "importance": {
+            "type": "string",
+            "enum": [
+              "紧急",
+              "重要",
+              "关注",
+              "一般"
+            ],
+            "title": "Importance",
+            "description": "重要性级别"
+          },
+          "matchScore": {
+            "type": "integer",
+            "title": "Matchscore",
+            "description": "匹配度得分（0-100）",
+            "examples": [
+              78
+            ]
+          },
+          "changes": {
+            "items": {
+              "$ref": "#/components/schemas/PersonnelChange"
+            },
+            "type": "array",
+            "title": "Changes",
+            "description": "从该文章中提取的任免变动列表",
+            "default": []
+          },
+          "sourceUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sourceurl",
+            "description": "原文链接"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "date",
+          "source",
+          "importance",
+          "matchScore"
+        ],
+        "title": "PersonnelFeedItem",
+        "description": "人事动态 Feed 中的单条记录（文章级）。"
+      },
+      "PersonnelFeedResponse": {
+        "properties": {
+          "generated_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Generated At",
+            "description": "数据生成时间",
+            "examples": [
+              "2024-01-15T10:30:00"
+            ]
+          },
+          "item_count": {
+            "type": "integer",
+            "title": "Item Count",
+            "description": "返回的记录数",
+            "examples": [
+              12
+            ]
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/PersonnelFeedItem"
+            },
+            "type": "array",
+            "title": "Items",
+            "description": "人事动态列表"
+          }
+        },
+        "type": "object",
+        "required": [
+          "item_count",
+          "items"
+        ],
+        "title": "PersonnelFeedResponse",
+        "description": "人事动态 Feed 响应。"
+      },
+      "PolicyFeedItem": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id",
+            "description": "记录 ID",
+            "examples": [
+              "pol_20240115_001"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "title": "Title",
+            "description": "政策标题",
+            "examples": [
+              "关于印发《新一代人工智能发展规划》的通知"
+            ]
+          },
+          "summary": {
+            "type": "string",
+            "title": "Summary",
+            "description": "政策摘要"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "国家政策",
+              "北京政策",
+              "领导讲话",
+              "政策机会"
+            ],
+            "title": "Category",
+            "description": "政策分类"
+          },
+          "importance": {
+            "type": "string",
+            "enum": [
+              "紧急",
+              "重要",
+              "关注",
+              "一般"
+            ],
+            "title": "Importance",
+            "description": "重要性级别"
+          },
+          "date": {
+            "type": "string",
+            "title": "Date",
+            "description": "发布日期",
+            "examples": [
+              "2024-01-15"
+            ]
+          },
+          "source": {
+            "type": "string",
+            "title": "Source",
+            "description": "来源名称",
+            "examples": [
+              "国务院"
+            ]
+          },
+          "tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Tags",
+            "description": "标签",
+            "default": [],
+            "examples": [
+              [
+                "人工智能",
+                "规划"
+              ]
+            ]
+          },
+          "matchScore": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Matchscore",
+            "description": "与研究院业务的匹配度（0-100）",
+            "examples": [
+              92
+            ]
+          },
+          "funding": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Funding",
+            "description": "涉及资金规模",
+            "examples": [
+              "5000万元"
+            ]
+          },
+          "daysLeft": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Daysleft",
+            "description": "截止日倒计时（天）",
+            "examples": [
+              15
+            ]
+          },
+          "leader": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leader",
+            "description": "相关领导",
+            "examples": [
+              "张某某"
+            ]
+          },
+          "relevance": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Relevance",
+            "description": "LLM 评估的相关性得分（0-100）",
+            "examples": [
+              88
+            ]
+          },
+          "signals": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Signals",
+            "description": "关键信号词列表",
+            "examples": [
+              [
+                "人工智能",
+                "专项资金",
+                "中关村"
+              ]
+            ]
+          },
+          "sourceUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sourceurl",
+            "description": "原文链接"
+          },
+          "aiInsight": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aiinsight",
+            "description": "AI 分析洞察"
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail",
+            "description": "详细说明"
+          },
+          "content": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Content",
+            "description": "原文正文"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "summary",
+          "category",
+          "importance",
+          "date",
+          "source"
+        ],
+        "title": "PolicyFeedItem",
+        "description": "政策动态 Feed 中的单条记录。"
+      },
+      "PolicyFeedResponse": {
+        "properties": {
+          "generated_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Generated At",
+            "description": "数据生成时间",
+            "examples": [
+              "2024-01-15T10:30:00"
+            ]
+          },
+          "item_count": {
+            "type": "integer",
+            "title": "Item Count",
+            "description": "返回的记录数",
+            "examples": [
+              25
+            ]
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/PolicyFeedItem"
+            },
+            "type": "array",
+            "title": "Items",
+            "description": "政策动态列表"
+          }
+        },
+        "type": "object",
+        "required": [
+          "item_count",
+          "items"
+        ],
+        "title": "PolicyFeedResponse",
+        "description": "政策动态 Feed 响应。"
+      },
+      "PolicyItem": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id",
+            "description": "机会 ID",
+            "examples": [
+              "opp_20240115_001"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "政策/项目名称",
+            "examples": [
+              "北京市人工智能产业创新发展专项"
+            ]
+          },
+          "agency": {
+            "type": "string",
+            "title": "Agency",
+            "description": "发布机构",
+            "examples": [
+              "北京市科委"
+            ]
+          },
+          "agencyType": {
+            "type": "string",
+            "enum": [
+              "national",
+              "beijing",
+              "ministry"
+            ],
+            "title": "Agencytype",
+            "description": "机构级别: national（国家）/ beijing（北京）/ ministry（部委）"
+          },
+          "matchScore": {
+            "type": "integer",
+            "title": "Matchscore",
+            "description": "匹配度得分（0-100）",
+            "examples": [
+              95
+            ]
+          },
+          "funding": {
+            "type": "string",
+            "title": "Funding",
+            "description": "资金规模",
+            "examples": [
+              "3000万元"
+            ]
+          },
+          "deadline": {
+            "type": "string",
+            "title": "Deadline",
+            "description": "申报截止日",
+            "examples": [
+              "2024-03-31"
+            ]
+          },
+          "daysLeft": {
+            "type": "integer",
+            "title": "Daysleft",
+            "description": "距截止日天数",
+            "examples": [
+              45
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "urgent",
+              "active",
+              "tracking"
+            ],
+            "title": "Status",
+            "description": "状态: urgent（紧急）/ active（进行中）/ tracking（跟踪中）"
+          },
+          "aiInsight": {
+            "type": "string",
+            "title": "Aiinsight",
+            "description": "AI 分析建议"
+          },
+          "detail": {
+            "type": "string",
+            "title": "Detail",
+            "description": "详细描述"
+          },
+          "sourceUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sourceurl",
+            "description": "原文链接"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "agency",
+          "agencyType",
+          "matchScore",
+          "funding",
+          "deadline",
+          "daysLeft",
+          "status",
+          "aiInsight",
+          "detail"
+        ],
+        "title": "PolicyItem",
+        "description": "政策机会看板中的单条记录。"
+      },
+      "PolicyOpportunitiesResponse": {
+        "properties": {
+          "generated_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Generated At",
+            "description": "数据生成时间",
+            "examples": [
+              "2024-01-15T10:30:00"
+            ]
+          },
+          "item_count": {
+            "type": "integer",
+            "title": "Item Count",
+            "description": "返回的记录数",
+            "examples": [
+              8
+            ]
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/PolicyItem"
+            },
+            "type": "array",
+            "title": "Items",
+            "description": "政策机会列表"
+          }
+        },
+        "type": "object",
+        "required": [
+          "item_count",
+          "items"
+        ],
+        "title": "PolicyOpportunitiesResponse",
+        "description": "政策机会列表响应。"
+      },
+      "SourceResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id",
+            "description": "信源唯一 ID",
+            "examples": [
+              "tech_arxiv"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "信源名称",
+            "examples": [
+              "ArXiv AI Papers"
+            ]
+          },
+          "url": {
+            "type": "string",
+            "title": "Url",
+            "description": "信源 URL",
+            "examples": [
+              "https://arxiv.org/list/cs.AI/recent"
+            ]
+          },
+          "dimension": {
+            "type": "string",
+            "title": "Dimension",
+            "description": "所属维度",
+            "examples": [
+              "technology"
+            ]
+          },
+          "crawl_method": {
+            "type": "string",
+            "title": "Crawl Method",
+            "description": "爬取方式: static / dynamic / rss / snapshot / custom",
+            "examples": [
+              "static"
+            ]
+          },
+          "schedule": {
+            "type": "string",
+            "title": "Schedule",
+            "description": "调度频率: hourly / daily / twice_daily 等",
+            "examples": [
+              "daily"
+            ]
+          },
+          "is_enabled": {
+            "type": "boolean",
+            "title": "Is Enabled",
+            "description": "是否启用",
+            "examples": [
+              true
+            ]
+          },
+          "priority": {
+            "type": "integer",
+            "title": "Priority",
+            "description": "优先级（1-5，1 最高）",
+            "examples": [
+              2
+            ]
+          },
+          "last_crawl_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Crawl At",
+            "description": "上次爬取时间"
+          },
+          "last_success_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Success At",
+            "description": "上次成功爬取时间"
+          },
+          "consecutive_failures": {
+            "type": "integer",
+            "title": "Consecutive Failures",
+            "description": "连续失败次数",
+            "default": 0,
+            "examples": [
+              0
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "url",
+          "dimension",
+          "crawl_method",
+          "schedule",
+          "is_enabled",
+          "priority"
+        ],
+        "title": "SourceResponse",
+        "description": "信源详情。"
+      },
+      "SourceUpdate": {
+        "properties": {
+          "is_enabled": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Is Enabled",
+            "description": "启用或禁用信源"
+          }
+        },
+        "type": "object",
+        "title": "SourceUpdate",
+        "description": "信源更新请求体。"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "articles",
+      "description": "文章管理 — 查询、搜索、统计和更新爬取到的文章。支持按维度、信源、关键词、日期范围过滤，以及分页排序。"
+    },
+    {
+      "name": "sources",
+      "description": "信源管理 — 查看信源配置与状态，启用/禁用信源，手动触发爬取，查看爬取日志。系统共 129 个信源（105 个启用），覆盖 9 个维度。"
+    },
+    {
+      "name": "dimensions",
+      "description": "维度视图 — 按 9 大维度（国家政策、北京政策、技术动态、人才政策、产业动态、高校动态、活动会议、人事变动、Twitter）浏览文章汇总。"
+    },
+    {
+      "name": "health",
+      "description": "系统健康 — 数据库连接检查、调度器状态、全局爬取健康度概览。"
+    },
+    {
+      "name": "policy-intel",
+      "description": "政策智能 — 基于规则引擎 + LLM 二级管线处理的政策情报。提供政策动态 Feed、政策机会看板（含资金/截止日/匹配度评分）和汇总统计。"
+    },
+    {
+      "name": "personnel-intel",
+      "description": "人事情报 — 自动提取任免信息，LLM 富化分析。提供人事动态 Feed、结构化任免变动、LLM 富化 Feed（含相关性评分/行动建议）和统计。"
+    }
+  ]
+}

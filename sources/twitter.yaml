@@ -1,0 +1,136 @@
+# Twitter KOL & 话题监控
+# 通过 twitterapi.io API 爬取 AI 领域 KOL 推文和相关话题
+# 需要配置: TWITTER_API_KEY, TWITTER_API_PROXY (在 .env 中)
+
+defaults:
+  schedule: "4h"
+  is_enabled: true
+  tags: ["twitter", "social"]
+
+sources:
+  # ============================================================
+  # 科技前沿 - AI KOL 监控
+  # ============================================================
+  - id: twitter_ai_kol_international
+    name: "Twitter AI KOL (国际)"
+    dimension: technology
+    group: kol
+    crawler_class: twitter_kol
+    schedule: "4h"
+    is_enabled: true
+    tags: ["twitter", "kol", "international"]
+    twitter_accounts:
+      # AI 研究领袖
+      - ylecun          # Yann LeCun - Meta/NYU, Turing Award
+      - kaboraAI        # Andrej Karpathy - Ex-Tesla/OpenAI
+      - jimfan_         # Jim Fan - NVIDIA AI
+      - DrJimFan        # Jim Fan (alt)
+      - demaboris       # Demis Hassabis - DeepMind CEO
+      - iaboris         # Boris Johnson AI
+      # AI 公司高管
+      - sama            # Sam Altman - OpenAI CEO
+      - daboris         # Dario Amodei - Anthropic CEO
+      - JensenHuang     # Jensen Huang - NVIDIA CEO (unofficial)
+      # AI 研究者
+      - goodaboris      # Ian Goodfellow (if active)
+      - hardmaru        # David Ha - Sakana AI
+      - jaseweston      # Jason Weston - Meta AI
+      - sraboris        # Sébastien Racanière - DeepMind
+    max_tweets_per_account: 15
+    min_likes: 50
+    fetch_profiles: true
+
+  - id: twitter_ai_kol_chinese
+    name: "Twitter AI KOL (华人)"
+    dimension: technology
+    group: kol
+    crawler_class: twitter_kol
+    schedule: "4h"
+    is_enabled: true
+    tags: ["twitter", "kol", "chinese"]
+    twitter_accounts:
+      # 华人 AI 学者
+      - DrJimFan        # Jim Fan (范继城) - NVIDIA
+      - Guodong_CN      # 郭栋
+      - ChenglongMa     # 马成龙
+      - xiaaboris       # Xia Boris
+    max_tweets_per_account: 15
+    min_likes: 20
+    fetch_profiles: true
+
+  # ============================================================
+  # 科技前沿 - AI 话题搜索
+  # ============================================================
+  - id: twitter_ai_breakthrough
+    name: "Twitter AI 突破性进展"
+    dimension: technology
+    group: community
+    crawler_class: twitter_search
+    schedule: "4h"
+    is_enabled: true
+    tags: ["twitter", "breakthrough"]
+    twitter_query: "(AI OR LLM OR GPT) (breakthrough OR launch OR release OR open-source) min_faves:100"
+    twitter_query_type: "Top"
+    max_tweets: 20
+    min_likes: 100
+
+  - id: twitter_ai_papers
+    name: "Twitter AI 论文讨论"
+    dimension: technology
+    group: community
+    crawler_class: twitter_search
+    schedule: "daily"
+    is_enabled: true
+    tags: ["twitter", "papers"]
+    twitter_query: "(arxiv.org OR paper OR SOTA) (AI OR LLM OR transformer) min_faves:50"
+    twitter_query_type: "Top"
+    max_tweets: 20
+    min_likes: 50
+
+  # ============================================================
+  # 产业动态 - AI 投融资与产品
+  # ============================================================
+  - id: twitter_ai_industry
+    name: "Twitter AI 产业动态"
+    dimension: industry
+    group: news
+    crawler_class: twitter_search
+    schedule: "4h"
+    is_enabled: true
+    tags: ["twitter", "industry"]
+    twitter_query: "(AI startup OR AI funding OR AI acquisition OR AI IPO) min_faves:50"
+    twitter_query_type: "Top"
+    max_tweets: 20
+    min_likes: 50
+
+  # ============================================================
+  # 人才雷达 - AI 人才动态
+  # ============================================================
+  - id: twitter_ai_talent
+    name: "Twitter AI 人才动态"
+    dimension: talent
+    group: tracking
+    crawler_class: twitter_search
+    schedule: "daily"
+    is_enabled: true
+    tags: ["twitter", "talent"]
+    twitter_query: '(joining OR hired OR "new role" OR "excited to announce") (AI OR ML OR "machine learning" OR "deep learning") min_faves:20'
+    twitter_query_type: "Latest"
+    max_tweets: 20
+    min_likes: 20
+
+  # ============================================================
+  # 学院舆情 - 社交媒体提及
+  # ============================================================
+  - id: twitter_zgci_sentiment
+    name: "Twitter 学院舆情监控"
+    dimension: sentiment
+    group: social_media
+    crawler_class: twitter_search
+    schedule: "4h"
+    is_enabled: true
+    tags: ["twitter", "sentiment"]
+    twitter_query: '"中关村人工智能研究院" OR "ZGCI AI" OR "Beijing Academy of AI"'
+    twitter_query_type: "Latest"
+    max_tweets: 20
+    min_likes: 0

@@ -1,0 +1,329 @@
+dimension: scholars
+dimension_name: 高校师资
+sources:
+- id: pku_cs_faculty
+  name: 北京大学计算机学院-师资队伍
+  group: pku
+  university: 北京大学
+  department: 计算机学院
+  url: https://cs.pku.edu.cn/szdw/jyxl/amz/ALL.htm
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  base_url: https://cs.pku.edu.cn
+  max_pages: 10
+  faculty_selectors:
+    list_item: ul li
+    name: h3
+    link: a
+    photo: img
+  tags:
+  - faculty
+  - pku
+  - cs
+  detail_selectors:
+    bio: div.v_news_content
+    research_areas: div.research
+    email: a[href^="mailto:"]
+    heading_sections:
+      bio: 个人简介
+      research_areas: 研究方向
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education
+- id: pku_cis_faculty
+  name: 北京大学智能学院-专职教师
+  group: pku
+  university: 北京大学
+  department: 智能学院
+  url: http://www.cis.pku.edu.cn/szdw/zzjs.htm
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  base_url: http://www.cis.pku.edu.cn
+  max_pages: 5
+  faculty_selectors:
+    list_item: ul li
+    name: h3
+    link: a
+    photo: img
+    research_areas: p:nth-of-type(2)
+  tags:
+  - faculty
+  - pku
+  - ai
+  detail_selectors:
+    bio: div.v_news_content
+    email: a[href^="mailto:"]
+    heading_sections:
+      bio: 个人简介
+      research_areas: 研究方向
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education
+- id: pku_icst_faculty
+  name: 北京大学王选计算机研究所-学术团队
+  group: pku
+  university: 北京大学
+  department: 王选计算机研究所
+  url: https://www.icst.pku.edu.cn/xstd/xstd_01/index.htm
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  base_url: https://www.icst.pku.edu.cn
+  faculty_selectors:
+    list_item: ul.m-list li
+    name: div.m-tt a
+    link: div.m-tt a
+    position: div.m-tt em
+    bio: div.m-tt p
+    research_areas: div.m-tt p
+  detail_selectors:
+    bio: div[class*='content'] p, div.article, div[class*='intro'], div[class*='bio']
+    email: a[href^='mailto:']
+    research_areas: div[class*='research'], div[class*='area'], li, ul
+    heading_sections:
+      bio: 个人简介|简历|自我介绍
+      research_areas: 研究方向|研究领域|研究兴趣|科研方向
+    label_prefix_sections:
+      email: 邮箱|Email|电子邮件
+      research_areas: 研究方向|研究领域
+  tags:
+  - faculty
+  - pku
+  - cs
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education
+- id: pku_ic_faculty
+  name: 北京大学集成电路学院-专职教师
+  group: pku
+  university: 北京大学
+  department: 集成电路学院
+  url: https://ic.pku.edu.cn/szdw/zzjs/jcwndzx1/index.htm
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  base_url: https://ic.pku.edu.cn/szdw/zzjs/jcwndzx1/index.htm
+  faculty_selectors:
+    list_item: ul.list03 li.zhuanzhi
+    name: span.name b
+    link: a
+    photo: span.gp-img-responsive img
+  detail_selectors:
+    bio: div.teacherIntro
+    heading_sections:
+      bio: 个人简介
+      research_areas: 研究方向
+    label_prefix_sections:
+      research_areas: 研究领域：
+  tags:
+  - faculty
+  - pku
+  - ic
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education
+- id: pku_ss_faculty
+  name: 北京大学软件与微电子学院-师资团队
+  group: pku
+  university: 北京大学
+  department: 软件与微电子学院
+  url: https://ss.pku.edu.cn/sztd/xssbsz/index.htm
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  base_url: https://ss.pku.edu.cn/sztd/xssbsz/index.htm
+  faculty_selectors:
+    list_item: ul.tab-content-list li
+    name: span.name-text
+    link: a
+  detail_selectors:
+    bio: div.jianjie, div[class*='content'], div.article
+    position: div.zw span, div[class*='position']
+    research_areas: div.jianjie1, div[class*='research']
+    email: a[href^='mailto:']
+  tags:
+  - faculty
+  - pku
+  - se
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education
+- id: pku_cfcs_faculty
+  name: 北京大学前沿计算研究中心-教学科研人员
+  group: pku
+  university: 北京大学
+  department: 前沿计算研究中心
+  url: https://cfcs.pku.edu.cn/people/faculty/index.htm
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  base_url: https://cfcs.pku.edu.cn/people/faculty/index.htm
+  faculty_selectors:
+    list_item: ul.pku-list03 li
+    name: a.name
+    link: a.name
+    photo: div.artImg img
+    position: span.title
+  detail_selectors:
+    research_areas: span.sampleText
+    bio: div.d_inner
+  tags:
+  - faculty
+  - pku
+  - cs
+  - ai
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education
+- id: pku_math_faculty
+  name: 北京大学数学学院-师资
+  group: pku
+  university: 北京大学
+  department: 数学学院
+  url: https://www.math.pku.edu.cn/jsdw/js_20180628175159671361/index.htm
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 3
+  is_enabled: false
+  base_url: https://www.math.pku.edu.cn
+  faculty_selectors:
+    list_item: ul.subDoctor_stateList li
+    name: h3 a
+    link: h3 a
+    photo: div.left_img img
+    position: div.right p i
+    research_areas: div.right p:nth-of-type(2) i
+  detail_selectors:
+    bio: div[class*='content'] p, div.article, div[class*='intro'], div[class*='bio']
+    email: a[href^='mailto:']
+    research_areas: div[class*='research'], div[class*='area'], li, ul
+    heading_sections:
+      bio: 个人简介|简历|自我介绍
+      research_areas: 研究方向|研究领域|研究兴趣|科研方向
+    label_prefix_sections:
+      email: 邮箱|Email|电子邮件
+      research_areas: 研究方向|研究领域
+  tags:
+  - faculty
+  - pku
+  - math
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education
+- id: pku_eecs_sz_faculty
+  name: 北京大学信息工程学院（深圳）-师资
+  group: pku
+  university: 北京大学
+  department: 信息工程学院（深圳）
+  url: https://www.pkusz.edu.cn/szdw/bsh/xxgcxy1.htm
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  base_url: https://www.pkusz.edu.cn
+  faculty_selectors:
+    list_item: ul li
+    name: a
+    link: a
+  detail_selectors:
+    bio: div[class*='content'], div.article
+    email: a[href^='mailto:']
+    heading_sections:
+      bio: 个人简介
+      research_areas: 研究方向
+    label_prefix_sections:
+      email: 邮箱|Email|电子邮件
+      research_areas: 研究方向|研究领域
+  tags:
+  - faculty
+  - pku
+  - cs
+  - shenzhen
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education
+- id: pku_coe_faculty
+  name: 北京大学工学院-师资
+  group: pku
+  university: 北京大学
+  department: 工学院
+  url: https://www.coe.pku.edu.cn/teching/all.html
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  enable_llm: true
+  base_url: https://www.coe.pku.edu.cn
+  faculty_selectors:
+    list_item: a[href*='/teaching/all_time/']
+    name: self
+    link: a
+  detail_selectors:
+    bio: div[class*='content'], div.article, p
+    email: a[href^='mailto:']
+    heading_sections:
+      bio: 个人简介|简历
+      research_areas: 研究方向|研究兴趣
+    label_prefix_sections:
+      email: 邮箱|Email|电子邮件
+      research_areas: 研究方向|研究领域
+  tags:
+  - faculty
+  - pku
+  - engineering
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education

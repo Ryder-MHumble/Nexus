@@ -1,0 +1,165 @@
+dimension: scholars
+dimension_name: 高校师资
+sources:
+- id: sjtu_ai_faculty
+  name: 上海交通大学人工智能研究院-师资
+  group: sjtu
+  university: 上海交通大学
+  department: 人工智能研究院
+  url: https://ai.sjtu.edu.cn/faculty/teachers
+  crawl_method: faculty
+  crawler_class: sjtu_ai_scholar
+  schedule: weekly
+  priority: 3
+  is_enabled: false
+  base_url: https://ai.sjtu.edu.cn
+  faculty_selectors:
+    list_item: .teacher-item, .faculty-item
+    name: h3, h4, .name, .teacher-name, .faculty-name
+    link: a
+  detail_selectors:
+    bio: div[class*='content'] p, div.article, div[class*='intro'], div[class*='bio']
+    email: a[href^='mailto:']
+    research_areas: div[class*='research'], div[class*='area'], li, ul
+    heading_sections:
+      bio: 个人简介|简历|自我介绍
+      research_areas: 研究方向|研究领域|研究兴趣|科研方向
+    label_prefix_sections:
+      email: 邮箱|Email|电子邮件
+      research_areas: 研究方向|研究领域
+  tags:
+  - faculty
+  - sjtu
+  - ai
+- id: sjtu_cs_faculty
+  name: 上海交通大学计算机系-教师名录
+  group: sjtu
+  university: 上海交通大学
+  department: 计算机科学与工程系
+  url: https://www.cs.sjtu.edu.cn/jiaoshiml.html
+  crawler_class: sjtu_cs_scholar
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  request_delay: 1.0
+  detail_selectors:
+    bio: div[class*='content'] p, div[class*='article'] p
+    email: a[href^='mailto:']
+    heading_sections:
+      bio: 个人简介
+      research_areas: 研究方向
+    label_prefix_sections:
+      email: Email：
+      position: 职称：
+      research_areas: 研究方向：
+  tags:
+  - faculty
+  - sjtu
+  - cs
+- id: sjtu_se_faculty
+  name: 上海交通大学软件学院-师资队伍
+  group: sjtu
+  university: 上海交通大学
+  department: 软件学院
+  url: http://www.se.sjtu.edu.cn/Data/List/people
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  enable_llm: false
+  base_url: http://www.se.sjtu.edu.cn
+  faculty_selectors:
+    list_item: div.tli
+    name: div.teacher-txt a
+    link: div.teacher-txt a
+  detail_selectors:
+    bio: null
+    email: null
+    label_prefix_sections:
+      position: 职称：
+      email: 邮箱：
+  tags:
+  - faculty
+  - sjtu
+  - se
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education
+- id: sjtu_infosec_faculty
+  name: 上海交通大学网络空间安全学院-师资
+  group: sjtu
+  university: 上海交通大学
+  department: 网络空间安全学院
+  url: https://infosec.sjtu.edu.cn/Directory.aspx
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  base_url: https://infosec.sjtu.edu.cn
+  faculty_selectors:
+    list_item: div.Faculty li
+    name: h2
+    link: a
+    photo: img
+    position: h5
+    email: p
+  detail_selectors:
+    email: a[href^="mailto:"]
+    heading_sections:
+      bio: 个人简介
+      research_areas: 研究方向
+  tags:
+  - faculty
+  - sjtu
+  - cybersecurity
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education
+- id: sjtu_qingyuan_faculty
+  name: 上海交通大学清源研究院-研究员
+  group: sjtu
+  university: 上海交通大学
+  department: 清源研究院
+  url: http://www.qingyuan.sjtu.edu.cn/c/quanzhijiaoshi
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  enable_llm: true
+  base_url: http://www.qingyuan.sjtu.edu.cn
+  faculty_selectors:
+    list_item: a[href^='/a/']
+    name: h3
+    link: a
+  detail_selectors:
+    bio: p, div[class*='content'], div.article
+    email: a[href^='mailto:']
+    heading_sections:
+      bio: 个人简介|简历
+      research_areas: 研究方向|研究兴趣
+    label_prefix_sections:
+      email: 邮箱|Email|电子邮件
+      research_areas: 研究方向|研究领域
+  tags:
+  - faculty
+  - sjtu
+  - ai
+  - research
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education

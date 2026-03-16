@@ -1,0 +1,219 @@
+dimension: "industry"
+dimension_name: "对产业"
+description: "产业新闻、AI融资/IPO、产业动态"
+
+default_keyword_filter:
+  - "人工智能"
+  - "AI"
+  - "大模型"
+  - "融资"
+  - "IPO"
+  - "创业"
+  - "投资"
+  - "科技"
+  - "芯片"
+  - "机器人"
+  - "智能"
+  - "数据"
+  - "算力"
+  - "独角兽"
+  - "上市"
+
+sources:
+  # === A. 产业新闻 ===
+  - id: "36kr_news"
+    name: "36氪-快讯"
+    group: "news"
+    url: "https://36kr.com/newsflashes"
+    crawl_method: "static"
+    schedule: "2h"
+    priority: 1
+    is_enabled: true
+    selectors:
+      list_item: "div.newsflash-item"
+      title: "a.item-title"
+      link: "a.item-title"
+      date: "span.time"
+    base_url: "https://36kr.com"
+    detail_selectors:
+      content: "div.item-desc"
+    tags: ["news", "36kr", "industry"]
+
+  - id: "huxiu_news"
+    name: "虎嗅"
+    group: "news"
+    url: "https://www.huxiu.com/"
+    crawl_method: "static"
+    schedule: "4h"
+    priority: 1
+    is_enabled: false  # WAF anti-bot protection, returns captcha page
+    selectors:
+      list_item: "div.article-item"
+      title: "a.article-title"
+      link: "a.article-title"
+      date: "span.time"
+    base_url: "https://www.huxiu.com"
+    tags: ["news", "huxiu", "industry"]
+
+  - id: "tmtpost_news"
+    name: "钛媒体"
+    group: "news"
+    url: "https://www.tmtpost.com/feed"
+    crawl_method: "rss"
+    schedule: "4h"
+    priority: 2
+    is_enabled: true
+    tags: ["news", "tmtpost", "industry"]
+
+  - id: "jiemian_tech"
+    name: "界面新闻-科技"
+    group: "news"
+    url: "https://www.jiemian.com/lists/280.html"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 2
+    is_enabled: true
+    selectors:
+      list_item: "li.card-list"
+      title: "h3.card-list__title"
+      link: "div.card-list__content a"
+    base_url: "https://www.jiemian.com"
+    detail_selectors:
+      content: "div.article-content"
+    tags: ["news", "jiemian", "tech"]
+
+  - id: "thepaper_tech"
+    name: "澎湃新闻-科技"
+    group: "news"
+    url: "https://www.thepaper.cn/"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 2
+    is_enabled: false  # Next.js SPA, content loaded via JS (__NEXT_DATA__), static crawl gets 0 items
+    selectors:
+      list_item: "div.news_li"
+      title: "a"
+      link: "a"
+      date: "span.time"
+    base_url: "https://www.thepaper.cn"
+    keyword_filter:
+      - "AI"
+      - "人工智能"
+      - "大模型"
+      - "芯片"
+      - "科技"
+    tags: ["news", "thepaper", "tech"]
+
+  - id: "iyiou_ai"
+    name: "亿欧-AI"
+    group: "news"
+    url: "https://www.iyiou.com/"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 2
+    is_enabled: false  # Site returns empty 209-byte response, likely defunct or heavy JS SPA
+    selectors:
+      list_item: "div.article-item"
+      title: "a.title"
+      link: "a.title"
+      date: "span.time"
+    base_url: "https://www.iyiou.com"
+    keyword_filter:
+      - "AI"
+      - "人工智能"
+      - "大模型"
+    tags: ["news", "iyiou", "ai"]
+
+  - id: "cyzone_news"
+    name: "创业邦"
+    group: "news"
+    url: "https://www.cyzone.cn/"
+    crawl_method: "static"
+    schedule: "4h"
+    priority: 2
+    is_enabled: true
+    selectors:
+      list_item: "div.article-item"
+      title: "a.item-title"
+      link: "a.item-title"
+    base_url: "https://www.cyzone.cn"
+    keyword_filter: ["AI", "人工智能", "大模型", "融资", "机器人", "智能", "芯片", "科技", "投资", "创业"]
+    detail_selectors:
+      content: "div.g-art-content"
+    tags: ["news", "cyzone", "startup"]
+
+  # === B. 融资/IPO ===
+  - id: "chinaventure_news"
+    name: "投中网"
+    group: "investment"
+    url: "https://www.chinaventure.com.cn/"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 2
+    is_enabled: true
+    selectors:
+      list_item: "div.news_list_zone li"
+      title: "h1"
+      link: "a"
+    base_url: "https://www.chinaventure.com.cn"
+    keyword_filter:
+      - "AI"
+      - "人工智能"
+      - "融资"
+      - "大模型"
+      - "芯片"
+      - "机器人"
+      - "智能"
+      - "投资"
+      - "科技"
+    detail_selectors:
+      content: "div.article_slice_pc"
+    tags: ["finance", "investment", "chinaventure"]
+
+  - id: "caict_news"
+    name: "中国信通院-动态"
+    group: "news"
+    url: "http://www.caict.ac.cn/xwdt/ynxw/"
+    crawl_method: "dynamic"
+    warmup_url: "http://www.caict.ac.cn/"
+    schedule: "daily"
+    priority: 2
+    is_enabled: true
+    selectors:
+      list_item: "tr"
+      title: "a.main_t_list"
+      link: "a.main_t_list"
+      date: "td.main_t_list"
+      date_format: "%Y-%m-%d"
+    base_url: "http://www.caict.ac.cn"
+    keyword_filter:
+      - "人工智能"
+      - "AI"
+      - "大模型"
+      - "数据"
+      - "算力"
+      - "6G"
+      - "数字经济"
+      - "智能"
+    tags: ["news", "caict", "industry", "research"]
+
+  - id: "36kr_investment"
+    name: "36氪-融资频道"
+    group: "investment"
+    url: "https://36kr.com/motif/616879672033"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 1
+    is_enabled: false  # URL returns 302 -> 404 (page removed/restructured)
+    selectors:
+      list_item: "div.article-item"
+      title: "a.article-title"
+      link: "a.article-title"
+      date: "span.time"
+    base_url: "https://36kr.com"
+    keyword_filter:
+      - "AI"
+      - "人工智能"
+      - "大模型"
+      - "机器人"
+    tags: ["finance", "investment", "36kr"]

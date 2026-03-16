@@ -1,0 +1,502 @@
+dimension: "technology"
+dimension_name: "对技术"
+description: "AI 技术进展、国际热点讨论、KOL 观点"
+
+default_keyword_filter:
+  - "AI"
+  - "人工智能"
+  - "大模型"
+  - "LLM"
+  - "GPT"
+  - "机器学习"
+  - "深度学习"
+
+sources:
+  # === A. 国内科技媒体 (RSS) ===
+  - id: "jiqizhixin_rss"
+    name: "机器之心"
+    group: "domestic_media"
+    url: "https://www.jiqizhixin.com/rss"
+    crawl_method: "rss"
+    schedule: "2h"
+    priority: 2
+    is_enabled: false  # RSS URL redirects to Feishu form, feed no longer available
+    max_entries: 20
+    keyword_filter: []  # 机器之心全站均为 AI 内容，无需关键词过滤
+    tags: ["tech_media", "domestic"]
+
+  - id: "36kr_ai_rss"
+    name: "36氪-AI频道"
+    group: "domestic_media"
+    url: "https://36kr.com/feed"
+    crawl_method: "rss"
+    schedule: "2h"
+    priority: 2
+    is_enabled: true
+    max_entries: 20
+    keyword_filter: ["AI", "人工智能", "大模型", "GPT", "LLM", "机器学习"]
+    tags: ["tech_media", "domestic"]
+
+  # === B. 国际科技源 (RSS) ===
+  - id: "techcrunch_ai_rss"
+    name: "TechCrunch AI"
+    group: "international_media"
+    url: "https://techcrunch.com/category/artificial-intelligence/feed/"
+    crawl_method: "rss"
+    schedule: "2h"
+    priority: 1
+    is_enabled: true
+    max_entries: 15
+    tags: ["tech_media", "international"]
+
+  - id: "theverge_ai_rss"
+    name: "The Verge AI"
+    group: "international_media"
+    url: "https://www.theverge.com/rss/index.xml"
+    crawl_method: "rss"
+    schedule: "4h"
+    priority: 2
+    is_enabled: true
+    max_entries: 15
+    keyword_filter: ["AI", "artificial intelligence", "machine learning", "OpenAI", "GPT", "LLM"]
+    tags: ["tech_media", "international"]
+
+  - id: "mit_tech_review_rss"
+    name: "MIT Technology Review"
+    group: "international_media"
+    url: "https://www.technologyreview.com/feed/"
+    crawl_method: "rss"
+    schedule: "daily"
+    priority: 2
+    is_enabled: true
+    max_entries: 10
+    keyword_filter: ["AI", "artificial intelligence", "machine learning", "deep learning"]
+    tags: ["tech_media", "international", "academic"]
+
+  - id: "venturebeat_ai_rss"
+    name: "VentureBeat AI"
+    group: "international_media"
+    url: "https://venturebeat.com/category/ai/feed/"
+    crawl_method: "rss"
+    schedule: "4h"
+    priority: 2
+    is_enabled: true
+    max_entries: 15
+    tags: ["tech_media", "international"]
+
+  - id: "ieee_spectrum_ai_rss"
+    name: "IEEE Spectrum AI"
+    group: "international_media"
+    url: "https://spectrum.ieee.org/feeds/topic/artificial-intelligence.rss"
+    crawl_method: "rss"
+    schedule: "daily"
+    priority: 2
+    is_enabled: true
+    max_entries: 15
+    tags: ["tech_media", "international", "academic"]
+
+  - id: "wired_ai_rss"
+    name: "Wired AI"
+    group: "international_media"
+    url: "https://www.wired.com/feed/tag/ai/latest/rss"
+    crawl_method: "rss"
+    schedule: "daily"
+    priority: 2
+    is_enabled: true
+    max_entries: 15
+    keyword_filter: ["AI", "artificial intelligence", "machine learning", "OpenAI", "GPT", "LLM"]
+    tags: ["tech_media", "international"]
+
+  - id: "arstechnica_ai_rss"
+    name: "Ars Technica AI"
+    group: "international_media"
+    url: "https://arstechnica.com/ai/feed/"
+    crawl_method: "rss"
+    schedule: "daily"
+    priority: 2
+    is_enabled: true
+    max_entries: 15
+    tags: ["tech_media", "international"]
+
+  # === C. 公司官方博客 (静态爬取) ===
+  - id: "openai_blog"
+    name: "OpenAI Blog"
+    group: "company_blogs"
+    url: "https://openai.com/news/rss.xml"
+    crawl_method: "rss"
+    schedule: "daily"
+    priority: 1
+    is_enabled: true  # Fixed: switched from dynamic to RSS feed
+    max_entries: 15
+    tags: ["company_blog", "openai"]
+
+  - id: "anthropic_blog"
+    name: "Anthropic News"
+    group: "company_blogs"
+    url: "https://www.anthropic.com/news"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 1
+    is_enabled: true  # Fixed: /news page has SSR-rendered article links with h2/h4 titles
+    keyword_filter: []  # All Anthropic news is AI-relevant; titles don't contain generic AI keywords
+    selectors:
+      list_item: "a[href*='/news/']"
+      title: "h2, h4"
+      link: "_self"
+      date: "time"
+      date_format: "%b %d, %Y"
+    base_url: "https://www.anthropic.com"
+    tags: ["company_blog", "anthropic"]
+
+  - id: "google_deepmind_blog"
+    name: "Google DeepMind Blog"
+    group: "company_blogs"
+    url: "https://deepmind.google/discover/blog/"
+    crawl_method: "dynamic"
+    schedule: "daily"
+    priority: 1
+    is_enabled: true
+    wait_for: "article"
+    wait_timeout: 15000
+    selectors:
+      list_item: "article"
+      title: "h3"
+      link: "a"
+      date: "time"
+    base_url: "https://deepmind.google"
+    keyword_filter: []  # All DeepMind content is AI-relevant
+    tags: ["company_blog", "google", "deepmind"]
+
+  - id: "meta_ai_blog"
+    name: "Meta AI Blog"
+    group: "company_blogs"
+    url: "https://ai.meta.com/blog/"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 1
+    is_enabled: true  # Fixed: switched from dynamic (no article elements) to static SSR links
+    selectors:
+      list_item: "a[href*='ai.meta.com/blog/']"
+      title: "_self"
+      link: "_self"
+    base_url: "https://ai.meta.com"
+    keyword_filter: []  # All Meta AI content is AI-relevant
+    tags: ["company_blog", "meta", "llama"]
+
+  - id: "microsoft_ai_blog"
+    name: "Microsoft AI Blog"
+    group: "company_blogs"
+    url: "https://blogs.microsoft.com/ai/feed/"
+    crawl_method: "rss"
+    schedule: "daily"
+    priority: 1
+    is_enabled: true  # Fixed: switched from static (403) to RSS feed
+    max_entries: 15
+    keyword_filter: []  # All Microsoft AI blog content is relevant
+    tags: ["company_blog", "microsoft", "copilot"]
+
+  - id: "mistral_ai_news"
+    name: "Mistral AI News"
+    group: "company_blogs"
+    url: "https://mistral.ai/news/"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 1
+    is_enabled: true  # Fixed: switched from dynamic (timeout) to static; SSR provides article elements
+    selectors:
+      list_item: "article"
+      title: "h2"
+      link: "a[href*='/news/']"
+    base_url: "https://mistral.ai"
+    keyword_filter: []  # All Mistral AI content is relevant
+    tags: ["company_blog", "mistral", "open_source"]
+
+  - id: "xai_blog"
+    name: "xAI Blog (Grok)"
+    group: "company_blogs"
+    url: "https://x.ai/blog"
+    crawl_method: "dynamic"
+    schedule: "daily"
+    priority: 1
+    is_enabled: false  # Cloudflare 403 protection blocks all automated access
+    wait_for: "article"
+    wait_timeout: 15000
+    selectors:
+      list_item: "article"
+      title: "h2"
+      link: "a"
+      date: "time"
+    base_url: "https://x.ai"
+    keyword_filter: []  # All xAI content is relevant (Grok, AGI research)
+    tags: ["company_blog", "xai", "grok", "elon_musk"]
+
+  - id: "cohere_blog"
+    name: "Cohere Blog"
+    group: "company_blogs"
+    url: "https://cohere.com/blog"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 2
+    is_enabled: false  # JS SPA with no static content; static fetch returns empty shell
+    selectors:
+      list_item: "article"
+      title: "h2"
+      link: "a"
+      date: "time"
+    base_url: "https://cohere.com"
+    keyword_filter: []  # All Cohere content is enterprise AI relevant
+    tags: ["company_blog", "cohere", "enterprise"]
+
+  - id: "stability_ai_news"
+    name: "Stability AI News"
+    group: "company_blogs"
+    url: "https://stability.ai/news"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 2
+    is_enabled: true  # Fixed: switched from dynamic (timeout) to static; 20 article.blog-item found
+    selectors:
+      list_item: "article.blog-item"
+      title: "h1"
+      link: "h1 a"
+    base_url: "https://stability.ai"
+    keyword_filter: []  # All Stability AI content is relevant (Stable Diffusion, generative AI)
+    tags: ["company_blog", "stability_ai", "image_generation"]
+
+  - id: "huggingface_blog"
+    name: "Hugging Face Blog"
+    group: "company_blogs"
+    url: "https://huggingface.co/blog"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 1
+    is_enabled: true  # Fixed: title selector changed h2 → h4 (actual heading tag in article cards)
+    selectors:
+      list_item: "article"
+      title: "h4"
+      link: "a"
+      date: "time"
+    base_url: "https://huggingface.co"
+    keyword_filter: []  # All Hugging Face content is AI/ML relevant
+    tags: ["company_blog", "huggingface", "open_source", "transformers"]
+
+  - id: "runway_blog"
+    name: "Runway Blog"
+    group: "company_blogs"
+    url: "https://runwayml.com/blog/"
+    crawl_method: "dynamic"
+    schedule: "weekly"
+    priority: 2
+    is_enabled: false  # Blog moved to /news/ with very few static items; dynamic times out
+    wait_for: "article"
+    wait_timeout: 15000
+    selectors:
+      list_item: "article"
+      title: "h2"
+      link: "a"
+      date: "time"
+    base_url: "https://runwayml.com"
+    keyword_filter: []  # All Runway content is generative AI relevant
+    tags: ["company_blog", "runway", "video_generation"]
+
+  - id: "inflection_ai_blog"
+    name: "Inflection AI Blog"
+    group: "company_blogs"
+    url: "https://inflection.ai/blog"
+    crawl_method: "static"
+    schedule: "weekly"
+    priority: 2
+    is_enabled: false  # JS SPA with no static content; 359KB page renders no article elements
+    selectors:
+      list_item: "article"
+      title: "h2"
+      link: "a"
+      date: "time"
+    base_url: "https://inflection.ai"
+    keyword_filter: []  # All Inflection AI content is relevant (Pi assistant)
+    tags: ["company_blog", "inflection_ai", "conversational_ai"]
+
+  # === D. ArXiv AI论文 (自定义 API Parser) ===
+  - id: "arxiv_cs_ai"
+    name: "ArXiv cs.AI"
+    group: "academic"
+    url: "http://export.arxiv.org/api/query"
+    crawl_method: "static"
+    crawler_class: "arxiv_api"
+    search_query: "cat:cs.AI"
+    max_results: 20
+    schedule: "daily"
+    priority: 1
+    is_enabled: true
+    tags: ["academic", "arxiv", "papers"]
+
+  - id: "arxiv_cs_lg"
+    name: "ArXiv cs.LG (机器学习)"
+    group: "academic"
+    url: "http://export.arxiv.org/api/query"
+    crawl_method: "static"
+    crawler_class: "arxiv_api"
+    search_query: "cat:cs.LG"
+    max_results: 20
+    schedule: "daily"
+    priority: 1
+    is_enabled: true
+    tags: ["academic", "arxiv", "papers", "machine_learning"]
+
+  - id: "arxiv_cs_cl"
+    name: "ArXiv cs.CL (NLP/大模型)"
+    group: "academic"
+    url: "http://export.arxiv.org/api/query"
+    crawl_method: "static"
+    crawler_class: "arxiv_api"
+    search_query: "cat:cs.CL"
+    max_results: 20
+    schedule: "daily"
+    priority: 1
+    is_enabled: true
+    tags: ["academic", "arxiv", "papers", "nlp"]
+
+  # === E. 社区讨论 ===
+  - id: "hacker_news"
+    name: "Hacker News"
+    group: "community"
+    url: "https://hacker-news.firebaseio.com/v0/"
+    crawl_method: "static"
+    crawler_class: "hacker_news_api"
+    schedule: "2h"
+    priority: 2
+    is_enabled: true
+    max_results: 30
+    tags: ["community", "hacker_news"]
+
+  - id: "reddit_ml_rss"
+    name: "Reddit r/MachineLearning"
+    group: "community"
+    url: "https://www.reddit.com/r/MachineLearning/.rss"
+    crawl_method: "rss"
+    schedule: "4h"
+    priority: 2
+    is_enabled: true
+    max_entries: 20
+    tags: ["community", "reddit", "academic"]
+
+  - id: "reddit_localllama_rss"
+    name: "Reddit r/LocalLLaMA"
+    group: "community"
+    url: "https://www.reddit.com/r/LocalLLaMA/.rss"
+    crawl_method: "rss"
+    schedule: "4h"
+    priority: 2
+    is_enabled: false  # Reddit returns 403 Forbidden for RSS requests
+    max_entries: 20
+    tags: ["community", "reddit", "open_source"]
+
+  - id: "github_trending"
+    name: "GitHub Trending"
+    group: "community"
+    url: "https://api.github.com"
+    crawl_method: "static"
+    crawler_class: "github_api"
+    schedule: "daily"
+    priority: 3
+    is_enabled: true
+    max_results: 20
+    tags: ["community", "github", "open_source"]
+
+  # === F. 中国 AI 公司博客 ===
+  - id: "qwen_blog"
+    name: "Qwen Blog (阿里通义千问)"
+    group: "cn_ai_company"
+    url: "https://qwenlm.github.io/blog/"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 1
+    is_enabled: true
+    selectors:
+      list_item: "main article.post-entry"
+      title: "h2"
+      link: "a.entry-link"
+      date: "footer span"
+      date_format: "%B %d, %Y"
+      date_regex: "[A-Z][a-z]+ \\d{1,2}, \\d{4}"
+    base_url: "https://qwenlm.github.io"
+    detail_selectors:
+      content: ".post-content, .entry-content"
+    keyword_filter: []
+    tags: ["company_blog", "qwen", "alibaba", "cn_ai"]
+
+  - id: "minimax_news"
+    name: "MiniMax 新闻动态"
+    group: "cn_ai_company"
+    url: "https://www.minimaxi.com/news"
+    crawl_method: "dynamic"
+    schedule: "daily"
+    priority: 1
+    is_enabled: true
+    wait_for: "h3"
+    wait_timeout: 20000
+    selectors:
+      list_item: "a[href^='/news/']:has(h3)"
+      title: "h3"
+      link: "_self"
+      date: "section section > span"
+      date_format: "%Y-%m-%d"
+      date_regex: "\\d{4}-\\d{2}-\\d{2}"
+    base_url: "https://www.minimaxi.com"
+    detail_selectors:
+      content: "article, main section"
+    detail_use_playwright: true
+    keyword_filter: []
+    tags: ["company_blog", "minimax", "hailuo", "cn_ai"]
+
+  - id: "moonshot_research"
+    name: "月之暗面-最新研究"
+    group: "cn_ai_company"
+    url: "https://www.moonshot.cn/news"
+    crawl_method: "dynamic"
+    schedule: "daily"
+    priority: 1
+    is_enabled: true
+    wait_for: "h2"
+    wait_timeout: 15000
+    selectors:
+      list_item: "a[href*='blog'], a[href*='github'], a[href*='huggingface']"
+      title: "h2"
+      link: "_self"
+      date: "p"
+      date_format: "%Y-%m-%d"
+      date_regex: "\\d{4}-\\d{2}-\\d{2}"
+    keyword_filter: []
+    tags: ["company_blog", "moonshot", "kimi", "cn_ai"]
+
+  - id: "hunyuan_news"
+    name: "腾讯混元-最新动态"
+    group: "cn_ai_company"
+    url: "https://api.hunyuan.tencent.com/api/vision_platform/public/auditOpenAPI/dynamic/list"
+    crawler_class: "hunyuan_api"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 2
+    is_enabled: true
+    max_results: 20
+    tags: ["company_blog", "tencent", "hunyuan", "cn_ai"]
+
+  - id: "zhipu_news"
+    name: "智谱AI-最新动态"
+    group: "cn_ai_company"
+    url: "https://www.zhipuai.cn"
+    crawl_method: "dynamic"
+    schedule: "daily"
+    priority: 2
+    is_enabled: false  # React SPA with JS-only click handlers, no DOM links; news is stale (last update 2025/08)
+    wait_for: "networkidle"
+    wait_timeout: 20000
+    selectors:
+      list_item: "div[class*='news'] a, div[class*='dynamic'] a"
+      title: "h3"
+      link: "_self"
+      date: "p"
+      date_format: "%Y/%m/%d"
+      date_regex: "\\d{4}/\\d{2}/\\d{2}"
+    keyword_filter: []
+    tags: ["company_blog", "zhipu", "glm", "cn_ai"]

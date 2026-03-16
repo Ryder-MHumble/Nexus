@@ -1,0 +1,167 @@
+"""Build API response objects from database records.
+
+Converts raw database records into Pydantic schema objects for API responses.
+"""
+
+from __future__ import annotations
+
+from app.schemas.institution import (
+    DepartmentInfo,
+    DepartmentSource,
+    InstitutionDetailResponse,
+    InstitutionListItem,
+    MentorInfo,
+    ScholarInfo,
+)
+from app.services.core.institution.classification import (
+    normalize_priority,
+)
+
+
+def _parse_scholar_list(raw: list | None) -> list[ScholarInfo]:
+    """Convert raw scholar data to ScholarInfo objects.
+
+    Args:
+        raw: List of strings or dicts
+
+    Returns:
+        List of ScholarInfo objects
+    """
+    if not raw:
+        return []
+    result = []
+    for item in raw:
+        if isinstance(item, str):
+            result.append(ScholarInfo(name=item))
+        elif isinstance(item, dict):
+            result.append(ScholarInfo(**{k: v for k, v in item.items() if k in ("name", "title", "department", "research_area")}))
+    return result
+
+
+def _parse_mentor_info(mentors_list: list | None) -> MentorInfo | None:
+    """Extract first mentor as MentorInfo.
+
+    Args:
+        mentors_list: List of mentor dicts
+
+    Returns:
+        MentorInfo object or None
+    """
+    if not mentors_list:
+        return None
+    m = mentors_list[0]
+    if isinstance(m, dict):
+        return MentorInfo(
+            name=m.get("name"),
+            category=m.get("category"),
+            department=m.get("department"),
+        )
+    return None
+
+
+def _build_department_info_list(department_items: list[InstitutionListItem] | None, department_records: list[dict] | None = None) -> list[DepartmentInfo]:
+    """Convert InstitutionListItem objects to DepartmentInfo objects.
+
+    Args:
+        department_items: List of InstitutionListItem objects
+        department_records: Optional list of raw department records for additional data
+
+    Returns:
+        List of DepartmentInfo objects
+    """
+    if not department_items:
+        return []
+
+    # Create a map of records by ID for quick lookup
+    record_map = {}
+    if department_records:
+        record_map = {r["id"]: r for r in department_records}
+
+    result = []
+    for item in department_items:
+        record = record_map.get(item.id, {})
+        result.append(DepartmentInfo(
+            id=item.id,
+            name=item.name,
+            scholar_count=item.scholar_count,
+            sources=[],  # Sources not available in list items
+            org_name=record.get("org_name"),
+        ))
+    return result
+
+
+def build_list_item(record: dict) -> InstitutionListItem:
+    """Build InstitutionListItem from database record.
+
+    Args:
+        record: Raw database record
+
+    Returns:
+        InstitutionListItem schema object
+    """
+    # Normalize priority
+    priority = normalize_priority(record.get("priority"))
+
+    return InstitutionListItem(
+        id=record["id"],
+        name=record["name"],
+        # Classification fields
+        entity_type=record.get("entity_type"),
+        region=record.get("region"),
+        org_type=record.get("org_type"),
+        classification=record.get("classification"),
+        # Common fields
+        priority=priority,
+        parent_id=record.get("parent_id"),
+        scholar_count=record.get("scholar_count", 0),
+        student_count_total=record.get("student_count_total"),
+        mentor_count=record.get("mentor_count"),
+        avatar=record.get("avatar"),
+    )
+
+
+def build_detail_response(record: dict, departments: list[dict] | None = None) -> InstitutionDetailResponse:
+    """Build InstitutionDetailResponse from database record.
+
+    Args:
+        record: Raw database record
+        departments: Optional list of department records (for organizations)
+
+    Returns:
+        InstitutionDetailResponse schema object
+    """
+    # Build base list item
+    base_item = build_list_item(record)
+
+    # Build department list items if provided
+    department_items = None
+    if departments:
+        department_items = [build_list_item(dept) for dept in departments]
+
+    # Parse mentor info
+    mentor_info = _parse_mentor_info(record.get("mentors"))
+
+    # Extract additional detail fields
+    detail_data = {
+        **base_item.model_dump(),
+        # People
+        "resident_leaders": record.get("resident_leaders") or [],
+        "degree_committee": record.get("degree_committee") or [],
+        "teaching_committee": record.get("teaching_committee") or [],
+        "mentor_info": mentor_info,
+        "university_leaders": _parse_scholar_list(record.get("university_leaders")),
+        "notable_scholars": _parse_scholar_list(record.get("notable_scholars")),
+        # Cooperation
+        "key_departments": record.get("key_departments") or [],
+        "joint_labs": record.get("joint_labs") or [],
+        "training_cooperation": record.get("training_cooperation") or [],
+        "academic_cooperation": record.get("academic_cooperation") or [],
+        "talent_dual_appointment": record.get("talent_dual_appointment") or [],
+        "recruitment_events": record.get("recruitment_events") or [],
+        "visit_exchanges": record.get("visit_exchanges") or [],
+        "cooperation_focus": record.get("cooperation_focus") or [],
+        # Departments
+        "departments": _build_department_info_list(department_items, departments),
+    }
+
+    return InstitutionDetailResponse(**detail_data)

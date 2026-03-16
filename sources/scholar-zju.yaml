@@ -1,0 +1,89 @@
+dimension: scholars
+dimension_name: 高校师资
+sources:
+- id: zju_cs_faculty
+  name: 浙江大学计算机学院-师资
+  group: zju
+  university: 浙江大学
+  department: 计算机学院
+  url: https://www.cs.zju.edu.cn/23779/list.htm
+  crawl_method: faculty
+  use_playwright: true
+  wait_for: ul li a
+  wait_timeout: 20000
+  schedule: weekly
+  priority: 3
+  is_enabled: false
+  base_url: https://www.cs.zju.edu.cn
+  faculty_selectors:
+    list_item: ul li
+    name: a
+    link: a
+  detail_selectors:
+    email: a[href^='mailto:']
+    heading_sections:
+      bio: 个人简介
+      research_areas: 研究方向
+  tags:
+  - faculty
+  - zju
+  - cs
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education
+- id: zju_cyber_faculty
+  name: 浙江大学网络空间安全学院-师资
+  group: zju
+  university: 浙江大学
+  department: 网络空间安全学院
+  url: https://icsr.zju.edu.cn/szdw/list.htm
+  crawler_class: zju_cyber_scholar
+  schedule: weekly
+  priority: 3
+  is_enabled: false
+  base_url: https://icsr.zju.edu.cn
+  tags:
+  - faculty
+  - zju
+  - cybersecurity
+- id: zju_soft_faculty
+  name: 浙江大学软件学院-师资
+  group: zju
+  university: 浙江大学
+  department: 软件学院
+  url: https://www.zjuse.zju.edu.cn/szdw/list.htm
+  crawl_method: faculty
+  use_playwright: true
+  wait_for: ul li a
+  wait_timeout: 20000
+  schedule: weekly
+  priority: 3
+  is_enabled: false
+  base_url: https://www.zjuse.zju.edu.cn
+  faculty_selectors:
+    list_item: ul li
+    name: a
+    link: a
+  detail_selectors:
+    email: a[href^='mailto:']
+    heading_sections:
+      bio: 个人简介
+      research_areas: 研究方向
+    label_prefix_sections:
+      email: 邮箱|Email|电子邮件
+      research_areas: 研究方向|研究领域
+  tags:
+  - faculty
+  - zju
+  - se
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education

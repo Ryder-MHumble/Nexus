@@ -1,0 +1,378 @@
+dimension: "beijing_policy"
+dimension_name: "对北京"
+description: "北京市政策文件、市领导动态、委办局人事变动"
+
+default_keyword_filter:
+  - "教育"
+  - "科技"
+  - "人工智能"
+  - "AI"
+  - "人才"
+  - "中关村"
+  - "海淀"
+  - "创新"
+  - "数字经济"
+  - "智能"
+  - "数据"
+  - "高精尖"
+  - "芯片"
+  - "机器人"
+  - "算力"
+  - "软件"
+  - "信息化"
+  - "数字"
+  - "高新"
+
+default_keyword_blacklist:
+  - "供水"
+  - "用水"
+  - "排水"
+  - "停水"
+  - "防汛"
+  - "防灾"
+  - "卫生许可"
+  - "消防检查"
+  - "食品安全"
+  - "租赁"
+  - "住房公积金"
+  - "婚姻登记"
+  - "道路施工"
+  - "绿化"
+  - "环卫"
+  - "垃圾"
+  - "农业补贴"
+  - "粮食"
+  - "畜牧"
+  - "基层选举"
+  - "居委会"
+
+sources:
+  # === A. 政策文件 ===
+  - id: "beijing_zhengce"
+    name: "首都之窗-政策文件"
+    group: "policy"
+    url: "https://www.beijing.gov.cn/zhengce/"
+    crawl_method: "static"
+    schedule: "4h"
+    priority: 1
+    is_enabled: true
+    selectors:
+      list_item: "ul.zc_news_list li"
+      title: "a"
+      link: "a"
+    base_url: "https://www.beijing.gov.cn/zhengce/"
+    detail_selectors:
+      content: "div.TRS_UEDITOR"
+    tags: ["policy", "beijing_gov"]
+
+  - id: "bjkw_policy"
+    name: "北京市科委/中关村管委会"
+    group: "policy"
+    url: "https://kw.beijing.gov.cn/"
+    crawl_method: "static"
+    schedule: "4h"
+    priority: 1
+    is_enabled: true
+    keyword_filter: []  # All items from science/ZGC commission are relevant
+    keyword_blacklist: []  # 内容专一，不做黑名单过滤
+    selectors:
+      list_item: "ul.infoList li"
+      title: "a"
+      link: "a"
+      date: "span"
+      date_format: "%Y-%m-%d"
+    base_url: "https://kw.beijing.gov.cn"
+    detail_selectors:
+      content: "div.TRS_UEDITOR"
+    tags: ["policy", "bjkw", "science"]
+
+  - id: "bjkw_reform"
+    name: "北京市科委/中关村-深化改革"
+    group: "policy"
+    url: "https://kw.beijing.gov.cn/xwdt/kcyx/xwdtshgg/"
+    crawl_method: "static"
+    schedule: "4h"
+    priority: 1
+    is_enabled: true
+    keyword_filter: []  # 科创一线内容全部相关
+    keyword_blacklist: []
+    selectors:
+      list_item: "div.right-columns ul.list li"
+      title: "a"
+      link: "a"
+      date: "span"
+      date_format: "%Y-%m-%d"
+    detail_selectors:
+      content: "div.TRS_UEDITOR"
+    tags: ["policy", "bjkw", "reform", "innovation"]
+
+  - id: "bjkw_industry"
+    name: "北京市科委/中关村-产业发展"
+    group: "policy"
+    url: "https://kw.beijing.gov.cn/xwdt/kcyx/xwdtcyfz/"
+    crawl_method: "static"
+    schedule: "4h"
+    priority: 1
+    is_enabled: true
+    keyword_filter: []  # 科创一线内容全部相关
+    keyword_blacklist: []
+    selectors:
+      list_item: "div.right-columns ul.list li"
+      title: "a"
+      link: "a"
+      date: "span"
+      date_format: "%Y-%m-%d"
+    detail_selectors:
+      content: "div.TRS_UEDITOR"
+    tags: ["policy", "bjkw", "industry", "innovation"]
+
+  - id: "bjkw_cooperation"
+    name: "北京市科委/中关村-开放合作"
+    group: "policy"
+    url: "https://kw.beijing.gov.cn/xwdt/kcyx/xwdtkfhz/"
+    crawl_method: "static"
+    schedule: "4h"
+    priority: 1
+    is_enabled: true
+    keyword_filter: []  # 科创一线内容全部相关
+    keyword_blacklist: []
+    selectors:
+      list_item: "div.right-columns ul.list li"
+      title: "a"
+      link: "a"
+      date: "span"
+      date_format: "%Y-%m-%d"
+    detail_selectors:
+      content: "div.TRS_UEDITOR"
+    tags: ["policy", "bjkw", "cooperation", "innovation"]
+
+  - id: "bjkw_frontier"
+    name: "北京市科委/中关村-科技前沿"
+    group: "policy"
+    url: "https://kw.beijing.gov.cn/xwdt/kcyx/xwdtkjqy/"
+    crawl_method: "static"
+    schedule: "4h"
+    priority: 1
+    is_enabled: true
+    keyword_filter: []  # 科创一线内容全部相关
+    keyword_blacklist: []
+    selectors:
+      list_item: "div.right-columns ul.list li"
+      title: "a"
+      link: "a"
+      date: "span"
+      date_format: "%Y-%m-%d"
+    detail_selectors:
+      content: "div.TRS_UEDITOR"
+    tags: ["policy", "bjkw", "frontier", "technology"]
+
+  - id: "bjjw_policy"
+    name: "北京市教委"
+    group: "policy"
+    url: "https://jw.beijing.gov.cn/xxgk/"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 1
+    is_enabled: true
+    selectors:
+      list_item: "ul.z-mylist li"
+      title: "a"
+      link: "a"
+    detail_selectors:
+      content: "div.TRS_UEDITOR"
+    tags: ["policy", "education", "beijing"]
+
+  - id: "bjrsj_policy"
+    name: "北京市人社局"
+    group: "policy"
+    url: "https://rsj.beijing.gov.cn/xxgk/"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 2
+    is_enabled: true
+    selectors:
+      list_item: "ul.allList li"
+      title: "a"
+      link: "a"
+    detail_selectors:
+      content: "div.TRS_UEDITOR"
+    tags: ["policy", "hr", "beijing"]
+
+  - id: "ncsti_policy"
+    name: "国际科创中心"
+    group: "policy"
+    url: "https://www.ncsti.gov.cn/"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 2
+    is_enabled: true
+    keyword_filter: []  # 科创中心内容全部与科技创新相关，不做过滤
+    keyword_blacklist: []  # 内容专一，不做黑名单过滤
+    selectors:
+      list_item: "ul.qcdt-list li"
+      title: "a"
+      link: "a"
+    base_url: "https://www.ncsti.gov.cn"
+    detail_selectors:
+      content: "div.TRS_UEDITOR"
+    tags: ["policy", "innovation", "science"]
+
+  - id: "bjjxj_policy"
+    name: "北京市经信局-通知公告"
+    group: "policy"
+    url: "https://jxj.beijing.gov.cn/jxdt/tzgg/"
+    crawl_method: "static"
+    schedule: "4h"
+    priority: 1
+    is_enabled: true
+    keyword_filter: []  # 经信局内容全部与产业/信息化相关，不做过滤
+    keyword_blacklist: []  # 内容专一，不做黑名单过滤
+    selectors:
+      list_item: "ul.list li"
+      title: "a"
+      link: "a"
+      date: "span.date"
+      date_format: "[%Y-%m-%d]"
+    detail_selectors:
+      content: "div.TRS_UEDITOR"
+    tags: ["policy", "bjjxj", "industry", "ai"]
+
+  - id: "bjzscqj_policy"
+    name: "北京市知识产权局-通知公告"
+    group: "policy"
+    url: "https://zscqj.beijing.gov.cn/zscqj/zwgk/tzgg/index.html"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 2
+    is_enabled: true
+    selectors:
+      list_item: "ul.subpageCon-conList li"
+      title: "a"
+      link: "a"
+      date: "span"
+      date_format: "%Y-%m-%d"
+    base_url: "https://zscqj.beijing.gov.cn"
+    keyword_filter: []  # 知识产权局内容与创新/专利相关，不做过滤
+    keyword_blacklist: []  # 内容专一，不做黑名单过滤
+    detail_selectors:
+      content: "div.article-word"
+    tags: ["policy", "ip", "beijing"]
+
+  - id: "bjfgw_policy"
+    name: "北京市发改委-政策文件"
+    group: "policy"
+    url: "https://fgw.beijing.gov.cn/gzdt/fgzs/"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 2
+    is_enabled: true
+    selectors:
+      list_item: "ul.list li"
+      title: "a"
+      link: "a"
+      date: "span"
+      date_format: "%Y-%m-%d"
+    keyword_filter:
+      - "人工智能"
+      - "AI"
+      - "数字经济"
+      - "科技"
+      - "创新"
+      - "数据"
+      - "高精尖"
+      - "产业"
+      - "新质生产力"
+      - "智能"
+      - "营商环境"
+      - "经济"
+    detail_selectors:
+      content: "div.TRS_UEDITOR"
+    tags: ["policy", "development", "beijing"]
+
+  - id: "bjhd_policy"
+    name: "海淀区政府-要闻动态"
+    group: "policy"
+    url: "https://zyk.bjhd.gov.cn/ywdt/hdywx/"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 1
+    is_enabled: true
+    selectors:
+      list_item: "div.listBox li"
+      title: "a"
+      link: "a"
+      date: "span.date"
+      date_format: "[%Y-%m-%d]"
+    base_url: "https://zyk.bjhd.gov.cn"
+    detail_selectors:
+      content: "div.common_content"
+    tags: ["policy", "haidian", "district", "news"]
+
+  # === B. 人事变动与要闻 ===
+  - id: "beijing_ywdt"
+    name: "首都之窗-要闻"
+    group: "news_personnel"
+    url: "https://www.beijing.gov.cn/ywdt/"
+    crawl_method: "static"
+    schedule: "4h"
+    priority: 1
+    is_enabled: true
+    selectors:
+      list_item: "ul.news_list li"
+      title: "a"
+      link: "a"
+    base_url: "https://www.beijing.gov.cn/ywdt/"
+    detail_selectors:
+      content: "div.TRS_UEDITOR"
+    tags: ["news", "beijing_gov"]
+
+  - id: "bjd_news"
+    name: "北京日报"
+    group: "news_personnel"
+    url: "https://www.bjd.com.cn/"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 2
+    is_enabled: false  # Homepage is complex layout with no clear news list structure, needs JS rendering
+    selectors:
+      list_item: "ul.news-list li"
+      title: "a"
+      link: "a"
+      date: "span.time"
+    base_url: "https://www.bjd.com.cn"
+    tags: ["news", "bjd", "media"]
+
+  - id: "bjrd_renshi"
+    name: "北京市人大常委会"
+    group: "news_personnel"
+    url: "https://www.bjrd.gov.cn/"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 2
+    is_enabled: true
+    selectors:
+      list_item: "ul.txt_tab li"
+      title: "a"
+      link: "a"
+    base_url: "https://www.bjrd.gov.cn"
+    keyword_filter: []  # Removed over-restrictive filter; page has 28 items but all were filtered
+    detail_selectors:
+      content: "div.TRS_UEDITOR"
+    tags: ["personnel", "bjrd"]
+
+  - id: "beijing_rsrm"
+    name: "首都之窗-人事任免"
+    group: "news_personnel"
+    url: "https://www.beijing.gov.cn/gongkai/rsrm/"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 1
+    is_enabled: false  # URL returns 404
+    selectors:
+      list_item: "ul.listTxt li"
+      title: "a"
+      link: "a"
+      date: "span"
+      date_format: "%Y-%m-%d"
+    base_url: "https://www.beijing.gov.cn"
+    tags: ["personnel", "beijing_gov"]

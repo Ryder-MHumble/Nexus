@@ -1,0 +1,459 @@
+dimension: scholars
+dimension_name: 高校师资
+sources:
+- id: tsinghua_air_faculty
+  name: 清华大学智能产业研究院-研究团队
+  group: tsinghua
+  university: 清华大学
+  department: 智能产业研究院
+  url: https://air.tsinghua.edu.cn/airtd/yjtd.htm
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  base_url: https://air.tsinghua.edu.cn
+  faculty_selectors:
+    list_item: ul li
+    name: h2
+    bio: p
+    link: a
+    photo: img
+  detail_selectors:
+    bio: div[class*='content'] p, div.article, div[class*='intro']
+    email: a[href^='mailto:']
+    research_areas: div[class*='research'], li, ul
+    heading_sections:
+      bio: 个人简介
+      research_areas: 研究方向
+  tags:
+  - faculty
+  - tsinghua
+  - ai
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education
+- id: tsinghua_iiis_faculty
+  name: 清华大学交叉信息研究院-教师
+  group: tsinghua
+  university: 清华大学
+  department: 交叉信息研究院
+  url: https://iiis.tsinghua.edu.cn/rydw.htm
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  base_url: https://iiis.tsinghua.edu.cn/
+  faculty_selectors:
+    list_item: ul.ls16 li
+    name: h4
+    position: div.txt p
+    link: a
+    photo: div.img img
+    bio: div.bottom
+  detail_selectors:
+    heading_sections:
+      education: 教育背景
+      bio: 工作经历
+    label_prefix_sections:
+      email: 邮箱|Email|电子邮件
+      research_areas: 研究方向|研究领域
+  tags:
+  - faculty
+  - tsinghua
+  - cs
+  - ai
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education
+- id: tsinghua_se_faculty
+  name: 清华大学软件学院-师资队伍
+  group: tsinghua
+  university: 清华大学
+  department: 软件学院
+  url: https://www.thss.tsinghua.edu.cn/szdw/jsml.htm
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  base_url: https://www.thss.tsinghua.edu.cn/
+  faculty_selectors:
+    list_item: div.name-container
+    name: a.name
+    link: a.name
+  detail_selectors:
+    bio: div[class*='content'] p, div.article, div.post
+    email: a[href^="mailto:"]
+    heading_sections:
+      bio: 个人简介
+      research_areas: 研究方向
+    label_prefix_sections:
+      bio: 个人简介：
+      position: 职称：
+      research_areas: 研究方向：
+  tags:
+  - faculty
+  - tsinghua
+  - se
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education
+- id: tsinghua_ee_faculty
+  name: 清华大学电子工程系-教师
+  group: tsinghua
+  university: 清华大学
+  department: 电子工程系
+  url: https://www.ee.tsinghua.edu.cn/ryqk/teacher/xxgdzyjs/js2.htm
+  crawl_method: faculty
+  use_playwright: true
+  wait_for: .line
+  wait_timeout: 15000
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  base_url: https://www.ee.tsinghua.edu.cn/
+  faculty_selectors:
+    list_item: .line .t ul a
+    name: a
+    link: a
+  detail_selectors:
+    bio: .t_grjj_nr, .siglecrifbx
+    email: a[href^='mailto:']
+    heading_sections:
+      bio: 个人简介
+      research_areas: 研究方向
+    label_prefix_sections:
+      email: 邮箱|Email|电子邮件
+      research_areas: 研究方向|研究领域
+  tags:
+  - faculty
+  - tsinghua
+  - ee
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education
+- id: tsinghua_au_faculty
+  name: 清华大学自动化系-教师
+  group: tsinghua
+  university: 清华大学
+  department: 自动化系
+  url: https://www.au.tsinghua.edu.cn/szdw/jsdw1/ayjscz/kzyjcyjs.htm
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  base_url: https://www.au.tsinghua.edu.cn/
+  faculty_selectors:
+    list_item: ul.list13 li
+    name: h3
+    link: a
+    photo: div.img img
+  detail_selectors:
+    bio: div.fl02
+    email: section.leader_d ul.list21 a[href^='mailto:']
+    heading_sections:
+      bio: 个人简介
+      research_areas: 研究领域
+    label_prefix_sections:
+      email: 邮箱|Email|电子邮件
+      research_areas: 研究方向|研究领域
+  tags:
+  - faculty
+  - tsinghua
+  - au
+  - ai
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education
+- id: tsinghua_insc_faculty
+  name: 清华大学网络研究院-师资
+  group: tsinghua
+  university: 清华大学
+  department: 网络研究院
+  url: https://www.insc.tsinghua.edu.cn/szdw_/jsml.htm
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 3
+  is_enabled: false
+  base_url: https://www.insc.tsinghua.edu.cn/szdw_/
+  faculty_selectors:
+    list_item: div.article-txt a[href*='/info/']
+    link: a
+  detail_selectors:
+    email: a[href^='mailto:']
+    heading_sections:
+      bio: 研究概况
+      research_areas: 研究领域
+    label_prefix_sections:
+      position: 职称：
+  tags:
+  - faculty
+  - tsinghua
+  - network
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education
+- id: tsinghua_ias_faculty
+  name: 清华大学高等研究院-师资
+  group: tsinghua
+  university: 清华大学
+  department: 高等研究院
+  url: https://www.ias.tsinghua.edu.cn/yjry/jy.htm
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 3
+  is_enabled: false
+  base_url: https://www.ias.tsinghua.edu.cn
+  faculty_selectors:
+    list_item: table tr
+    name: td a
+    link: td a
+    position: td:nth-child(2)
+    research_areas: td:nth-child(3)
+    email: td:nth-child(4)
+  detail_selectors:
+    bio: div[class*='content'] p, div.article, div[class*='intro'], div[class*='bio']
+    email: a[href^='mailto:']
+    research_areas: div[class*='research'], div[class*='area'], li, ul
+    heading_sections:
+      bio: 个人简介|简历|自我介绍
+      research_areas: 研究方向|研究领域|研究兴趣|科研方向
+    label_prefix_sections:
+      email: 邮箱|Email|电子邮件
+      research_areas: 研究方向|研究领域
+  tags:
+  - faculty
+  - tsinghua
+  - science
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education
+- id: tsinghua_futurelab_faculty
+  name: 清华大学未来实验室-研究人员
+  group: tsinghua
+  university: 清华大学
+  department: 未来实验室
+  url: https://thfl.tsinghua.edu.cn/yjdw/jzg/zxjg.htm
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 3
+  is_enabled: false
+  base_url: https://thfl.tsinghua.edu.cn/yjdw/jzg/zxjg.htm
+  faculty_selectors:
+    list_item: ul.teacher li
+    name: .title
+    link: a
+    photo: img
+    position: .tip
+  detail_selectors:
+    email: a[href^='mailto:']
+    heading_sections:
+      bio: 个人简介
+      research_areas: 研究方向
+    label_prefix_sections:
+      email: 邮箱|Email|电子邮件
+      research_areas: 研究方向|研究领域
+  tags:
+  - faculty
+  - tsinghua
+  - ai
+  - design
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education
+- id: tsinghua_ymsc_faculty
+  name: 清华大学丘成桐数学科学中心-师资
+  group: tsinghua
+  university: 清华大学
+  department: 丘成桐数学科学中心
+  url: https://ymsc.tsinghua.edu.cn/sxxr/zxjs.htm
+  crawler_class: ymsc_scholar
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  request_delay: 0.5
+  tags:
+  - faculty
+  - tsinghua
+  - math
+- id: tsinghua_cs_faculty
+  name: 清华大学计算机系-师资
+  group: tsinghua
+  university: 清华大学
+  department: 计算机科学与技术系
+  url: https://www.cs.tsinghua.edu.cn/szzk/jzgml.htm
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  base_url: https://www.cs.tsinghua.edu.cn/
+  faculty_selectors:
+    list_item: dl dd ul li
+    name: h2 a
+    link: h2 a
+    position: .text p:nth-of-type(1)
+    phone: .text p:nth-of-type(2)
+    email: .text p:nth-of-type(3)
+    photo: .pic img
+  detail_selectors:
+    bio: div.v_news_content
+    email: a[href^='mailto:']
+    heading_sections:
+      bio: 研究概况|研究领域
+      education: 教育背景
+      work_experience: 学术兼职
+    label_prefix_sections:
+      position: 职称：
+      email: 邮箱：
+      phone: 电话：
+      research_areas: 研究领域
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education
+  tags:
+  - faculty
+  - tsinghua
+  - cs
+- id: tsinghua_life_faculty
+  name: 清华大学生命科学学院-师资
+  group: tsinghua
+  university: 清华大学
+  department: 生命科学学院
+  url: https://life.tsinghua.edu.cn/szdw/jzyg1/All1/All.htm
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 3
+  is_enabled: false
+  base_url: https://life.tsinghua.edu.cn/szdw/jzyg1/All1/All.htm
+  faculty_selectors:
+    list_item: div.pepolelist li
+    name: a
+    link: a
+  detail_selectors:
+    email: a[href^='mailto:']
+    photo: .v_news_content img, .pic img
+    bio: .v_news_content
+    research_areas: div[class*='research'], div[class*='area'], li, ul
+    heading_sections:
+      bio: 个人简介|简历|自我介绍|教育经历
+      research_areas: 研究方向|研究领域|研究兴趣|科研方向
+    label_prefix_sections:
+      email: 邮箱|Email|电子邮件
+      research_areas: 研究方向|研究领域
+  tags:
+  - faculty
+  - tsinghua
+  - life
+  - bio
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education
+- id: tsinghua_sigs_faculty
+  name: 清华大学深圳国际研究生院-师资队伍
+  group: tsinghua
+  university: 清华大学
+  department: 深圳国际研究生院
+  url: https://www.sigs.tsinghua.edu.cn/7644/list.htm
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  base_url: https://www.sigs.tsinghua.edu.cn
+  faculty_selectors:
+    list_item: .list-item, div.faculty-item, li.faculty, ul li
+    name: a, h3, h4
+    link: a
+    photo: img
+  detail_selectors:
+    bio: div[class*='content'], div.article, div[class*='intro'], div[class*='bio']
+    email: a[href^='mailto:']
+    research_areas: div[class*='research'], div[class*='area'], li, ul
+    heading_sections:
+      bio: 个人简介|简历|自我介绍
+      research_areas: 研究方向|研究领域|研究兴趣|科研方向
+    label_prefix_sections:
+      email: 邮箱|Email|电子邮件
+      research_areas: 研究方向|研究领域
+  tags:
+  - faculty
+  - tsinghua
+  - shenzhen
+- id: tsinghua_iaiig_faculty
+  name: 清华大学人工智能国际治理研究院-研究员
+  group: tsinghua
+  university: 清华大学
+  department: 人工智能国际治理研究院
+  url: https://iaiig.tsinghua.edu.cn/
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  base_url: https://iaiig.tsinghua.edu.cn
+  faculty_selectors:
+    list_item: ul li, div.faculty-item, div.researcher, li.faculty
+    name: a, h3, h4
+    link: a
+  detail_selectors:
+    bio: div[class*='content'], div.article
+    email: a[href^='mailto:']
+    heading_sections:
+      bio: 个人简介
+      research_areas: 研究方向
+    label_prefix_sections:
+      email: 邮箱|Email|电子邮件
+      research_areas: 研究方向|研究领域
+  tags:
+  - faculty
+  - tsinghua
+  - ai
+  - governance

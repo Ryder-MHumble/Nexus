@@ -1,0 +1,271 @@
+dimension: universities
+dimension_name: 对高校
+description: 高校相关信源 - ai_institutes
+default_keyword_filter:
+- 人工智能
+- AI
+- 人事
+- 任命
+- 院长
+- 校长
+- 院士
+- 科技
+- 成果
+sources:
+- id: baai_news
+  name: 北京智源人工智能研究院(BAAI)-智源社区
+  group: ai_institutes
+  url: https://hub.baai.ac.cn/
+  crawl_method: dynamic
+  schedule: daily
+  priority: 1
+  is_enabled: true
+  wait_for: div.story-item
+  wait_timeout: 15000
+  selectors:
+    list_item: div.story-item
+    title: h6
+    link: a[href^='/view/']
+    date: .story-item-author a
+    date_format: '%Y-%m-%d'
+    date_regex: \d{4}-\d{2}-\d{2}
+  base_url: https://hub.baai.ac.cn
+  keyword_filter: []
+  detail_selectors:
+    content: div.post-content
+  tags:
+  - institute
+  - baai
+  - ai
+- id: tsinghua_air
+  name: 清华大学智能产业研究院(AIR)
+  group: ai_institutes
+  url: https://air.tsinghua.edu.cn/
+  crawl_method: static
+  schedule: daily
+  priority: 1
+  is_enabled: true
+  selectors:
+    list_item: div.xinwdt div.xinwdt_lb
+    title: h2
+    link: a
+    date: b
+    date_format: '%Y/%m/%d'
+  base_url: https://air.tsinghua.edu.cn
+  keyword_filter: []
+  detail_selectors:
+    content: div.v_news_content
+  tags:
+  - institute
+  - tsinghua
+  - ai
+- id: shlab_news
+  name: 上海人工智能实验室-科研动态
+  group: ai_institutes
+  url: https://www.shlab.org.cn/info
+  crawl_method: dynamic
+  schedule: daily
+  priority: 1
+  is_enabled: true
+  wait_for: .itembox a
+  wait_timeout: 15000
+  selectors:
+    list_item: .itembox a[href*='/news/']
+    title: h2
+    link: _self
+    date: p:last-of-type
+    date_format: '%Y-%m-%d'
+  base_url: https://www.shlab.org.cn
+  keyword_filter: []
+  detail_selectors:
+    content: '#lightgallery'
+  tags:
+  - institute
+  - shlab
+  - ai
+- id: zhejianglab_news
+  name: 之江实验室
+  group: ai_institutes
+  url: https://www.zhejianglab.org/lab/home
+  crawl_method: dynamic
+  schedule: daily
+  priority: 2
+  is_enabled: false
+  wait_for: networkidle
+  wait_timeout: 15000
+  selectors:
+    list_item: h5
+    title: _self
+    link: _self
+  base_url: https://www.zhejianglab.org
+  tags:
+  - institute
+  - zhejianglab
+  - ai
+- id: pcl_news
+  name: 鹏城实验室
+  group: ai_institutes
+  url: https://www.pcl.ac.cn/
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: ul.sidelist33 li
+    title: a
+    link: a
+    date: span.label_datatime
+    date_format: '%Y-%m-%d'
+  base_url: https://www.pcl.ac.cn
+  keyword_filter: []
+  detail_selectors:
+    content: div.article
+  tags:
+  - institute
+  - pcl
+  - ai
+- id: ia_cas_news
+  name: 中科院自动化所
+  group: ai_institutes
+  url: http://www.ia.cas.cn/
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: ul.focus-bottom li
+    title: a
+    link: a
+    date: span.data-s
+    date_format: '%Y-%m-%d'
+  base_url: http://www.ia.cas.cn
+  keyword_filter: []
+  detail_selectors:
+    content: div.trs_editor_view
+  tags:
+  - institute
+  - cas
+  - automation
+- id: ict_cas_news
+  name: 中科院计算所
+  group: ai_institutes
+  url: https://www.ict.ac.cn/
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: ul.col-topnews-list li
+    title: a
+    link: a
+    date: time
+    date_format: '%Y/%m/%d'
+  base_url: https://www.ict.ac.cn
+  keyword_filter: []
+  detail_selectors:
+    content: '#xlmain'
+  tags:
+  - institute
+  - cas
+  - computing
+- id: sii_news
+  name: 上海创智学院
+  group: ai_institutes
+  url: https://www.sii.edu.cn/czxw/list.htm
+  crawl_method: static
+  schedule: daily
+  priority: 1
+  is_enabled: true
+  selectors:
+    list_item: ul.news_list li.news
+    title: div.news_title
+    link: a
+    date: div.news_date
+    date_format: '%Y%m/%d'
+    date_regex: \d{4}\d{2}/\d{2}
+  base_url: https://www.sii.edu.cn
+  keyword_filter: []
+  detail_selectors:
+    content: div.wp_articlecontent
+  tags:
+  - institute
+  - sii
+  - brother
+- id: slai_news
+  name: 深圳河套学院-学院动态
+  group: ai_institutes
+  url: https://www.slai.edu.cn/taxonomy/term/1
+  crawl_method: static
+  schedule: daily
+  priority: 1
+  is_enabled: true
+  selectors:
+    list_item: div.list-body div.col-lg-4
+    title: div.card-title a
+    link: div.card-title a
+    date: div.card-date span
+    date_format: '%Y-%m-%d'
+  base_url: https://www.slai.edu.cn
+  keyword_filter: []
+  detail_selectors:
+    content: div.field-item
+  tags:
+  - institute
+  - slai
+  - brother
+- id: cesi_news
+  name: 中国电子标准化研究院
+  group: ai_institutes
+  url: https://www.cesi.cn/page/second2.jsp?catalog=/002/002-001
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: false
+  selectors:
+    list_item: '#rmlbsed li'
+    title: a
+    link: a
+    date: span
+    date_format: '%Y-%m-%d'
+  base_url: https://www.cesi.cn
+  keyword_filter:
+  - 人工智能
+  - AI
+  - 标准
+  - 智能
+  - 大模型
+  - 算法
+  detail_selectors:
+    content: div.content3
+  tags:
+  - institute
+  - cesi
+  - standards
+- id: iie_cas_news
+  name: 中科院信工所-科研动态
+  group: ai_institutes
+  url: https://iie.cas.cn/xwdt/kydt/
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: ul.ipn-list li
+    title: dt
+    link: a
+    date: dd
+    date_format: '%Y-%m-%d'
+  base_url: https://iie.cas.cn/xwdt/kydt
+  keyword_filter:
+  - 人工智能
+  - AI
+  - 安全
+  - 智能
+  - 大模型
+  - 网络
+  detail_selectors:
+    content: div.about-content
+  tags:
+  - institute
+  - iie_cas
+  - cybersecurity

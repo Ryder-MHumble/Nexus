@@ -1,0 +1,233 @@
+dimension: "national_policy"
+dimension_name: "对国家"
+description: "国家级政策文件、人事任免、领导讲话"
+
+default_keyword_filter:
+  - "教育"
+  - "科技"
+  - "人工智能"
+  - "AI"
+  - "人才"
+  - "成果转化"
+  - "大模型"
+  - "数字经济"
+  - "创新"
+  - "数据"
+  - "智能"
+  - "芯片"
+  - "算力"
+  - "信息"
+  - "网络安全"
+  - "高新"
+  - "软件"
+
+default_keyword_blacklist:
+  - "供水"
+  - "用水"
+  - "排水"
+  - "停水"
+  - "防汛"
+  - "防灾"
+  - "卫生许可"
+  - "消防检查"
+  - "食品安全"
+  - "租赁"
+  - "住房公积金"
+  - "婚姻登记"
+  - "道路施工"
+  - "绿化"
+  - "环卫"
+  - "垃圾"
+  - "农业补贴"
+  - "粮食"
+  - "畜牧"
+  - "基层选举"
+  - "居委会"
+
+sources:
+  # === A. 政策文件 ===
+  - id: "gov_cn_zhengce"
+    name: "中国政府网-最新政策"
+    group: "policy"
+    url: "https://www.gov.cn/zhengce/zuixin/"
+    crawl_method: "dynamic"
+    schedule: "2h"
+    priority: 1
+    is_enabled: true
+    keyword_filter: []  # gov.cn aggregates all national policies; no title-level filter
+    wait_for: "div.list_2 li"
+    wait_timeout: 15000
+    selectors:
+      list_item: "div.list_2 li"
+      title: "h4 a"
+      link: "h4 a"
+      date: "span.date"
+      date_format: "%Y-%m-%d"
+    base_url: "https://www.gov.cn"
+    detail_selectors:
+      content: "div.pages_content"
+    detail_use_playwright: false
+    tags: ["policy", "gov_cn"]
+
+  - id: "ndrc_policy"
+    name: "国家发改委-通知公告"
+    group: "policy"
+    url: "https://www.ndrc.gov.cn/xxgk/zcfb/tz/"
+    crawl_method: "static"
+    schedule: "4h"
+    priority: 1
+    is_enabled: true
+    selectors:
+      list_item: "ul.u-list li"
+      title: "a"
+      link: "a"
+      date: "span"
+      date_format: "%Y/%m/%d"
+    base_url: "https://www.ndrc.gov.cn/xxgk/zcfb/tz/"
+    detail_selectors:
+      content: "div.TRS_Editor"
+    tags: ["policy", "ndrc"]
+
+  - id: "moe_policy"
+    name: "教育部-政策法规"
+    group: "policy"
+    url: "http://www.moe.gov.cn/jyb_xxgk/moe_1777/moe_1778/"
+    crawl_method: "static"
+    schedule: "4h"
+    priority: 1
+    is_enabled: true
+    selectors:
+      list_item: "div.moe-list li"
+      title: "a"
+      link: "a"
+      date: "span"
+      date_format: "%Y-%m-%d"
+    base_url: "http://www.moe.gov.cn/jyb_xxgk/moe_1777/moe_1778/"
+    detail_selectors:
+      content: "div.TRS_Editor"
+    tags: ["policy", "moe", "education"]
+
+  - id: "most_policy"
+    name: "科技部-信息公开"
+    group: "policy"
+    url: "https://www.most.gov.cn/xxgk/xinxifenlei/fdzdgknr/"
+    crawl_method: "static"
+    schedule: "4h"
+    priority: 1
+    is_enabled: true
+    keyword_filter: []  # 科技部内容全部与科技相关，不做过滤
+    keyword_blacklist: []  # 内容专一，不做黑名单过滤
+    selectors:
+      list_item: "ul.a_list li"
+      title: "a"
+      link: "a"
+      date: "div.w_list_rq"
+      date_format: "%Y年%m月%d日"
+    base_url: "https://www.most.gov.cn/xxgk/xinxifenlei/fdzdgknr/"
+    detail_selectors:
+      content: "div.TRS_UEDITOR"
+    tags: ["policy", "most", "science"]
+
+  - id: "cac_policy"
+    name: "国家网信办-政策法规"
+    group: "policy"
+    url: "https://www.cac.gov.cn/wxzw/zcfg/A093703index_1.htm"
+    crawl_method: "static"
+    schedule: "4h"
+    priority: 1
+    is_enabled: false  # Cloudflare 521 (Web Server Is Down) - server unreachable
+    selectors:
+      list_item: "div.default li"
+      title: "h5 a"
+      link: "h5 a"
+      date: "div.times"
+      date_format: "%Y-%m-%d"
+    base_url: "https://www.cac.gov.cn"
+    detail_selectors:
+      content: "div.main-content"
+    keyword_filter:
+      - "人工智能"
+      - "AI"
+      - "算法"
+      - "数据"
+      - "网络安全"
+      - "生成式"
+      - "大模型"
+      - "深度合成"
+      - "智能"
+    tags: ["policy", "cac", "ai_governance"]
+
+  - id: "samr_news"
+    name: "国家市监总局-要闻"
+    group: "policy"
+    url: "https://www.samr.gov.cn/xw/zj/"
+    crawler_class: "samr_api"
+    schedule: "daily"
+    priority: 2
+    is_enabled: true
+    base_url: "https://www.samr.gov.cn"
+    keyword_filter:
+      - "人工智能"
+      - "AI"
+      - "算法"
+      - "数据"
+      - "反垄断"
+      - "平台"
+      - "科技"
+      - "智能"
+    detail_selectors:
+      content: "#zoom"
+    tags: ["policy", "samr", "regulation"]
+
+  - id: "miit_policy"
+    name: "工信部-政策文件"
+    group: "policy"
+    url: "https://www.miit.gov.cn/search/zcwjk.html?websiteid=110000000000000&pg=&p=&tpl=14&category=183&q="
+    crawl_method: "dynamic"
+    schedule: "daily"
+    priority: 2
+    is_enabled: true
+    wait_for: "networkidle"
+    wait_timeout: 20000
+    selectors:
+      list_item: "div.jcse-result-box.search-list"
+      title: "div.search-list-t a"
+      link: "div.search-list-t a"
+      date: "div.search-list-b span:nth-child(2)"
+      date_format: "%Y-%m-%d"
+    base_url: "https://www.miit.gov.cn"
+    keyword_filter:
+      - "人工智能"
+      - "AI"
+      - "算法"
+      - "数据"
+      - "信息化"
+      - "科技"
+      - "智能制造"
+      - "数字经济"
+    detail_selectors:
+      content: "div.ccontent.center, #con_con"
+    tags: ["policy", "miit", "industry"]
+
+  - id: "nsfc_news"
+    name: "国家自然科学基金委-通知公告"
+    group: "policy"
+    url: "https://www.nsfc.gov.cn/publish/portal0/tab434/"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 2
+    is_enabled: false  # URL 404 - NSFC has changed site structure, needs URL update
+    selectors:
+      list_item: "ul.list li"
+      title: "a"
+      link: "a"
+      date: "span"
+      date_format: "%Y-%m-%d"
+    base_url: "https://www.nsfc.gov.cn"
+    keyword_filter:
+      - "人工智能"
+      - "AI"
+      - "智能"
+      - "计算"
+      - "信息"
+    tags: ["funding", "nsfc"]

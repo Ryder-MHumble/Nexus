@@ -1,0 +1,87 @@
+dimension: "personnel"
+dimension_name: "对人事"
+description: "国务院及各部委人事任免、高校及科研机构领导变动"
+
+default_keyword_filter: []  # 人事任免信息全量采集，后续 AI 处理时再分类
+
+sources:
+  # === A. 国务院人事任免 ===
+  - id: "mohrss_rsrm"
+    name: "人社部-国务院人事任免"
+    group: "state_council"
+    url: "https://www.mohrss.gov.cn/xxgk2020/fdzdgknr/bnrsgl/rsrm/"
+    crawl_method: "dynamic"
+    schedule: "daily"
+    priority: 1
+    is_enabled: true
+    wait_for: "ul.rsb_con_rightUl li"
+    wait_timeout: 30000
+    request_delay: 3
+    selectors:
+      list_item: "ul.rsb_con_rightUl li"
+      title: "a"
+      link: "a"
+      date: "span"
+      date_format: "%Y-%m-%d"
+    base_url: "https://www.mohrss.gov.cn/xxgk2020/fdzdgknr/bnrsgl/rsrm/"
+    keyword_filter: []  # 标题统一格式，不做过滤；后续 AI 处理时再筛选
+    detail_selectors:
+      content: "div.TRS_Editor"
+    detail_fetch_js: true
+    tags: ["personnel", "mohrss", "state_council"]
+
+  # === B. 教育部人事任免 ===
+  - id: "moe_renshi"
+    name: "教育部-人事任免"
+    group: "moe"
+    url: "https://www.moe.gov.cn/jyb_xwfb/s271/"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 1
+    is_enabled: true
+    selectors:
+      list_item: "div.moe-list li"
+      title: "a"
+      link: "a"
+      date: "span"
+      date_format: "%Y-%m-%d"
+    detail_selectors:
+      content: "div.TRS_Editor"
+    tags: ["personnel", "moe"]
+
+  - id: "cas_renshi"
+    name: "中科院-人事任免"
+    group: "cas"
+    url: "http://www.pe.cas.cn/rsrm/"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 1
+    is_enabled: true
+    selectors:
+      list_item: "div.list_rh ul li"
+      title: "a"
+      link: "a"
+      date: "span.time"
+      date_format: "%Y-%m-%d"
+    base_url: "http://www.pe.cas.cn/rsrm/"
+    detail_selectors:
+      content: "div.cobtbox"
+    tags: ["personnel", "cas"]
+
+  - id: "moe_renshi_si"
+    name: "教育部-人事司公告"
+    group: "moe"
+    url: "https://www.moe.gov.cn/s78/A04/tongzhi/"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 1
+    is_enabled: true
+    selectors:
+      list_item: "div.moe-list li"
+      title: "a"
+      link: "a"
+      date: "span"
+      date_format: "%Y-%m-%d"
+    detail_selectors:
+      content: "div.TRS_Editor"
+    tags: ["personnel", "moe"]

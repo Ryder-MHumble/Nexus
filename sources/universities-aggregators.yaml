@@ -1,0 +1,82 @@
+dimension: universities
+dimension_name: 对高校
+description: 高校相关信源 - aggregators
+default_keyword_filter:
+- 人工智能
+- AI
+- 人事
+- 任命
+- 院长
+- 校长
+- 院士
+- 科技
+- 成果
+sources:
+- id: shanghairanking_news
+  name: 软科(Shanghai Ranking)
+  group: aggregators
+  url: https://www.shanghairanking.cn/news
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: false
+  selectors:
+    list_item: ul.news-list li
+    title: a
+    link: a
+    date: span.time
+  base_url: https://www.shanghairanking.cn
+  tags:
+  - ranking
+  - education
+  - aggregator
+- id: eol_news
+  name: 中国教育在线-要闻
+  group: aggregators
+  url: https://news.eol.cn/yaowen/
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: div.list
+    title: div.fline a
+    link: div.fline a
+  base_url: https://news.eol.cn/yaowen/
+  keyword_filter:
+  - 人工智能
+  - AI
+  - 人事
+  - 校长
+  - 院士
+  detail_selectors:
+    content: div.article
+  tags:
+  - education
+  - aggregator
+- id: jyb_news
+  name: 中国教育报
+  group: aggregators
+  url: http://www.jyb.cn/
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: div.doclist a
+    title: _self
+    link: _self
+  base_url: http://www.jyb.cn
+  keyword_filter:
+  - 人工智能
+  - AI
+  - 人事
+  - 校长
+  - 院士
+  - 高校
+  detail_selectors:
+    content: div.xl_text
+  tags:
+  - education
+  - news
+  - official

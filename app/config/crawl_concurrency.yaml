@@ -1,0 +1,40 @@
+# Crawler Concurrency Configuration
+#
+# This configuration file defines concurrency levels for different crawler types
+# to optimize resource utilization and prevent system overload.
+#
+# Two strategies are available:
+# 1. grouped: Per-crawler-type concurrency (recommended for mixed workloads)
+# 2. fixed: Single concurrency level for all crawler types
+#
+# Set 'strategy' to either 'grouped' or 'fixed' to enable the desired approach.
+
+# Active strategy: either 'grouped' or 'fixed'
+strategy: grouped
+
+# Grouped strategy: Define concurrency per crawler type
+# Use this when you have mixed crawler types with different resource requirements
+grouped:
+  # Static crawlers: lightweight HTTP requests, high concurrency safe
+  # Examples: most news sites, blogs with simple parsing
+  static: 20
+
+  # RSS crawlers: lightweight, fetch and parse XML feeds, high concurrency safe
+  # Examples: RSS feeds, newsfeeds
+  rss: 20
+
+  # Dynamic crawlers: heavyweight, require browser instance per crawl
+  # Keep lower due to memory/CPU constraints from Playwright instances
+  # Examples: JavaScript-heavy sites, interactive content
+  dynamic: 8
+
+  # Snapshot crawlers: medium weight, browser snapshot without full page interaction
+  # Lighter than dynamic but heavier than static
+  # Examples: capturing page state at specific moments
+  snapshot: 10
+
+# Fixed strategy: Single concurrency level for all crawler types
+# Use this for simpler deployments or when crawler type distribution is unknown
+# The default value of 12 is a conservative middle ground for mixed workloads
+fixed:
+  default: 12

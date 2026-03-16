@@ -1,0 +1,78 @@
+dimension: scholars
+dimension_name: 高校师资
+sources:
+- id: fudan_cs_faculty
+  name: 复旦大学计算与智能创新学院-师资队伍
+  group: fudan
+  university: 复旦大学
+  department: 计算与智能创新学院
+  url: https://ai.fudan.edu.cn/53161/list.htm
+  crawl_method: faculty
+  use_playwright: true
+  wait_for: li.news .news_title a
+  wait_timeout: 20000
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  base_url: https://ai.fudan.edu.cn
+  faculty_selectors:
+    list_item: li.news
+    name: .news_title a
+    link: .news_title a
+    photo: .news_imgs img
+    email: .news_kz
+  detail_selectors:
+    bio: div[class*='content'] p, div.article, div.post, div[class*='intro']
+    position: div[class*='position'], div[class*='title']
+    email: a[href^="mailto:"]
+    heading_sections:
+      bio: 个人简介
+      research_areas: 研究方向
+    label_prefix_sections:
+      research_areas: 研究方向：
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education
+  tags:
+  - faculty
+  - fudan
+  - cs
+  - ai
+- id: fudan_ai_robot_faculty
+  name: 复旦大学智能机器人与先进制造创新学院-师资
+  group: fudan
+  university: 复旦大学
+  department: 智能机器人与先进制造创新学院
+  url: https://ciram.fudan.edu.cn/cslm/list.htm
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  base_url: https://ciram.fudan.edu.cn
+  faculty_selectors:
+    list_item: div.teacher-item
+    name: h2, .teacher-name, a
+    link: a
+  detail_selectors:
+    bio: div[class*='content'], div.article
+    email: a[href^='mailto:']
+    heading_sections:
+      bio: 个人简介
+      research_areas: 研究方向
+  tags:
+  - faculty
+  - fudan
+  - robot
+  - ai
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education

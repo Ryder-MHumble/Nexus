@@ -1,0 +1,351 @@
+# 领域配置文件
+# 支持多级分类：一级领域 → 二级子领域
+# 用于灵活过滤不同业务关注的信息
+
+domains:
+  # ============ 科技类 ============
+  technology:
+    name: "科技"
+    description: "科技创新、技术发展"
+    subdomains:
+      ai:
+        name: "人工智能"
+        keywords:
+          - "人工智能"
+          - "AI"
+          - "机器学习"
+          - "深度学习"
+          - "大模型"
+          - "算法"
+          - "神经网络"
+          - "智能"
+          - "ChatGPT"
+          - "LLM"
+          - "AGI"
+          - "自然语言处理"
+          - "NLP"
+          - "计算机视觉"
+          - "语音识别"
+          - "强化学习"
+
+      biotech:
+        name: "生物科技"
+        keywords:
+          - "生物技术"
+          - "基因"
+          - "蛋白质"
+          - "细胞"
+          - "医药"
+          - "临床"
+          - "疫苗"
+          - "基因编辑"
+          - "CRISPR"
+          - "干细胞"
+          - "生物制药"
+
+      quantum:
+        name: "量子科技"
+        keywords:
+          - "量子"
+          - "量子计算"
+          - "量子通信"
+          - "量子纠缠"
+          - "量子密钥"
+          - "量子比特"
+
+      semiconductor:
+        name: "半导体"
+        keywords:
+          - "芯片"
+          - "半导体"
+          - "集成电路"
+          - "光刻"
+          - "晶圆"
+          - "EUV"
+          - "制程"
+          - "芯片设计"
+          - "封装"
+
+      aerospace:
+        name: "航空航天"
+        keywords:
+          - "航空"
+          - "航天"
+          - "卫星"
+          - "火箭"
+          - "探测器"
+          - "空间站"
+          - "载人航天"
+          - "商业航天"
+
+      energy:
+        name: "新能源"
+        keywords:
+          - "新能源"
+          - "光伏"
+          - "风电"
+          - "储能"
+          - "电池"
+          - "氢能"
+          - "核能"
+          - "碳中和"
+          - "清洁能源"
+
+  # ============ 经济类 ============
+  economy:
+    name: "经济"
+    description: "经济发展、产业政策"
+    subdomains:
+      finance:
+        name: "金融"
+        keywords:
+          - "金融"
+          - "银行"
+          - "证券"
+          - "保险"
+          - "基金"
+          - "股市"
+          - "债券"
+          - "利率"
+          - "汇率"
+          - "货币政策"
+
+      industry:
+        name: "产业"
+        keywords:
+          - "产业"
+          - "制造业"
+          - "工业"
+          - "供应链"
+          - "产业链"
+          - "投资"
+          - "融资"
+          - "IPO"
+          - "并购"
+
+      trade:
+        name: "贸易"
+        keywords:
+          - "贸易"
+          - "进出口"
+          - "关税"
+          - "自贸区"
+          - "跨境"
+          - "外贸"
+
+      realestate:
+        name: "房地产"
+        keywords:
+          - "房地产"
+          - "楼市"
+          - "房价"
+          - "土地"
+          - "住房"
+          - "商品房"
+
+  # ============ 民生类 ============
+  livelihood:
+    name: "民生"
+    description: "民生保障、社会福利"
+    subdomains:
+      education:
+        name: "教育"
+        keywords:
+          - "教育"
+          - "学校"
+          - "高考"
+          - "招生"
+          - "学费"
+          - "义务教育"
+          - "职业教育"
+          - "双减"
+          - "课程"
+          - "教师"
+
+      healthcare:
+        name: "医疗"
+        keywords:
+          - "医疗"
+          - "医院"
+          - "医保"
+          - "药品"
+          - "看病"
+          - "就医"
+          - "医改"
+          - "健康"
+
+      employment:
+        name: "就业"
+        keywords:
+          - "就业"
+          - "招聘"
+          - "失业"
+          - "工资"
+          - "社保"
+          - "养老"
+          - "退休"
+          - "劳动"
+
+      housing:
+        name: "住房"
+        keywords:
+          - "住房"
+          - "保障房"
+          - "公租房"
+          - "廉租房"
+          - "棚改"
+          - "安居"
+
+      transportation:
+        name: "交通"
+        keywords:
+          - "交通"
+          - "地铁"
+          - "公交"
+          - "高铁"
+          - "道路"
+          - "拥堵"
+          - "出行"
+
+  # ============ 环境类 ============
+  environment:
+    name: "环境"
+    description: "环境保护、生态建设"
+    subdomains:
+      pollution:
+        name: "污染治理"
+        keywords:
+          - "污染"
+          - "环保"
+          - "排放"
+          - "治理"
+          - "空气质量"
+          - "水质"
+          - "土壤"
+
+      climate:
+        name: "气候"
+        keywords:
+          - "气候"
+          - "碳排放"
+          - "碳达峰"
+          - "碳中和"
+          - "温室气体"
+          - "全球变暖"
+
+      ecology:
+        name: "生态"
+        keywords:
+          - "生态"
+          - "绿化"
+          - "森林"
+          - "湿地"
+          - "生物多样性"
+          - "自然保护"
+
+  # ============ 社会类 ============
+  society:
+    name: "社会"
+    description: "社会治理、公共安全"
+    subdomains:
+      governance:
+        name: "治理"
+        keywords:
+          - "治理"
+          - "管理"
+          - "服务"
+          - "改革"
+          - "政务"
+
+      security:
+        name: "安全"
+        keywords:
+          - "安全"
+          - "消防"
+          - "应急"
+          - "灾害"
+          - "防疫"
+          - "救援"
+
+      law:
+        name: "法律"
+        keywords:
+          - "法律"
+          - "法规"
+          - "司法"
+          - "执法"
+          - "法院"
+          - "检察"
+          - "律师"
+
+  # ============ 文化类 ============
+  culture:
+    name: "文化"
+    description: "文化建设、文化产业"
+    subdomains:
+      heritage:
+        name: "文化遗产"
+        keywords:
+          - "文化遗产"
+          - "文物"
+          - "非遗"
+          - "传统文化"
+          - "古迹"
+
+      media:
+        name: "传媒"
+        keywords:
+          - "传媒"
+          - "新闻"
+          - "出版"
+          - "广播"
+          - "电视"
+          - "网络媒体"
+
+      sports:
+        name: "体育"
+        keywords:
+          - "体育"
+          - "运动"
+          - "赛事"
+          - "奥运"
+          - "全运会"
+          - "健身"
+
+  # ============ 特殊领域 ============
+  all:
+    name: "全领域"
+    description: "不进行关键词过滤"
+    keywords: []  # 空列表表示不过滤
+
+# 领域组合（预设常用组合）
+domain_groups:
+  tech_all:
+    name: "全科技"
+    description: "所有科技子领域"
+    domains:
+      - "technology.ai"
+      - "technology.biotech"
+      - "technology.quantum"
+      - "technology.semiconductor"
+      - "technology.aerospace"
+      - "technology.energy"
+
+  economy_all:
+    name: "全经济"
+    description: "所有经济子领域"
+    domains:
+      - "economy.finance"
+      - "economy.industry"
+      - "economy.trade"
+      - "economy.realestate"
+
+  livelihood_all:
+    name: "全民生"
+    description: "所有民生子领域"
+    domains:
+      - "livelihood.education"
+      - "livelihood.healthcare"
+      - "livelihood.employment"
+      - "livelihood.housing"
+      - "livelihood.transportation"

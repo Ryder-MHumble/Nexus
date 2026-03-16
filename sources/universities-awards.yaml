@@ -1,0 +1,108 @@
+dimension: universities
+dimension_name: 对高校
+description: 高校相关信源 - awards
+default_keyword_filter:
+- 人工智能
+- AI
+- 人事
+- 任命
+- 院长
+- 校长
+- 院士
+- 科技
+- 成果
+sources:
+- id: cas_news
+  name: 中国科学院
+  group: awards
+  url: https://www.cas.cn/
+  crawl_method: static
+  schedule: monthly
+  priority: 1
+  is_enabled: true
+  selectors:
+    list_item: ul.news_list li
+    title: a
+    link: a
+  base_url: https://www.cas.cn
+  keyword_filter:
+  - 院士
+  - 增选
+  - 人工智能
+  - AI
+  detail_selectors:
+    content: div.trs_editor_view
+  tags:
+  - academician
+  - cas
+- id: cae_news
+  name: 中国工程院
+  group: awards
+  url: https://www.cae.cn/
+  crawl_method: static
+  schedule: monthly
+  priority: 1
+  is_enabled: true
+  selectors:
+    list_item: div.info_list_flex div.info_item
+    title: a.info_item_a
+    link: a.info_item_a
+    date: div.info_item_time
+    date_format: '%Y-%m-%d'
+  base_url: https://www.cae.cn
+  keyword_filter:
+  - 院士
+  - 增选
+  - 人工智能
+  - AI
+  detail_selectors:
+    content: '#info_content'
+  tags:
+  - academician
+  - cae
+- id: nosta_news
+  name: 国家科技奖励办
+  group: awards
+  url: https://www.nosta.gov.cn/
+  crawl_method: dynamic
+  schedule: monthly
+  priority: 2
+  is_enabled: true
+  wait_for: a.news-item
+  wait_timeout: 15000
+  selectors:
+    list_item: div.tzgg a.news-item
+    title: div.title
+    link: _self
+    date: div.time
+    date_format: '%Y-%m-%d'
+  base_url: https://www.nosta.gov.cn
+  keyword_filter: []
+  detail_selectors:
+    content: div.TRS_UEDITOR
+  tags:
+  - award
+  - science
+  - national
+- id: moe_keji
+  name: 教育部科学技术与信息化司
+  group: awards
+  url: https://www.moe.gov.cn/s78/A16/
+  crawl_method: static
+  schedule: monthly
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: ul.siju-list li
+    title: a
+    link: a
+    date: span
+    date_format: '%Y-%m-%d'
+  base_url: https://www.moe.gov.cn/s78/A16/
+  keyword_filter: []
+  detail_selectors:
+    content: div.TRS_Editor
+  tags:
+  - award
+  - moe
+  - tech

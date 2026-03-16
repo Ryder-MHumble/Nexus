@@ -1,0 +1,184 @@
+dimension: scholars
+dimension_name: 高校师资
+sources:
+- id: ustc_cs_faculty
+  name: 中国科学技术大学计算机学院-教授
+  group: ustc
+  university: 中国科学技术大学
+  department: 计算机学院
+  url: http://cs.ustc.edu.cn/js_23235/list.htm
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  base_url: http://cs.ustc.edu.cn
+  max_pages: 2
+  faculty_selectors:
+    list_item: li.news
+    name: .news_title a
+    link: .news_title a
+    photo: .news_images img
+    email: .news_text
+  detail_selectors:
+    email: a[href^="mailto:"]
+    heading_sections:
+      bio: 个人简介
+      research_areas: 研究方向
+    label_prefix_sections:
+      email: 邮箱|Email|电子邮件
+      research_areas: 研究方向|研究领域
+  tags:
+  - faculty
+  - ustc
+  - cs
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education
+- id: ustc_sist_faculty
+  name: 中国科学技术大学信息科学技术学院-师资
+  group: ustc
+  university: 中国科学技术大学
+  department: 信息科学技术学院（电子工程与信息科学系）
+  url: http://eeis.ustc.edu.cn/2648/list.htm
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  base_url: http://eeis.ustc.edu.cn
+  max_pages: 8
+  next_page_text: 下一页
+  faculty_selectors:
+    list_item: div.card
+    name: .card-title
+    link: a
+    research_areas: .card-text
+  detail_selectors:
+    email: a[href^="mailto:"]
+    heading_sections:
+      bio: 个人简介
+      research_areas: 研究方向
+    label_prefix_sections:
+      email: 邮箱|Email|电子邮件
+      research_areas: 研究方向|研究领域
+  tags:
+  - faculty
+  - ustc
+  - cs
+  - ai
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education
+- id: ustc_se_faculty
+  name: 中国科学技术大学软件学院-师资
+  group: ustc
+  university: 中国科学技术大学
+  department: 软件学院
+  url: https://sse.ustc.edu.cn/
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  base_url: https://sse.ustc.edu.cn
+  faculty_selectors:
+    list_item: ul li, div.faculty-item, div.teacher-card
+    name: a, h3, h4
+    link: a
+  detail_selectors:
+    bio: div[class*='content'], div.article
+    email: a[href^='mailto:']
+    heading_sections:
+      bio: 个人简介
+      research_areas: 研究方向
+    label_prefix_sections:
+      email: 邮箱|Email|电子邮件
+      research_areas: 研究方向|研究领域
+  tags:
+  - faculty
+  - ustc
+  - se
+- id: ustc_ds_faculty
+  name: 中国科学技术大学大数据学院-师资
+  group: ustc
+  university: 中国科学技术大学
+  department: 人工智能与数据科学学院
+  url: https://saids.ustc.edu.cn/szdw/list.htm
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  enable_llm: true
+  max_pages: 2
+  base_url: https://saids.ustc.edu.cn
+  faculty_selectors:
+    list_item: li.list_item
+    name: a
+    link: a
+  detail_selectors:
+    bio: div[class*='content'], div.article, p
+    email: a[href^='mailto:']
+    heading_sections:
+      bio: 个人简介|简历
+      research_areas: 研究方向|研究兴趣
+    label_prefix_sections:
+      email: 邮箱|Email|电子邮件
+      research_areas: 研究方向|研究领域
+  tags:
+  - faculty
+  - ustc
+  - data
+  - ai
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education
+- id: ustc_cyber_faculty
+  name: 中国科学技术大学网安学院-师资
+  group: ustc
+  university: 中国科学技术大学
+  department: 网络空间安全学院
+  url: https://cybersec.ustc.edu.cn/szdw_23805/list.htm
+  crawl_method: faculty
+  use_playwright: false
+  verify_ssl: false
+  schedule: weekly
+  priority: 3
+  is_enabled: false
+  base_url: https://cybersec.ustc.edu.cn
+  faculty_selectors:
+    list_item: div.teacher dl.cle dd.fl
+    name: a
+    link: a
+  detail_selectors:
+    heading_sections:
+      bio: 个人简介
+      research_areas: 研究方向
+    label_prefix_sections:
+      position: 职称：
+      email: 邮箱：
+      research_areas: 研究方向：
+  tags:
+  - faculty
+  - ustc
+  - cybersecurity
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education

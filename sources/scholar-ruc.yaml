@@ -1,0 +1,71 @@
+dimension: scholars
+dimension_name: 高校师资
+sources:
+- id: ruc_info_faculty
+  name: 中国人民大学信息学院-师资队伍
+  group: ruc
+  university: 中国人民大学
+  department: 信息学院
+  url: http://info.ruc.edu.cn/jsky/szdw/ajxjgcx/bx/bx1/index.htm
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  base_url: http://info.ruc.edu.cn
+  faculty_selectors:
+    list_item: div.research
+    name: div.text1
+    link: a
+    photo: div.research-img img
+    research_areas: div.text3
+  detail_selectors:
+    email: a[href^='mailto:']
+    heading_sections:
+      bio: 个人简介
+      research_areas: 研究方向
+  tags:
+  - faculty
+  - ruc
+  - cs
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education
+- id: ruc_ai_faculty
+  name: 中国人民大学高瓴人工智能学院-教师队伍
+  group: ruc
+  university: 中国人民大学
+  department: 高瓴人工智能学院
+  url: http://ai.ruc.edu.cn/academicfaculty/szdwn/index.htm
+  crawl_method: faculty
+  use_playwright: false
+  schedule: weekly
+  priority: 2
+  is_enabled: false
+  base_url: http://ai.ruc.edu.cn
+  faculty_selectors:
+    list_item: div.tutor
+    name: h2 a
+    link: h2 a
+    position: small.fs-16
+    bio: p.position
+  detail_selectors:
+    email: a[href^="mailto:"]
+    heading_sections:
+      bio: 个人简介
+      research_areas: 研究方向
+  tags:
+  - faculty
+  - ruc
+  - ai
+  llm_extraction: true
+  llm_provider: openrouter
+  llm_model: google/gemini-2.5-flash
+  llm_fields:
+  - phone
+  - research_areas
+  - education

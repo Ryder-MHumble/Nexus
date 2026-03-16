@@ -1,0 +1,147 @@
+dimension: "events"
+dimension_name: "对日程"
+description: "AI相关会议活动、学术会议deadline、行业峰会"
+
+default_keyword_filter:
+  - "AI"
+  - "artificial intelligence"
+  - "machine learning"
+  - "人工智能"
+  - "deep learning"
+  - "NLP"
+  - "computer vision"
+  - "大模型"
+  - "机器人"
+  - "数据"
+  - "智能"
+  - "芯片"
+  - "算力"
+  - "LLM"
+  - "robotics"
+
+sources:
+  - id: "aideadlines"
+    name: "AI Conference Deadlines"
+    group: "academic"
+    url: "https://aideadlin.es/"
+    crawl_method: "dynamic"
+    schedule: "weekly"
+    priority: 1
+    is_enabled: true
+    wait_for: "div.ConfItem"
+    wait_timeout: 15000
+    keyword_filter: []  # All items are AI conferences, no filter needed
+    selectors:
+      list_item: "div.ConfItem"
+      title: "span.conf-title a"
+      link: "span.conf-title a"
+      date: "span.conf-date"
+    base_url: "https://aideadlin.es"
+    tags: ["conference", "deadline", "academic"]
+
+  - id: "wikicfp"
+    name: "WikiCFP-AI"
+    group: "academic"
+    url: "http://www.wikicfp.com/cfp/call?conference=artificial%20intelligence"
+    crawl_method: "static"
+    schedule: "weekly"
+    priority: 1
+    is_enabled: true
+    keyword_filter: []  # Already filtered by search query
+    selectors:
+      list_item: "tr[bgcolor]"
+      title: "td a"
+      link: "td a"
+      date: "td:last-child"
+    base_url: "http://www.wikicfp.com"
+    tags: ["conference", "cfp", "academic"]
+
+  - id: "ccf_focus"
+    name: "CCF聚焦"
+    group: "academic"
+    url: "https://www.ccf.org.cn/Focus/"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 1
+    is_enabled: false  # Alibaba Cloud WAF JS challenge blocks all automated access
+    keyword_filter:
+      - "AI"
+      - "人工智能"
+      - "机器学习"
+      - "深度学习"
+      - "大模型"
+      - "会议"
+      - "论坛"
+      - "峰会"
+      - "学术"
+      - "智能"
+      - "计算"
+      - "数据"
+      - "芯片"
+      - "机器人"
+    selectors:
+      list_item: "ul.ul-imgtxt2 > li"
+      title: "h3.tit > a"
+      link: "h3.tit > a"
+      date: "span.time"
+      date_format: "%Y-%m-%d"
+    base_url: "https://www.ccf.org.cn"
+    tags: ["conference", "ccf", "academic", "domestic"]
+
+  - id: "caai_news"
+    name: "CAAI学会新闻"
+    group: "academic"
+    url: "https://www.caai.cn/site/term/13.html"
+    crawl_method: "static"
+    schedule: "daily"
+    priority: 1
+    is_enabled: true
+    keyword_filter: []  # All CAAI news is AI-relevant
+    selectors:
+      list_item: "ul.news-list-page > li"
+      title: "h4"
+      link: "a"
+      date: "span.date"
+      date_format: "%Y-%m-%d"
+    base_url: "https://www.caai.cn"
+    detail_selectors:
+      content: "div.content"
+    tags: ["conference", "caai", "academic", "domestic"]
+
+  - id: "huodongxing"
+    name: "活动行-人工智能"
+    group: "industry"
+    url: "https://www.huodongxing.com/eventlist?tag=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD"
+    crawl_method: "static"
+    schedule: "weekly"
+    priority: 2
+    is_enabled: false  # CAPTCHA/anti-bot protection (302 redirect to verify page)
+    keyword_filter: []  # Already filtered by tag
+    selectors:
+      list_item: "div.search-tab-content-item"
+      title: "a.item-title"
+      link: "a.item-title"
+    base_url: "https://www.huodongxing.com"
+    tags: ["event", "industry", "domestic"]
+
+  - id: "meeting_edu"
+    name: "中国学术会议在线"
+    group: "academic"
+    url: "https://www.meeting.edu.cn/"
+    crawl_method: "static"
+    schedule: "weekly"
+    priority: 2
+    is_enabled: false  # Site unreachable (connection error), needs URL verification
+    selectors:
+      list_item: "ul.list li"
+      title: "a"
+      link: "a"
+      date: "span"
+    base_url: "https://www.meeting.edu.cn"
+    keyword_filter:
+      - "人工智能"
+      - "AI"
+      - "计算机"
+      - "信息"
+      - "智能"
+    tags: ["conference", "academic", "domestic"]

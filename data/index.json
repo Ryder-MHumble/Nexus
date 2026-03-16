@@ -1,0 +1,2949 @@
+{
+  "generated_at": "2026-02-28T03:55:49.926052+00:00",
+  "total_sources": 191,
+  "total_enabled": 133,
+  "total_articles": 1736,
+  "dimensions": {
+    "beijing_policy": {
+      "name": "对北京",
+      "source_count": 14,
+      "enabled_count": 10,
+      "article_count": 68,
+      "sources": [
+        {
+          "source_id": "beijing_zhengce",
+          "source_name": "首都之窗-政策文件",
+          "group": "policy",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.beijing.gov.cn/zhengce/",
+          "schedule": "4h",
+          "data_path": "data/raw/beijing_policy/policy/beijing_zhengce/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 3
+            }
+          ],
+          "article_count": 3
+        },
+        {
+          "source_id": "bjkw_policy",
+          "source_name": "北京市科委/中关村管委会",
+          "group": "policy",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://kw.beijing.gov.cn/",
+          "schedule": "4h",
+          "data_path": "data/raw/beijing_policy/policy/bjkw_policy/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 4
+            }
+          ],
+          "article_count": 4
+        },
+        {
+          "source_id": "bjjw_policy",
+          "source_name": "北京市教委",
+          "group": "policy",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://jw.beijing.gov.cn/xxgk/",
+          "schedule": "daily",
+          "data_path": "data/raw/beijing_policy/policy/bjjw_policy/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 14
+            }
+          ],
+          "article_count": 14
+        },
+        {
+          "source_id": "bjrsj_policy",
+          "source_name": "北京市人社局",
+          "group": "policy",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://rsj.beijing.gov.cn/xxgk/",
+          "schedule": "daily",
+          "data_path": "data/raw/beijing_policy/policy/bjrsj_policy/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 3
+            }
+          ],
+          "article_count": 3
+        },
+        {
+          "source_id": "zgc_policy",
+          "source_name": "中关村示范区",
+          "group": "policy",
+          "crawl_method": "static",
+          "enabled": false,
+          "url": "https://zgc.beijing.gov.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/beijing_policy/policy/zgc_policy/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "ncsti_policy",
+          "source_name": "国际科创中心",
+          "group": "policy",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.ncsti.gov.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/beijing_policy/policy/ncsti_policy/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 6
+            }
+          ],
+          "article_count": 6
+        },
+        {
+          "source_id": "bjjxj_policy",
+          "source_name": "北京市经信局-通知公告",
+          "group": "policy",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://jxj.beijing.gov.cn/jxdt/tzgg/",
+          "schedule": "4h",
+          "data_path": "data/raw/beijing_policy/policy/bjjxj_policy/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 20
+            }
+          ],
+          "article_count": 20
+        },
+        {
+          "source_id": "bjzscqj_policy",
+          "source_name": "北京市知识产权局-通知公告",
+          "group": "policy",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://zscqj.beijing.gov.cn/zscqj/zwgk/tzgg/index.html",
+          "schedule": "daily",
+          "data_path": "data/raw/beijing_policy/policy/bjzscqj_policy/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 10
+            }
+          ],
+          "article_count": 10
+        },
+        {
+          "source_id": "bjfgw_policy",
+          "source_name": "北京市发改委-政策文件",
+          "group": "policy",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://fgw.beijing.gov.cn/gzdt/fgzs/",
+          "schedule": "daily",
+          "data_path": "data/raw/beijing_policy/policy/bjfgw_policy/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 5
+            }
+          ],
+          "article_count": 5
+        },
+        {
+          "source_id": "bjhd_policy",
+          "source_name": "海淀区政府",
+          "group": "policy",
+          "crawl_method": "static",
+          "enabled": false,
+          "url": "https://www.bjhd.gov.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/beijing_policy/policy/bjhd_policy/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "beijing_ywdt",
+          "source_name": "首都之窗-要闻",
+          "group": "news_personnel",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.beijing.gov.cn/ywdt/",
+          "schedule": "4h",
+          "data_path": "data/raw/beijing_policy/news_personnel/beijing_ywdt/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 3
+            }
+          ],
+          "article_count": 3
+        },
+        {
+          "source_id": "bjd_news",
+          "source_name": "北京日报",
+          "group": "news_personnel",
+          "crawl_method": "static",
+          "enabled": false,
+          "url": "https://www.bjd.com.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/beijing_policy/news_personnel/bjd_news/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "bjrd_renshi",
+          "source_name": "北京市人大常委会",
+          "group": "news_personnel",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.bjrd.gov.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/beijing_policy/news_personnel/bjrd_renshi/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "beijing_rsrm",
+          "source_name": "首都之窗-人事任免",
+          "group": "news_personnel",
+          "crawl_method": "static",
+          "enabled": false,
+          "url": "https://www.beijing.gov.cn/gongkai/rsrm/",
+          "schedule": "daily",
+          "data_path": "data/raw/beijing_policy/news_personnel/beijing_rsrm/",
+          "files": [],
+          "article_count": 0
+        }
+      ]
+    },
+    "events": {
+      "name": "对日程",
+      "source_count": 6,
+      "enabled_count": 4,
+      "article_count": 221,
+      "sources": [
+        {
+          "source_id": "aideadlines",
+          "source_name": "AI Conference Deadlines",
+          "group": "academic",
+          "crawl_method": "dynamic",
+          "enabled": true,
+          "url": "https://aideadlin.es/",
+          "schedule": "weekly",
+          "data_path": "data/raw/events/academic/aideadlines/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 191
+            }
+          ],
+          "article_count": 191
+        },
+        {
+          "source_id": "wikicfp",
+          "source_name": "WikiCFP-AI",
+          "group": "academic",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "http://www.wikicfp.com/cfp/call?conference=artificial%20intelligence",
+          "schedule": "weekly",
+          "data_path": "data/raw/events/academic/wikicfp/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 20
+            }
+          ],
+          "article_count": 20
+        },
+        {
+          "source_id": "ccf_focus",
+          "source_name": "CCF聚焦",
+          "group": "academic",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.ccf.org.cn/Focus/",
+          "schedule": "daily",
+          "data_path": "data/raw/events/academic/ccf_focus/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "caai_news",
+          "source_name": "CAAI学会新闻",
+          "group": "academic",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.caai.cn/site/term/13.html",
+          "schedule": "daily",
+          "data_path": "data/raw/events/academic/caai_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 10
+            }
+          ],
+          "article_count": 10
+        },
+        {
+          "source_id": "huodongxing",
+          "source_name": "活动行-人工智能",
+          "group": "industry",
+          "crawl_method": "static",
+          "enabled": false,
+          "url": "https://www.huodongxing.com/eventlist?tag=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD",
+          "schedule": "weekly",
+          "data_path": "data/raw/events/industry/huodongxing/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "meeting_edu",
+          "source_name": "中国学术会议在线",
+          "group": "academic",
+          "crawl_method": "static",
+          "enabled": false,
+          "url": "https://www.meeting.edu.cn/",
+          "schedule": "weekly",
+          "data_path": "data/raw/events/academic/meeting_edu/",
+          "files": [],
+          "article_count": 0
+        }
+      ]
+    },
+    "industry": {
+      "name": "对产业",
+      "source_count": 11,
+      "enabled_count": 7,
+      "article_count": 57,
+      "sources": [
+        {
+          "source_id": "36kr_news",
+          "source_name": "36氪-快讯",
+          "group": "news",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://36kr.com/newsflashes",
+          "schedule": "2h",
+          "data_path": "data/raw/industry/news/36kr_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 6
+            }
+          ],
+          "article_count": 6
+        },
+        {
+          "source_id": "huxiu_news",
+          "source_name": "虎嗅",
+          "group": "news",
+          "crawl_method": "static",
+          "enabled": false,
+          "url": "https://www.huxiu.com/",
+          "schedule": "4h",
+          "data_path": "data/raw/industry/news/huxiu_news/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "tmtpost_news",
+          "source_name": "钛媒体",
+          "group": "news",
+          "crawl_method": "rss",
+          "enabled": true,
+          "url": "https://www.tmtpost.com/feed",
+          "schedule": "4h",
+          "data_path": "data/raw/industry/news/tmtpost_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 7
+            }
+          ],
+          "article_count": 7
+        },
+        {
+          "source_id": "jiemian_tech",
+          "source_name": "界面新闻-科技",
+          "group": "news",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.jiemian.com/lists/280.html",
+          "schedule": "daily",
+          "data_path": "data/raw/industry/news/jiemian_tech/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 5
+            }
+          ],
+          "article_count": 5
+        },
+        {
+          "source_id": "thepaper_tech",
+          "source_name": "澎湃新闻-科技",
+          "group": "news",
+          "crawl_method": "static",
+          "enabled": false,
+          "url": "https://www.thepaper.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/industry/news/thepaper_tech/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "iyiou_ai",
+          "source_name": "亿欧-AI",
+          "group": "news",
+          "crawl_method": "static",
+          "enabled": false,
+          "url": "https://www.iyiou.com/",
+          "schedule": "daily",
+          "data_path": "data/raw/industry/news/iyiou_ai/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "cyzone_news",
+          "source_name": "创业邦",
+          "group": "news",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.cyzone.cn/",
+          "schedule": "4h",
+          "data_path": "data/raw/industry/news/cyzone_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 11
+            }
+          ],
+          "article_count": 11
+        },
+        {
+          "source_id": "chinaventure_news",
+          "source_name": "投中网",
+          "group": "investment",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.chinaventure.com.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/industry/investment/chinaventure_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 9
+            }
+          ],
+          "article_count": 9
+        },
+        {
+          "source_id": "caict_news",
+          "source_name": "中国信通院-动态",
+          "group": "news",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "http://www.caict.ac.cn/xwdt/ynxw/",
+          "schedule": "daily",
+          "data_path": "data/raw/industry/news/caict_news/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "36kr_investment",
+          "source_name": "36氪-融资频道",
+          "group": "investment",
+          "crawl_method": "static",
+          "enabled": false,
+          "url": "https://36kr.com/motif/616879672033",
+          "schedule": "daily",
+          "data_path": "data/raw/industry/investment/36kr_investment/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "twitter_ai_industry",
+          "source_name": "Twitter AI 产业动态",
+          "group": "news",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "",
+          "schedule": "4h",
+          "data_path": "data/raw/industry/news/twitter_ai_industry/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 19
+            }
+          ],
+          "article_count": 19,
+          "crawler_class": "twitter_search"
+        }
+      ]
+    },
+    "national_policy": {
+      "name": "对国家",
+      "source_count": 8,
+      "enabled_count": 6,
+      "article_count": 42,
+      "sources": [
+        {
+          "source_id": "gov_cn_zhengce",
+          "source_name": "中国政府网-最新政策",
+          "group": "policy",
+          "crawl_method": "dynamic",
+          "enabled": true,
+          "url": "https://www.gov.cn/zhengce/zuixin/",
+          "schedule": "2h",
+          "data_path": "data/raw/national_policy/policy/gov_cn_zhengce/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 19
+            }
+          ],
+          "article_count": 19
+        },
+        {
+          "source_id": "ndrc_policy",
+          "source_name": "国家发改委-通知公告",
+          "group": "policy",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.ndrc.gov.cn/xxgk/zcfb/tz/",
+          "schedule": "4h",
+          "data_path": "data/raw/national_policy/policy/ndrc_policy/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 5
+            }
+          ],
+          "article_count": 5
+        },
+        {
+          "source_id": "moe_policy",
+          "source_name": "教育部-政策法规",
+          "group": "policy",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "http://www.moe.gov.cn/jyb_xxgk/moe_1777/moe_1778/",
+          "schedule": "4h",
+          "data_path": "data/raw/national_policy/policy/moe_policy/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 8
+            }
+          ],
+          "article_count": 8
+        },
+        {
+          "source_id": "most_policy",
+          "source_name": "科技部-信息公开",
+          "group": "policy",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.most.gov.cn/xxgk/xinxifenlei/fdzdgknr/",
+          "schedule": "4h",
+          "data_path": "data/raw/national_policy/policy/most_policy/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 10
+            }
+          ],
+          "article_count": 10
+        },
+        {
+          "source_id": "cac_policy",
+          "source_name": "国家网信办-政策法规",
+          "group": "policy",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.cac.gov.cn/wxzw/zcfg/A093703index_1.htm",
+          "schedule": "4h",
+          "data_path": "data/raw/national_policy/policy/cac_policy/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "samr_news",
+          "source_name": "国家市监总局-要闻",
+          "group": "policy",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.samr.gov.cn/xw/zj/",
+          "schedule": "daily",
+          "data_path": "data/raw/national_policy/policy/samr_news/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "miit_policy",
+          "source_name": "工信部-政策文件",
+          "group": "policy",
+          "crawl_method": "dynamic",
+          "enabled": false,
+          "url": "https://www.miit.gov.cn/zwgk/zcwj/",
+          "schedule": "daily",
+          "data_path": "data/raw/national_policy/policy/miit_policy/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "nsfc_news",
+          "source_name": "国家自然科学基金委-通知公告",
+          "group": "policy",
+          "crawl_method": "static",
+          "enabled": false,
+          "url": "https://www.nsfc.gov.cn/publish/portal0/tab434/",
+          "schedule": "daily",
+          "data_path": "data/raw/national_policy/policy/nsfc_news/",
+          "files": [],
+          "article_count": 0
+        }
+      ]
+    },
+    "personnel": {
+      "name": "对人事",
+      "source_count": 4,
+      "enabled_count": 4,
+      "article_count": 62,
+      "sources": [
+        {
+          "source_id": "mohrss_rsrm",
+          "source_name": "人社部-国务院人事任免",
+          "group": "state_council",
+          "crawl_method": "dynamic",
+          "enabled": true,
+          "url": "https://www.mohrss.gov.cn/xxgk2020/fdzdgknr/bnrsgl/rsrm/",
+          "schedule": "daily",
+          "data_path": "data/raw/personnel/state_council/mohrss_rsrm/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 19
+            }
+          ],
+          "article_count": 19
+        },
+        {
+          "source_id": "moe_renshi",
+          "source_name": "教育部-人事任免",
+          "group": "moe",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.moe.gov.cn/jyb_xwfb/s271/",
+          "schedule": "daily",
+          "data_path": "data/raw/personnel/moe/moe_renshi/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 20
+            }
+          ],
+          "article_count": 20
+        },
+        {
+          "source_id": "cas_renshi",
+          "source_name": "中科院-人事任免",
+          "group": "cas",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "http://www.pe.cas.cn/rsrm/",
+          "schedule": "daily",
+          "data_path": "data/raw/personnel/cas/cas_renshi/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 15
+            }
+          ],
+          "article_count": 15
+        },
+        {
+          "source_id": "moe_renshi_si",
+          "source_name": "教育部-人事司公告",
+          "group": "moe",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.moe.gov.cn/s78/A04/tongzhi/",
+          "schedule": "daily",
+          "data_path": "data/raw/personnel/moe/moe_renshi_si/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 8
+            }
+          ],
+          "article_count": 8
+        }
+      ]
+    },
+    "talent": {
+      "name": "对人才",
+      "source_count": 8,
+      "enabled_count": 5,
+      "article_count": 50,
+      "sources": [
+        {
+          "source_id": "csrankings",
+          "source_name": "CSRankings",
+          "group": "tracking",
+          "crawl_method": "static",
+          "enabled": false,
+          "url": "https://csrankings.org/",
+          "schedule": "monthly",
+          "data_path": "data/raw/talent/tracking/csrankings/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "semantic_scholar_ai",
+          "source_name": "Semantic Scholar-AI论文",
+          "group": "tracking",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://api.semanticscholar.org/",
+          "schedule": "weekly",
+          "data_path": "data/raw/talent/tracking/semantic_scholar_ai/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 20
+            }
+          ],
+          "article_count": 20,
+          "crawler_class": "semantic_scholar"
+        },
+        {
+          "source_id": "nsfc_talent",
+          "source_name": "NSFC杰青/优青公示",
+          "group": "policy",
+          "crawl_method": "static",
+          "enabled": false,
+          "url": "https://www.nsfc.gov.cn/publish/portal0/tab434/",
+          "schedule": "daily",
+          "data_path": "data/raw/talent/policy/nsfc_talent/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "moe_talent",
+          "source_name": "教育部人才计划公示",
+          "group": "policy",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.moe.gov.cn/jyb_xxgk/s5743/s5744/",
+          "schedule": "daily",
+          "data_path": "data/raw/talent/policy/moe_talent/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 5
+            }
+          ],
+          "article_count": 5
+        },
+        {
+          "source_id": "nature_index",
+          "source_name": "Nature Index",
+          "group": "tracking",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.nature.com/nature-index/",
+          "schedule": "monthly",
+          "data_path": "data/raw/talent/tracking/nature_index/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 4
+            }
+          ],
+          "article_count": 4
+        },
+        {
+          "source_id": "wrsa_talent",
+          "source_name": "欧美同学会",
+          "group": "policy",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.wrsa.net/",
+          "schedule": "monthly",
+          "data_path": "data/raw/talent/policy/wrsa_talent/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 1
+            }
+          ],
+          "article_count": 1
+        },
+        {
+          "source_id": "aminer_ai",
+          "source_name": "AMiner-AI学者",
+          "group": "tracking",
+          "crawl_method": "static",
+          "enabled": false,
+          "url": "https://www.aminer.cn/",
+          "schedule": "weekly",
+          "data_path": "data/raw/talent/tracking/aminer_ai/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "twitter_ai_talent",
+          "source_name": "Twitter AI 人才动态",
+          "group": "tracking",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "",
+          "schedule": "daily",
+          "data_path": "data/raw/talent/tracking/twitter_ai_talent/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 20
+            }
+          ],
+          "article_count": 20,
+          "crawler_class": "twitter_search"
+        }
+      ]
+    },
+    "technology": {
+      "name": "对技术",
+      "source_count": 37,
+      "enabled_count": 36,
+      "article_count": 380,
+      "sources": [
+        {
+          "source_id": "jiqizhixin_rss",
+          "source_name": "机器之心",
+          "group": "domestic_media",
+          "crawl_method": "rss",
+          "enabled": true,
+          "url": "https://www.jiqizhixin.com/rss",
+          "schedule": "2h",
+          "data_path": "data/raw/technology/domestic_media/jiqizhixin_rss/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "36kr_ai_rss",
+          "source_name": "36氪-AI频道",
+          "group": "domestic_media",
+          "crawl_method": "rss",
+          "enabled": true,
+          "url": "https://36kr.com/feed",
+          "schedule": "2h",
+          "data_path": "data/raw/technology/domestic_media/36kr_ai_rss/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 11
+            }
+          ],
+          "article_count": 11
+        },
+        {
+          "source_id": "techcrunch_ai_rss",
+          "source_name": "TechCrunch AI",
+          "group": "international_media",
+          "crawl_method": "rss",
+          "enabled": true,
+          "url": "https://techcrunch.com/category/artificial-intelligence/feed/",
+          "schedule": "2h",
+          "data_path": "data/raw/technology/international_media/techcrunch_ai_rss/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 11
+            }
+          ],
+          "article_count": 11
+        },
+        {
+          "source_id": "theverge_ai_rss",
+          "source_name": "The Verge AI",
+          "group": "international_media",
+          "crawl_method": "rss",
+          "enabled": true,
+          "url": "https://www.theverge.com/rss/index.xml",
+          "schedule": "4h",
+          "data_path": "data/raw/technology/international_media/theverge_ai_rss/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 3
+            }
+          ],
+          "article_count": 3
+        },
+        {
+          "source_id": "mit_tech_review_rss",
+          "source_name": "MIT Technology Review",
+          "group": "international_media",
+          "crawl_method": "rss",
+          "enabled": true,
+          "url": "https://www.technologyreview.com/feed/",
+          "schedule": "daily",
+          "data_path": "data/raw/technology/international_media/mit_tech_review_rss/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 4
+            }
+          ],
+          "article_count": 4
+        },
+        {
+          "source_id": "venturebeat_ai_rss",
+          "source_name": "VentureBeat AI",
+          "group": "international_media",
+          "crawl_method": "rss",
+          "enabled": true,
+          "url": "https://venturebeat.com/category/ai/feed/",
+          "schedule": "4h",
+          "data_path": "data/raw/technology/international_media/venturebeat_ai_rss/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 7
+            }
+          ],
+          "article_count": 7
+        },
+        {
+          "source_id": "ieee_spectrum_ai_rss",
+          "source_name": "IEEE Spectrum AI",
+          "group": "international_media",
+          "crawl_method": "rss",
+          "enabled": true,
+          "url": "https://spectrum.ieee.org/feeds/topic/artificial-intelligence.rss",
+          "schedule": "daily",
+          "data_path": "data/raw/technology/international_media/ieee_spectrum_ai_rss/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 15
+            }
+          ],
+          "article_count": 15
+        },
+        {
+          "source_id": "wired_ai_rss",
+          "source_name": "Wired AI",
+          "group": "international_media",
+          "crawl_method": "rss",
+          "enabled": true,
+          "url": "https://www.wired.com/feed/tag/ai/latest/rss",
+          "schedule": "daily",
+          "data_path": "data/raw/technology/international_media/wired_ai_rss/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 9
+            }
+          ],
+          "article_count": 9
+        },
+        {
+          "source_id": "arstechnica_ai_rss",
+          "source_name": "Ars Technica AI",
+          "group": "international_media",
+          "crawl_method": "rss",
+          "enabled": true,
+          "url": "https://arstechnica.com/ai/feed/",
+          "schedule": "daily",
+          "data_path": "data/raw/technology/international_media/arstechnica_ai_rss/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 12
+            }
+          ],
+          "article_count": 12
+        },
+        {
+          "source_id": "openai_blog",
+          "source_name": "OpenAI Blog",
+          "group": "company_blogs",
+          "crawl_method": "rss",
+          "enabled": true,
+          "url": "https://openai.com/news/rss.xml",
+          "schedule": "daily",
+          "data_path": "data/raw/technology/company_blogs/openai_blog/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 14
+            }
+          ],
+          "article_count": 14
+        },
+        {
+          "source_id": "anthropic_blog",
+          "source_name": "Anthropic Research",
+          "group": "company_blogs",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.anthropic.com/research",
+          "schedule": "daily",
+          "data_path": "data/raw/technology/company_blogs/anthropic_blog/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "google_deepmind_blog",
+          "source_name": "Google DeepMind Blog",
+          "group": "company_blogs",
+          "crawl_method": "dynamic",
+          "enabled": true,
+          "url": "https://deepmind.google/discover/blog/",
+          "schedule": "daily",
+          "data_path": "data/raw/technology/company_blogs/google_deepmind_blog/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 25
+            }
+          ],
+          "article_count": 25
+        },
+        {
+          "source_id": "meta_ai_blog",
+          "source_name": "Meta AI Blog",
+          "group": "company_blogs",
+          "crawl_method": "dynamic",
+          "enabled": true,
+          "url": "https://ai.meta.com/blog/",
+          "schedule": "daily",
+          "data_path": "data/raw/technology/company_blogs/meta_ai_blog/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "microsoft_ai_blog",
+          "source_name": "Microsoft AI Blog",
+          "group": "company_blogs",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://blogs.microsoft.com/ai/",
+          "schedule": "daily",
+          "data_path": "data/raw/technology/company_blogs/microsoft_ai_blog/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "mistral_ai_news",
+          "source_name": "Mistral AI News",
+          "group": "company_blogs",
+          "crawl_method": "dynamic",
+          "enabled": true,
+          "url": "https://mistral.ai/news/",
+          "schedule": "daily",
+          "data_path": "data/raw/technology/company_blogs/mistral_ai_news/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "xai_blog",
+          "source_name": "xAI Blog (Grok)",
+          "group": "company_blogs",
+          "crawl_method": "dynamic",
+          "enabled": true,
+          "url": "https://x.ai/blog",
+          "schedule": "daily",
+          "data_path": "data/raw/technology/company_blogs/xai_blog/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "cohere_blog",
+          "source_name": "Cohere Blog",
+          "group": "company_blogs",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://cohere.com/blog",
+          "schedule": "daily",
+          "data_path": "data/raw/technology/company_blogs/cohere_blog/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "stability_ai_news",
+          "source_name": "Stability AI News",
+          "group": "company_blogs",
+          "crawl_method": "dynamic",
+          "enabled": true,
+          "url": "https://stability.ai/news",
+          "schedule": "daily",
+          "data_path": "data/raw/technology/company_blogs/stability_ai_news/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "huggingface_blog",
+          "source_name": "Hugging Face Blog",
+          "group": "company_blogs",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://huggingface.co/blog",
+          "schedule": "daily",
+          "data_path": "data/raw/technology/company_blogs/huggingface_blog/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "runway_blog",
+          "source_name": "Runway Blog",
+          "group": "company_blogs",
+          "crawl_method": "dynamic",
+          "enabled": true,
+          "url": "https://runwayml.com/blog/",
+          "schedule": "weekly",
+          "data_path": "data/raw/technology/company_blogs/runway_blog/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "inflection_ai_blog",
+          "source_name": "Inflection AI Blog",
+          "group": "company_blogs",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://inflection.ai/blog",
+          "schedule": "weekly",
+          "data_path": "data/raw/technology/company_blogs/inflection_ai_blog/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "arxiv_cs_ai",
+          "source_name": "ArXiv cs.AI",
+          "group": "academic",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "http://export.arxiv.org/api/query",
+          "schedule": "daily",
+          "data_path": "data/raw/technology/academic/arxiv_cs_ai/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 20
+            }
+          ],
+          "article_count": 20,
+          "crawler_class": "arxiv_api"
+        },
+        {
+          "source_id": "arxiv_cs_lg",
+          "source_name": "ArXiv cs.LG (机器学习)",
+          "group": "academic",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "http://export.arxiv.org/api/query",
+          "schedule": "daily",
+          "data_path": "data/raw/technology/academic/arxiv_cs_lg/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 20
+            }
+          ],
+          "article_count": 20,
+          "crawler_class": "arxiv_api"
+        },
+        {
+          "source_id": "arxiv_cs_cl",
+          "source_name": "ArXiv cs.CL (NLP/大模型)",
+          "group": "academic",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "http://export.arxiv.org/api/query",
+          "schedule": "daily",
+          "data_path": "data/raw/technology/academic/arxiv_cs_cl/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 20
+            }
+          ],
+          "article_count": 20,
+          "crawler_class": "arxiv_api"
+        },
+        {
+          "source_id": "hacker_news",
+          "source_name": "Hacker News",
+          "group": "community",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://hacker-news.firebaseio.com/v0/",
+          "schedule": "2h",
+          "data_path": "data/raw/technology/community/hacker_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 7
+            }
+          ],
+          "article_count": 7,
+          "crawler_class": "hacker_news_api"
+        },
+        {
+          "source_id": "reddit_ml_rss",
+          "source_name": "Reddit r/MachineLearning",
+          "group": "community",
+          "crawl_method": "rss",
+          "enabled": true,
+          "url": "https://www.reddit.com/r/MachineLearning/.rss",
+          "schedule": "4h",
+          "data_path": "data/raw/technology/community/reddit_ml_rss/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 5
+            }
+          ],
+          "article_count": 5
+        },
+        {
+          "source_id": "reddit_localllama_rss",
+          "source_name": "Reddit r/LocalLLaMA",
+          "group": "community",
+          "crawl_method": "rss",
+          "enabled": true,
+          "url": "https://www.reddit.com/r/LocalLLaMA/.rss",
+          "schedule": "4h",
+          "data_path": "data/raw/technology/community/reddit_localllama_rss/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 9
+            }
+          ],
+          "article_count": 9
+        },
+        {
+          "source_id": "github_trending",
+          "source_name": "GitHub Trending",
+          "group": "community",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://api.github.com",
+          "schedule": "daily",
+          "data_path": "data/raw/technology/community/github_trending/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 20
+            }
+          ],
+          "article_count": 20,
+          "crawler_class": "github_api"
+        },
+        {
+          "source_id": "qwen_blog",
+          "source_name": "Qwen Blog (阿里通义千问)",
+          "group": "cn_ai_company",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://qwenlm.github.io/blog/",
+          "schedule": "daily",
+          "data_path": "data/raw/technology/cn_ai_company/qwen_blog/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 5
+            }
+          ],
+          "article_count": 5
+        },
+        {
+          "source_id": "minimax_news",
+          "source_name": "MiniMax 新闻动态",
+          "group": "cn_ai_company",
+          "crawl_method": "dynamic",
+          "enabled": true,
+          "url": "https://www.minimaxi.com/news",
+          "schedule": "daily",
+          "data_path": "data/raw/technology/cn_ai_company/minimax_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 6
+            }
+          ],
+          "article_count": 6
+        },
+        {
+          "source_id": "moonshot_research",
+          "source_name": "月之暗面-最新研究",
+          "group": "cn_ai_company",
+          "crawl_method": "dynamic",
+          "enabled": true,
+          "url": "https://www.moonshot.cn/news",
+          "schedule": "daily",
+          "data_path": "data/raw/technology/cn_ai_company/moonshot_research/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 13
+            }
+          ],
+          "article_count": 13
+        },
+        {
+          "source_id": "hunyuan_news",
+          "source_name": "腾讯混元-最新动态",
+          "group": "cn_ai_company",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://api.hunyuan.tencent.com/api/vision_platform/public/auditOpenAPI/dynamic/list",
+          "schedule": "daily",
+          "data_path": "data/raw/technology/cn_ai_company/hunyuan_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 20
+            }
+          ],
+          "article_count": 20,
+          "crawler_class": "hunyuan_api"
+        },
+        {
+          "source_id": "zhipu_news",
+          "source_name": "智谱AI-最新动态",
+          "group": "cn_ai_company",
+          "crawl_method": "dynamic",
+          "enabled": false,
+          "url": "https://www.zhipuai.cn",
+          "schedule": "daily",
+          "data_path": "data/raw/technology/cn_ai_company/zhipu_news/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "twitter_ai_kol_international",
+          "source_name": "Twitter AI KOL (国际)",
+          "group": "kol",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "",
+          "schedule": "4h",
+          "data_path": "data/raw/technology/kol/twitter_ai_kol_international/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 72
+            }
+          ],
+          "article_count": 72,
+          "crawler_class": "twitter_kol"
+        },
+        {
+          "source_id": "twitter_ai_kol_chinese",
+          "source_name": "Twitter AI KOL (华人)",
+          "group": "kol",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "",
+          "schedule": "4h",
+          "data_path": "data/raw/technology/kol/twitter_ai_kol_chinese/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 15
+            }
+          ],
+          "article_count": 15,
+          "crawler_class": "twitter_kol"
+        },
+        {
+          "source_id": "twitter_ai_breakthrough",
+          "source_name": "Twitter AI 突破性进展",
+          "group": "community",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "",
+          "schedule": "4h",
+          "data_path": "data/raw/technology/community/twitter_ai_breakthrough/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 18
+            }
+          ],
+          "article_count": 18,
+          "crawler_class": "twitter_search"
+        },
+        {
+          "source_id": "twitter_ai_papers",
+          "source_name": "Twitter AI 论文讨论",
+          "group": "community",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "",
+          "schedule": "daily",
+          "data_path": "data/raw/technology/community/twitter_ai_papers/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 19
+            }
+          ],
+          "article_count": 19,
+          "crawler_class": "twitter_search"
+        }
+      ]
+    },
+    "sentiment": {
+      "name": "对学院舆情",
+      "source_count": 1,
+      "enabled_count": 1,
+      "article_count": 20,
+      "sources": [
+        {
+          "source_id": "twitter_zgci_sentiment",
+          "source_name": "Twitter 学院舆情监控",
+          "group": "social_media",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "",
+          "schedule": "4h",
+          "data_path": "data/raw/sentiment/social_media/twitter_zgci_sentiment/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 20
+            }
+          ],
+          "article_count": 20,
+          "crawler_class": "twitter_search"
+        }
+      ]
+    },
+    "universities": {
+      "name": "对高校",
+      "source_count": 55,
+      "enabled_count": 46,
+      "article_count": 504,
+      "sources": [
+        {
+          "source_id": "tsinghua_news",
+          "source_name": "清华大学新闻网-最新动态",
+          "group": "university_news",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.tsinghua.edu.cn/news/zxdt.htm",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/tsinghua_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 10
+            }
+          ],
+          "article_count": 10
+        },
+        {
+          "source_id": "pku_news",
+          "source_name": "北京大学新闻网",
+          "group": "university_news",
+          "crawl_method": "dynamic",
+          "enabled": true,
+          "url": "https://news.pku.edu.cn/xwzh/index.htm",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/pku_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 10
+            }
+          ],
+          "article_count": 10
+        },
+        {
+          "source_id": "ustc_news",
+          "source_name": "中国科大新闻网-新闻博览",
+          "group": "university_news",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://news.ustc.edu.cn/xwbl.htm",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/ustc_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 30
+            }
+          ],
+          "article_count": 30
+        },
+        {
+          "source_id": "zju_news",
+          "source_name": "浙江大学新闻网",
+          "group": "university_news",
+          "crawl_method": "static",
+          "enabled": false,
+          "url": "https://www.zju.edu.cn/38199/list.htm",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/zju_news/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "sjtu_news",
+          "source_name": "上海交大新闻网",
+          "group": "university_news",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://news.sjtu.edu.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/sjtu_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 46
+            }
+          ],
+          "article_count": 46
+        },
+        {
+          "source_id": "fudan_news",
+          "source_name": "复旦大学新闻网",
+          "group": "university_news",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://news.fudan.edu.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/fudan_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 16
+            }
+          ],
+          "article_count": 16
+        },
+        {
+          "source_id": "nju_news",
+          "source_name": "南京大学新闻网",
+          "group": "university_news",
+          "crawl_method": "static",
+          "enabled": false,
+          "url": "https://news.nju.edu.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/nju_news/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "buaa_news",
+          "source_name": "北京航空航天大学新闻网",
+          "group": "university_news",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://news.buaa.edu.cn/zhxw.htm",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/buaa_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 5
+            }
+          ],
+          "article_count": 5
+        },
+        {
+          "source_id": "bit_news",
+          "source_name": "北京理工大学新闻网-综合新闻",
+          "group": "university_news",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.bit.edu.cn/xww/zhxw/index.htm",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/bit_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 21
+            }
+          ],
+          "article_count": 21
+        },
+        {
+          "source_id": "bnu_news",
+          "source_name": "北京师范大学新闻网",
+          "group": "university_news",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://news.bnu.edu.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/bnu_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 5
+            }
+          ],
+          "article_count": 5
+        },
+        {
+          "source_id": "bupt_news",
+          "source_name": "北京邮电大学新闻网",
+          "group": "university_news",
+          "crawl_method": "dynamic",
+          "enabled": false,
+          "url": "https://news.bupt.edu.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/bupt_news/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "ruc_news",
+          "source_name": "中国人民大学新闻网",
+          "group": "university_news",
+          "crawl_method": "dynamic",
+          "enabled": true,
+          "url": "https://news.ruc.edu.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/ruc_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 9
+            }
+          ],
+          "article_count": 9
+        },
+        {
+          "source_id": "nankai_news",
+          "source_name": "南开大学新闻网",
+          "group": "university_news",
+          "crawl_method": "dynamic",
+          "enabled": false,
+          "url": "https://news.nankai.edu.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/nankai_news/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "tju_news",
+          "source_name": "天津大学新闻网",
+          "group": "university_news",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://news.tju.edu.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/tju_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 4
+            }
+          ],
+          "article_count": 4
+        },
+        {
+          "source_id": "tongji_news",
+          "source_name": "同济大学新闻网",
+          "group": "university_news",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://news.tongji.edu.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/tongji_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 5
+            }
+          ],
+          "article_count": 5
+        },
+        {
+          "source_id": "jlu_news",
+          "source_name": "吉林大学新闻网-焦点新闻",
+          "group": "university_news",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://news.jlu.edu.cn/jdxw/jdxw.htm",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/jlu_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 10
+            }
+          ],
+          "article_count": 10
+        },
+        {
+          "source_id": "hit_news",
+          "source_name": "哈尔滨工业大学新闻网",
+          "group": "university_news",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://news.hit.edu.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/hit_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 8
+            }
+          ],
+          "article_count": 8
+        },
+        {
+          "source_id": "seu_news",
+          "source_name": "东南大学新闻网",
+          "group": "university_news",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://news.seu.edu.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/seu_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 5
+            }
+          ],
+          "article_count": 5
+        },
+        {
+          "source_id": "xmu_news",
+          "source_name": "厦门大学新闻网",
+          "group": "university_news",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://news.xmu.edu.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/xmu_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 16
+            }
+          ],
+          "article_count": 16
+        },
+        {
+          "source_id": "sdu_news",
+          "source_name": "山东大学新闻网-山大要闻",
+          "group": "university_news",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.view.sdu.edu.cn/sdyw.htm",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/sdu_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 16
+            }
+          ],
+          "article_count": 16
+        },
+        {
+          "source_id": "whu_news",
+          "source_name": "武汉大学新闻网",
+          "group": "university_news",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://news.whu.edu.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/whu_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 6
+            }
+          ],
+          "article_count": 6
+        },
+        {
+          "source_id": "hust_news",
+          "source_name": "华中科技大学新闻网",
+          "group": "university_news",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://news.hust.edu.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/hust_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 6
+            }
+          ],
+          "article_count": 6
+        },
+        {
+          "source_id": "csu_news",
+          "source_name": "中南大学新闻网",
+          "group": "university_news",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://news.csu.edu.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/csu_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 14
+            }
+          ],
+          "article_count": 14
+        },
+        {
+          "source_id": "xidian_news",
+          "source_name": "西安电子科技大学新闻网",
+          "group": "university_news",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://news.xidian.edu.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/xidian_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 12
+            }
+          ],
+          "article_count": 12
+        },
+        {
+          "source_id": "xjtu_news",
+          "source_name": "西安交通大学新闻网-要闻聚焦",
+          "group": "university_news",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://news.xjtu.edu.cn/ywjj.htm",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/xjtu_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 10
+            }
+          ],
+          "article_count": 10
+        },
+        {
+          "source_id": "nwpu_news",
+          "source_name": "西北工业大学新闻网",
+          "group": "university_news",
+          "crawl_method": "dynamic",
+          "enabled": false,
+          "url": "https://www.nwpu.edu.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/nwpu_news/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "scu_news",
+          "source_name": "四川大学新闻网",
+          "group": "university_news",
+          "crawl_method": "dynamic",
+          "enabled": false,
+          "url": "https://news.scu.edu.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/scu_news/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "uestc_news",
+          "source_name": "电子科技大学新闻网",
+          "group": "university_news",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://news.uestc.edu.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/uestc_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 45
+            }
+          ],
+          "article_count": 45
+        },
+        {
+          "source_id": "lzu_news",
+          "source_name": "兰州大学新闻网",
+          "group": "university_news",
+          "crawl_method": "dynamic",
+          "enabled": false,
+          "url": "https://news.lzu.edu.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/lzu_news/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "nudt_news",
+          "source_name": "国防科技大学-科大要闻",
+          "group": "university_news",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.nudt.edu.cn/xwgg/kdyw/index.htm",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/nudt_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 20
+            }
+          ],
+          "article_count": 20
+        },
+        {
+          "source_id": "sysu_news",
+          "source_name": "中山大学新闻网",
+          "group": "university_news",
+          "crawl_method": "dynamic",
+          "enabled": true,
+          "url": "https://news.sysu.edu.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/sysu_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 11
+            }
+          ],
+          "article_count": 11
+        },
+        {
+          "source_id": "sustech_news",
+          "source_name": "南方科技大学新闻网",
+          "group": "university_news",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://newshub.sustech.edu.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/university_news/sustech_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 6
+            }
+          ],
+          "article_count": 6
+        },
+        {
+          "source_id": "baai_news",
+          "source_name": "北京智源人工智能研究院(BAAI)-智源社区",
+          "group": "ai_institutes",
+          "crawl_method": "dynamic",
+          "enabled": true,
+          "url": "https://hub.baai.ac.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/ai_institutes/baai_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 6
+            }
+          ],
+          "article_count": 6
+        },
+        {
+          "source_id": "tsinghua_air",
+          "source_name": "清华大学智能产业研究院(AIR)",
+          "group": "ai_institutes",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://air.tsinghua.edu.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/ai_institutes/tsinghua_air/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 16
+            }
+          ],
+          "article_count": 16
+        },
+        {
+          "source_id": "shlab_news",
+          "source_name": "上海人工智能实验室-科研动态",
+          "group": "ai_institutes",
+          "crawl_method": "dynamic",
+          "enabled": true,
+          "url": "https://www.shlab.org.cn/info",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/ai_institutes/shlab_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 7
+            }
+          ],
+          "article_count": 7
+        },
+        {
+          "source_id": "zhejianglab_news",
+          "source_name": "之江实验室",
+          "group": "ai_institutes",
+          "crawl_method": "dynamic",
+          "enabled": false,
+          "url": "https://www.zhejianglab.org/lab/home",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/ai_institutes/zhejianglab_news/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "pcl_news",
+          "source_name": "鹏城实验室",
+          "group": "ai_institutes",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.pcl.ac.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/ai_institutes/pcl_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 10
+            }
+          ],
+          "article_count": 10
+        },
+        {
+          "source_id": "ia_cas_news",
+          "source_name": "中科院自动化所",
+          "group": "ai_institutes",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "http://www.ia.cas.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/ai_institutes/ia_cas_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 33
+            }
+          ],
+          "article_count": 33
+        },
+        {
+          "source_id": "ict_cas_news",
+          "source_name": "中科院计算所",
+          "group": "ai_institutes",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.ict.ac.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/ai_institutes/ict_cas_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 6
+            }
+          ],
+          "article_count": 6
+        },
+        {
+          "source_id": "sii_news",
+          "source_name": "上海创智学院",
+          "group": "ai_institutes",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.sii.edu.cn/czxw/list.htm",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/ai_institutes/sii_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 14
+            }
+          ],
+          "article_count": 14
+        },
+        {
+          "source_id": "slai_news",
+          "source_name": "深圳河套学院-学院动态",
+          "group": "ai_institutes",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.slai.edu.cn/taxonomy/term/1",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/ai_institutes/slai_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 6
+            }
+          ],
+          "article_count": 6
+        },
+        {
+          "source_id": "cesi_news",
+          "source_name": "中国电子标准化研究院",
+          "group": "ai_institutes",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.cesi.cn/page/second2.jsp?catalog=/002/002-001",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/ai_institutes/cesi_news/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "iie_cas_news",
+          "source_name": "中科院信工所-科研动态",
+          "group": "ai_institutes",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://iie.cas.cn/xwdt/kydt/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/ai_institutes/iie_cas_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 8
+            }
+          ],
+          "article_count": 8
+        },
+        {
+          "source_id": "shanghairanking_news",
+          "source_name": "软科(Shanghai Ranking)",
+          "group": "aggregators",
+          "crawl_method": "static",
+          "enabled": false,
+          "url": "https://www.shanghairanking.cn/news",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/aggregators/shanghairanking_news/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "eol_news",
+          "source_name": "中国教育在线",
+          "group": "aggregators",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.eol.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/aggregators/eol_news/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "jyb_news",
+          "source_name": "中国教育报",
+          "group": "aggregators",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "http://www.jyb.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/aggregators/jyb_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 16
+            }
+          ],
+          "article_count": 16
+        },
+        {
+          "source_id": "cas_news",
+          "source_name": "中国科学院",
+          "group": "awards",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.cas.cn/",
+          "schedule": "monthly",
+          "data_path": "data/raw/universities/awards/cas_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 1
+            }
+          ],
+          "article_count": 1
+        },
+        {
+          "source_id": "cae_news",
+          "source_name": "中国工程院",
+          "group": "awards",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.cae.cn/",
+          "schedule": "monthly",
+          "data_path": "data/raw/universities/awards/cae_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 5
+            }
+          ],
+          "article_count": 5
+        },
+        {
+          "source_id": "nosta_news",
+          "source_name": "国家科技奖励办",
+          "group": "awards",
+          "crawl_method": "dynamic",
+          "enabled": true,
+          "url": "https://www.nosta.gov.cn/",
+          "schedule": "monthly",
+          "data_path": "data/raw/universities/awards/nosta_news/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 6
+            }
+          ],
+          "article_count": 6
+        },
+        {
+          "source_id": "moe_keji",
+          "source_name": "教育部科学技术与信息化司",
+          "group": "awards",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://www.moe.gov.cn/s78/A16/",
+          "schedule": "monthly",
+          "data_path": "data/raw/universities/awards/moe_keji/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 7
+            }
+          ],
+          "article_count": 7
+        },
+        {
+          "source_id": "beijing_jw",
+          "source_name": "北京市教委-政务公开",
+          "group": "provincial",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://jw.beijing.gov.cn/xxgk/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/provincial/beijing_jw/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 1
+            }
+          ],
+          "article_count": 1
+        },
+        {
+          "source_id": "shanghai_jw",
+          "source_name": "上海市教委-本市新闻",
+          "group": "provincial",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://edu.sh.gov.cn/xwzx_bsxw/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/provincial/shanghai_jw/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 3
+            }
+          ],
+          "article_count": 3
+        },
+        {
+          "source_id": "zhejiang_jyt",
+          "source_name": "浙江省教育厅-教育动态",
+          "group": "provincial",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://jyt.zj.gov.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/provincial/zhejiang_jyt/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 6
+            }
+          ],
+          "article_count": 6
+        },
+        {
+          "source_id": "jiangsu_jyt",
+          "source_name": "江苏省教育厅",
+          "group": "provincial",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://jyt.jiangsu.gov.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/provincial/jiangsu_jyt/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 6
+            }
+          ],
+          "article_count": 6
+        },
+        {
+          "source_id": "guangdong_jyt",
+          "source_name": "广东省教育厅-教育新闻",
+          "group": "provincial",
+          "crawl_method": "static",
+          "enabled": true,
+          "url": "https://edu.gd.gov.cn/",
+          "schedule": "daily",
+          "data_path": "data/raw/universities/provincial/guangdong_jyt/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 1
+            }
+          ],
+          "article_count": 1
+        }
+      ]
+    },
+    "university_faculty": {
+      "name": "university_faculty",
+      "source_count": 47,
+      "enabled_count": 14,
+      "article_count": 332,
+      "sources": [
+        {
+          "source_id": "tsinghua_air_faculty",
+          "source_name": "清华大学智能产业研究院-研究团队",
+          "group": "tsinghua",
+          "crawl_method": "faculty",
+          "enabled": true,
+          "url": "https://air.tsinghua.edu.cn/airtd/yjtd.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/tsinghua/tsinghua_air_faculty/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 37
+            }
+          ],
+          "article_count": 37
+        },
+        {
+          "source_id": "tsinghua_cs_faculty",
+          "source_name": "清华大学计算机系-教师",
+          "group": "tsinghua",
+          "crawl_method": "faculty",
+          "enabled": true,
+          "url": "https://www.cs.tsinghua.edu.cn/szzk/jzgml.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/tsinghua/tsinghua_cs_faculty/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 135
+            }
+          ],
+          "article_count": 135
+        },
+        {
+          "source_id": "pku_cs_faculty",
+          "source_name": "北京大学计算机学院-师资队伍",
+          "group": "pku",
+          "crawl_method": "faculty",
+          "enabled": true,
+          "url": "https://cs.pku.edu.cn/szdw/jyxl/amz/ALL.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/pku/pku_cs_faculty/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 12
+            }
+          ],
+          "article_count": 12
+        },
+        {
+          "source_id": "pku_cis_faculty",
+          "source_name": "北京大学智能学院-专职教师",
+          "group": "pku",
+          "crawl_method": "faculty",
+          "enabled": true,
+          "url": "http://www.cis.pku.edu.cn/szdw/zzjs.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/pku/pku_cis_faculty/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 8
+            }
+          ],
+          "article_count": 8
+        },
+        {
+          "source_id": "ict_cas_faculty",
+          "source_name": "中科院计算技术研究所-研究员",
+          "group": "cas_ict",
+          "crawl_method": "faculty",
+          "enabled": true,
+          "url": "http://www.ict.ac.cn/yjdw/yjy2020/",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/cas_ict/ict_cas_faculty/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 24
+            }
+          ],
+          "article_count": 24
+        },
+        {
+          "source_id": "casia_faculty",
+          "source_name": "中科院自动化研究所-研究员",
+          "group": "cas_ia",
+          "crawl_method": "faculty",
+          "enabled": true,
+          "url": "http://www.ia.cas.cn/rcdw/yjy/",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/cas_ia/casia_faculty/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 20
+            }
+          ],
+          "article_count": 20
+        },
+        {
+          "source_id": "sjtu_ai_faculty",
+          "source_name": "上海交通大学人工智能研究院-师资",
+          "group": "sjtu",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "https://ai.sjtu.edu.cn/faculty/teachers",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/sjtu/sjtu_ai_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "tsinghua_iiis_faculty",
+          "source_name": "清华大学交叉信息研究院-教师",
+          "group": "tsinghua",
+          "crawl_method": "faculty",
+          "enabled": true,
+          "url": "https://iiis.tsinghua.edu.cn/rydw.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/tsinghua/tsinghua_iiis_faculty/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 77
+            }
+          ],
+          "article_count": 77
+        },
+        {
+          "source_id": "tsinghua_se_faculty",
+          "source_name": "清华大学软件学院-师资队伍",
+          "group": "tsinghua",
+          "crawl_method": "faculty",
+          "enabled": true,
+          "url": "https://www.thss.tsinghua.edu.cn/szdw/jsml.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/tsinghua/tsinghua_se_faculty/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 5
+            }
+          ],
+          "article_count": 5
+        },
+        {
+          "source_id": "tsinghua_ee_faculty",
+          "source_name": "清华大学电子工程系-教师",
+          "group": "tsinghua",
+          "crawl_method": "faculty",
+          "enabled": true,
+          "url": "https://www.ee.tsinghua.edu.cn/ryqk/teacher/xxgdzyjs/js2.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/tsinghua/tsinghua_ee_faculty/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 7
+            }
+          ],
+          "article_count": 7
+        },
+        {
+          "source_id": "tsinghua_au_faculty",
+          "source_name": "清华大学自动化系-教师",
+          "group": "tsinghua",
+          "crawl_method": "faculty",
+          "enabled": true,
+          "url": "https://www.au.tsinghua.edu.cn/szdw/jsdw1/ayjscz/kzyjcyjs.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/tsinghua/tsinghua_au_faculty/",
+          "files": [
+            {
+              "date": "latest",
+              "article_count": 7
+            }
+          ],
+          "article_count": 7
+        },
+        {
+          "source_id": "pku_icst_faculty",
+          "source_name": "北京大学王选计算机研究所-学术团队",
+          "group": "pku",
+          "crawl_method": "faculty",
+          "enabled": true,
+          "url": "https://www.icst.pku.edu.cn/xstd/index.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/pku/pku_icst_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "pku_ic_faculty",
+          "source_name": "北京大学集成电路学院-专职教师",
+          "group": "pku",
+          "crawl_method": "faculty",
+          "enabled": true,
+          "url": "https://ic.pku.edu.cn/szdw/zzjs/index.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/pku/pku_ic_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "pku_ss_faculty",
+          "source_name": "北京大学软件与微电子学院-师资团队",
+          "group": "pku",
+          "crawl_method": "faculty",
+          "enabled": true,
+          "url": "https://ss.pku.edu.cn/sztd/index.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/pku/pku_ss_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "pku_cfcs_faculty",
+          "source_name": "北京大学前沿计算研究中心-教学科研人员",
+          "group": "pku",
+          "crawl_method": "faculty",
+          "enabled": true,
+          "url": "https://cfcs.pku.edu.cn/people/faculty/index.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/pku/pku_cfcs_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "sjtu_cs_faculty",
+          "source_name": "上海交通大学计算机系-教师名录",
+          "group": "sjtu",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "https://www.cs.sjtu.edu.cn/jiaoshiml.html",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/sjtu/sjtu_cs_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "sjtu_se_faculty",
+          "source_name": "上海交通大学软件学院-师资队伍",
+          "group": "sjtu",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "https://www.se.sjtu.edu.cn/szdw.html",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/sjtu/sjtu_se_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "sjtu_infosec_faculty",
+          "source_name": "上海交通大学网络空间安全学院-师资",
+          "group": "sjtu",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "https://infosec.sjtu.edu.cn/Directory.aspx",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/sjtu/sjtu_infosec_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "fudan_cs_faculty",
+          "source_name": "复旦大学计算与智能创新学院-师资队伍",
+          "group": "fudan",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "http://ai.fudan.edu.cn/53161/list.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/fudan/fudan_cs_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "fudan_ai_robot_faculty",
+          "source_name": "复旦大学智能机器人与先进制造创新学院-师资",
+          "group": "fudan",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "https://mirmi.fudan.edu.cn/szdw/",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/fudan/fudan_ai_robot_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "nju_cs_faculty",
+          "source_name": "南京大学计算机系-师资队伍",
+          "group": "nju",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "https://cs.nju.edu.cn/1651/list.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/nju/nju_cs_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "nju_ai_faculty",
+          "source_name": "南京大学人工智能学院-师资队伍",
+          "group": "nju",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "http://ai.nju.edu.cn/people/list.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/nju/nju_ai_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "nju_software_faculty",
+          "source_name": "南京大学软件学院-专业教师",
+          "group": "nju",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "https://software.nju.edu.cn/szll/szdw/index.html",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/nju/nju_software_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "nju_is_faculty",
+          "source_name": "南京大学智能科学与技术学院-师资",
+          "group": "nju",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "https://is.nju.edu.cn/szdw/list.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/nju/nju_is_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "nju_ise_faculty",
+          "source_name": "南京大学智能软件与工程学院-师资",
+          "group": "nju",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "https://ise.nju.edu.cn/szdw/list.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/nju/nju_ise_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "ustc_cs_faculty",
+          "source_name": "中国科学技术大学计算机学院-师资队伍",
+          "group": "ustc",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "http://cs.ustc.edu.cn/zgj_23225/list.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/ustc/ustc_cs_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "ustc_sist_faculty",
+          "source_name": "中国科学技术大学信息科学技术学院-师资",
+          "group": "ustc",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "https://sist.ustc.edu.cn/5140/list.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/ustc/ustc_sist_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "ustc_se_faculty",
+          "source_name": "中国科学技术大学软件学院-师资",
+          "group": "ustc",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "https://se.ustc.edu.cn/17383/list.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/ustc/ustc_se_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "zju_cs_faculty",
+          "source_name": "浙江大学计算机学院-师资",
+          "group": "zju",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "https://www.cs.zju.edu.cn/csen/28085/list.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/zju/zju_cs_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "zju_cyber_faculty",
+          "source_name": "浙江大学网络空间安全学院-师资",
+          "group": "zju",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "https://icsr.zju.edu.cn/szdw/zzjs/list.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/zju/zju_cyber_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "zju_soft_faculty",
+          "source_name": "浙江大学软件学院-师资",
+          "group": "zju",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "https://www.zjuse.zju.edu.cn/szdw/list.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/zju/zju_soft_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "iscas_faculty",
+          "source_name": "中科院软件研究所-研究员",
+          "group": "cas_iscas",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "http://www.iscas.ac.cn/rcdw2016/yjyzgjgcs2016/",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/cas_iscas/iscas_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "ruc_info_faculty",
+          "source_name": "中国人民大学信息学院-师资队伍",
+          "group": "ruc",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "http://info.ruc.edu.cn/jsky/szdw/index.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/ruc/ruc_info_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "ruc_ai_faculty",
+          "source_name": "中国人民大学高瓴人工智能学院-教师队伍",
+          "group": "ruc",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "http://ai.ruc.edu.cn/academicfaculty/szdwn/index.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/ruc/ruc_ai_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "tsinghua_insc_faculty",
+          "source_name": "清华大学网络研究院-师资",
+          "group": "tsinghua",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "https://www.insc.tsinghua.edu.cn/szdw.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/tsinghua/tsinghua_insc_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "tsinghua_ias_faculty",
+          "source_name": "清华大学高等研究院-师资",
+          "group": "tsinghua",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "https://ias.tsinghua.edu.cn/szdw.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/tsinghua/tsinghua_ias_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "tsinghua_futurelab_faculty",
+          "source_name": "清华大学未来实验室-研究人员",
+          "group": "tsinghua",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "https://thfl.tsinghua.edu.cn/yjdw.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/tsinghua/tsinghua_futurelab_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "tsinghua_ymsc_faculty",
+          "source_name": "清华大学丘成桐数学中心-师资",
+          "group": "tsinghua",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "https://ymsc.tsinghua.edu.cn/yjdw.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/tsinghua/tsinghua_ymsc_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "tsinghua_life_faculty",
+          "source_name": "清华大学生命科学学院-师资",
+          "group": "tsinghua",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "https://life.tsinghua.edu.cn/szdw/jsdw.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/tsinghua/tsinghua_life_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "tsinghua_sigs_faculty",
+          "source_name": "清华大学数据与信息研究院（深圳）-师资",
+          "group": "tsinghua",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "https://www.sigs.tsinghua.edu.cn/szdw.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/tsinghua/tsinghua_sigs_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "tsinghua_iaiig_faculty",
+          "source_name": "清华大学人工智能国际治理研究院-研究员",
+          "group": "tsinghua",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "https://iaiig.tsinghua.edu.cn/yjdw.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/tsinghua/tsinghua_iaiig_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "pku_math_faculty",
+          "source_name": "北京大学数学学院-师资",
+          "group": "pku",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "https://www.math.pku.edu.cn/teachers/index.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/pku/pku_math_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "pku_eecs_sz_faculty",
+          "source_name": "北京大学信息工程学院（深圳）-师资",
+          "group": "pku",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "https://eecs.pku.edu.cn/szdw/",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/pku/pku_eecs_sz_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "pku_coe_faculty",
+          "source_name": "北京大学工学院-师资",
+          "group": "pku",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "https://www.coe.pku.edu.cn/teaching/teacher/",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/pku/pku_coe_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "sjtu_qingyuan_faculty",
+          "source_name": "上海交通大学清源研究院-研究员",
+          "group": "sjtu",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "https://qingyuan.sjtu.edu.cn/",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/sjtu/sjtu_qingyuan_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "ustc_ds_faculty",
+          "source_name": "中国科学技术大学大数据学院-师资",
+          "group": "ustc",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "https://ds.ustc.edu.cn/szdw.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/ustc/ustc_ds_faculty/",
+          "files": [],
+          "article_count": 0
+        },
+        {
+          "source_id": "ustc_cyber_faculty",
+          "source_name": "中国科学技术大学网安学院-师资",
+          "group": "ustc",
+          "crawl_method": "faculty",
+          "enabled": false,
+          "url": "https://cybersec.ustc.edu.cn/szdw_23805/list.htm",
+          "schedule": "weekly",
+          "data_path": "data/raw/university_faculty/ustc/ustc_cyber_faculty/",
+          "files": [],
+          "article_count": 0
+        }
+      ]
+    }
+  }
+}

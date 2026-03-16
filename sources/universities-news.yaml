@@ -1,0 +1,677 @@
+dimension: universities
+dimension_name: 对高校
+description: 高校相关信源 - university_news
+default_keyword_filter:
+- 人工智能
+- AI
+- 人事
+- 任命
+- 院长
+- 校长
+- 院士
+- 科技
+- 成果
+sources:
+- id: tsinghua_news
+  name: 清华大学新闻网-最新动态
+  group: university_news
+  url: https://www.tsinghua.edu.cn/news/zxdt.htm
+  crawl_method: static
+  schedule: daily
+  priority: 1
+  is_enabled: true
+  selectors:
+    list_item: ul.ztxw_ul2 li
+    title: p.bt
+    link: a
+    date: div.sj
+    date_format: '%d %Y.%m'
+  base_url: https://www.tsinghua.edu.cn
+  keyword_filter: []
+  detail_selectors:
+    content: div.content
+  tags:
+  - university
+  - tsinghua
+  - news
+- id: pku_news
+  name: 北京大学新闻网
+  group: university_news
+  url: https://news.pku.edu.cn/xwzh/index.htm
+  crawl_method: dynamic
+  schedule: daily
+  priority: 1
+  is_enabled: true
+  wait_for: ul.newsList01 li
+  wait_timeout: 15000
+  selectors:
+    list_item: ul.newsList01 li
+    title: h3 a
+    link: h3 a
+    date: span.item-date
+    date_format: '%Y/%m/%d'
+  base_url: https://news.pku.edu.cn/xwzh/
+  keyword_filter: []
+  detail_selectors:
+    content: div.article
+  tags:
+  - university
+  - pku
+  - news
+- id: ustc_news
+  name: 中国科大新闻网-新闻博览
+  group: university_news
+  url: https://news.ustc.edu.cn/xwbl.htm
+  crawl_method: static
+  schedule: daily
+  priority: 1
+  is_enabled: true
+  selectors:
+    list_item: ul.info-list li
+    title: a
+    link: a
+    date: div.date
+    date_format: '%Y-%m-%d'
+  base_url: https://news.ustc.edu.cn
+  keyword_filter: []
+  detail_selectors:
+    content: div.article-content
+  tags:
+  - university
+  - ustc
+  - news
+- id: zju_news
+  name: 浙江大学新闻网
+  group: university_news
+  url: https://www.zju.edu.cn/38199/list.htm
+  crawl_method: static
+  schedule: daily
+  priority: 1
+  is_enabled: false
+  selectors:
+    list_item: ul.list li
+    title: a
+    link: a
+    date: span
+  base_url: https://www.zju.edu.cn
+  tags:
+  - university
+  - zju
+  - news
+- id: sjtu_news
+  name: 上海交大新闻网
+  group: university_news
+  url: https://news.sjtu.edu.cn/
+  crawl_method: static
+  schedule: daily
+  priority: 1
+  is_enabled: true
+  selectors:
+    list_item: ul.list li
+    title: a
+    link: a
+    date: span
+  base_url: https://news.sjtu.edu.cn
+  keyword_filter: []
+  detail_selectors:
+    content: div.Article_content
+  tags:
+  - university
+  - sjtu
+  - news
+- id: fudan_news
+  name: 复旦大学新闻网
+  group: university_news
+  url: https://news.fudan.edu.cn/
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: ul.news_list li
+    title: div.news_title a
+    link: div.news_title a
+  base_url: https://news.fudan.edu.cn
+  keyword_filter: []
+  detail_selectors:
+    content: div.article
+  tags:
+  - university
+  - fudan
+  - news
+- id: nju_news
+  name: 南京大学新闻网
+  group: university_news
+  url: https://news.nju.edu.cn/
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: false
+  selectors:
+    list_item: ul.list li
+    title: a
+    link: a
+    date: span
+  base_url: https://news.nju.edu.cn
+  tags:
+  - university
+  - nju
+  - news
+- id: buaa_news
+  name: 北京航空航天大学新闻网
+  group: university_news
+  url: https://news.buaa.edu.cn/zhxw.htm
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: div.twlist ul li
+    title: h3
+    link: a
+    date: div.pub_date
+    date_format: '%d %Y.%m'
+    date_regex: \d{1,2} \d{4}\.\d{2}
+  base_url: https://news.buaa.edu.cn
+  keyword_filter: []
+  detail_selectors:
+    content: div.v_news_content
+  tags:
+  - university
+  - buaa
+  - news
+- id: bit_news
+  name: 北京理工大学新闻网-综合新闻
+  group: university_news
+  url: https://www.bit.edu.cn/xww/zhxw/index.htm
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: ul.newsList04 li
+    title: h3 a
+    link: h3 a
+    date: span.item-date04 i
+    date_format: '%Y-%m-%d'
+  base_url: https://www.bit.edu.cn/xww/zhxw/
+  keyword_filter: []
+  detail_selectors:
+    content: div.article
+  tags:
+  - university
+  - bit
+  - news
+- id: bnu_news
+  name: 北京师范大学新闻网
+  group: university_news
+  url: https://news.bnu.edu.cn/
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: li div.slideTitle
+    title: h3 a
+    link: h3 a
+  base_url: https://news.bnu.edu.cn
+  keyword_filter: []
+  detail_selectors:
+    content: div.article
+  tags:
+  - university
+  - bnu
+  - news
+- id: bupt_news
+  name: 北京邮电大学新闻网
+  group: university_news
+  url: https://news.bupt.edu.cn/
+  crawl_method: dynamic
+  schedule: daily
+  priority: 2
+  is_enabled: false
+  wait_for: div.news
+  wait_timeout: 15000
+  selectors:
+    list_item: div.news-list ul li
+    title: a
+    link: a
+    date: span
+  base_url: https://news.bupt.edu.cn
+  keyword_filter: []
+  tags:
+  - university
+  - bupt
+  - news
+- id: ruc_news
+  name: 中国人民大学新闻网
+  group: university_news
+  url: https://news.ruc.edu.cn/
+  crawl_method: dynamic
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  wait_for: div.swiper-slide
+  wait_timeout: 15000
+  selectors:
+    list_item: div.swiper-slide
+    title: a
+    link: a
+  base_url: https://news.ruc.edu.cn
+  keyword_filter: []
+  detail_selectors:
+    content: div.page-content
+  tags:
+  - university
+  - ruc
+  - news
+- id: nankai_news
+  name: 南开大学新闻网
+  group: university_news
+  url: https://news.nankai.edu.cn/
+  crawl_method: dynamic
+  schedule: daily
+  priority: 2
+  is_enabled: false
+  wait_for: div.right_con
+  wait_timeout: 15000
+  selectors:
+    list_item: div.right_con a
+    title: _self
+    link: _self
+  base_url: https://news.nankai.edu.cn
+  keyword_filter: []
+  tags:
+  - university
+  - nankai
+  - news
+- id: tju_news
+  name: 天津大学新闻网
+  group: university_news
+  url: https://news.tju.edu.cn/
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: ul.slide-list li
+    title: a
+    link: a
+  base_url: https://news.tju.edu.cn
+  keyword_filter: []
+  detail_selectors:
+    content: div.v_news_content
+  tags:
+  - university
+  - tju
+  - news
+- id: tongji_news
+  name: 同济大学新闻网
+  group: university_news
+  url: https://news.tongji.edu.cn/
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: div.xyxw-right ul li
+    title: a
+    link: a
+  base_url: https://news.tongji.edu.cn
+  keyword_filter: []
+  detail_selectors:
+    content: div.v_news_content
+  tags:
+  - university
+  - tongji
+  - news
+- id: jlu_news
+  name: 吉林大学新闻网-焦点新闻
+  group: university_news
+  url: https://news.jlu.edu.cn/jdxw/jdxw.htm
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: div.list-right-2 a
+    title: _self
+    link: _self
+  base_url: https://news.jlu.edu.cn/jdxw/
+  keyword_filter: []
+  detail_selectors:
+    content: '#vsb_content_2'
+  tags:
+  - university
+  - jlu
+  - news
+- id: hit_news
+  name: 哈尔滨工业大学新闻网
+  group: university_news
+  url: https://news.hit.edu.cn/
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: div.col-r ul.ul-cnn li
+    title: a
+    link: a
+  base_url: https://news.hit.edu.cn
+  keyword_filter: []
+  detail_selectors:
+    content: div.wp_articlecontent
+  tags:
+  - university
+  - hit
+  - news
+- id: seu_news
+  name: 东南大学新闻网
+  group: university_news
+  url: https://news.seu.edu.cn/
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: ul.news_list li.news
+    title: div.news_title a
+    link: div.news_title a
+    date: div.news_time
+  base_url: https://news.seu.edu.cn
+  keyword_filter: []
+  detail_selectors:
+    content: div.wp_articlecontent
+  tags:
+  - university
+  - seu
+  - news
+- id: xmu_news
+  name: 厦门大学新闻网
+  group: university_news
+  url: https://news.xmu.edu.cn/
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: ul.picList li
+    title: a
+    link: a
+  base_url: https://news.xmu.edu.cn
+  keyword_filter: []
+  detail_selectors:
+    content: div.v_news_content
+  tags:
+  - university
+  - xmu
+  - news
+- id: sdu_news
+  name: 山东大学新闻网-山大要闻
+  group: university_news
+  url: https://www.view.sdu.edu.cn/sdyw.htm
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: div.i-list ul li
+    title: h3
+    link: a
+    date: em
+    date_format: '%Y-%m-%d'
+  base_url: https://www.view.sdu.edu.cn/
+  keyword_filter: []
+  detail_selectors:
+    content: div.nymain
+  tags:
+  - university
+  - sdu
+  - news
+- id: whu_news
+  name: 武汉大学新闻网
+  group: university_news
+  url: https://news.whu.edu.cn/
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: div.lists div.item
+    title: a
+    link: a
+  base_url: https://news.whu.edu.cn
+  keyword_filter: []
+  detail_selectors:
+    content: div.v_news_content
+  tags:
+  - university
+  - whu
+  - news
+- id: hust_news
+  name: 华中科技大学新闻网
+  group: university_news
+  url: https://news.hust.edu.cn/
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: div.part1-R ul li
+    title: a
+    link: a
+  base_url: https://news.hust.edu.cn
+  keyword_filter: []
+  detail_selectors:
+    content: div.v_news_content
+  tags:
+  - university
+  - hust
+  - news
+- id: csu_news
+  name: 中南大学新闻网
+  group: university_news
+  url: https://news.csu.edu.cn/
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: ul.mediaList li
+    title: a
+    link: a
+  base_url: https://news.csu.edu.cn
+  keyword_filter: []
+  detail_selectors:
+    content: div.v_news_content
+  tags:
+  - university
+  - csu
+  - news
+- id: xidian_news
+  name: 西安电子科技大学新闻网
+  group: university_news
+  url: https://news.xidian.edu.cn/
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: div.news_c a
+    title: _self
+    link: _self
+  base_url: https://news.xidian.edu.cn/
+  keyword_filter: []
+  detail_selectors:
+    content: div.v_news_content
+  tags:
+  - university
+  - xidian
+  - news
+- id: xjtu_news
+  name: 西安交通大学新闻网-要闻聚焦
+  group: university_news
+  url: https://news.xjtu.edu.cn/ywjj.htm
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: ul.listq1-3 li
+    title: a.tit
+    link: a.tit
+    date: a.dateyw
+  base_url: https://news.xjtu.edu.cn
+  keyword_filter: []
+  detail_selectors:
+    content: div.v_news_content
+  tags:
+  - university
+  - xjtu
+  - news
+- id: nwpu_news
+  name: 西北工业大学新闻网
+  group: university_news
+  url: https://www.nwpu.edu.cn/
+  crawl_method: dynamic
+  schedule: daily
+  priority: 2
+  is_enabled: false
+  wait_for: div.news-list
+  wait_timeout: 15000
+  selectors:
+    list_item: div.news-list li
+    title: div.li-bottom p a
+    link: div.li-bottom p a
+  base_url: https://www.nwpu.edu.cn
+  keyword_filter: []
+  tags:
+  - university
+  - nwpu
+  - news
+- id: scu_news
+  name: 四川大学新闻网
+  group: university_news
+  url: https://news.scu.edu.cn/
+  crawl_method: dynamic
+  schedule: daily
+  priority: 2
+  is_enabled: false
+  wait_for: div.news
+  wait_timeout: 15000
+  selectors:
+    list_item: ul.newsList01 li
+    title: a
+    link: a
+    date: span
+  base_url: https://news.scu.edu.cn
+  keyword_filter: []
+  tags:
+  - university
+  - scu
+  - news
+- id: uestc_news
+  name: 电子科技大学新闻网
+  group: university_news
+  url: https://news.uestc.edu.cn/
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: div.hot_news-item
+    title: a.title
+    link: a.title
+    date: span.date
+    date_format: '%Y-%m-%d'
+  base_url: https://news.uestc.edu.cn
+  keyword_filter: []
+  detail_selectors:
+    content: div.v_news_content
+  tags:
+  - university
+  - uestc
+  - news
+- id: lzu_news
+  name: 兰州大学新闻网
+  group: university_news
+  url: https://news.lzu.edu.cn/
+  crawl_method: dynamic
+  schedule: daily
+  priority: 2
+  is_enabled: false
+  wait_for: div.news
+  wait_timeout: 15000
+  selectors:
+    list_item: ul.newsList01 li
+    title: a
+    link: a
+    date: span
+  base_url: https://news.lzu.edu.cn
+  keyword_filter: []
+  tags:
+  - university
+  - lzu
+  - news
+- id: nudt_news
+  name: 国防科技大学-科大要闻
+  group: university_news
+  url: https://www.nudt.edu.cn/xwgg/kdyw/index.htm
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: ul.listCon li
+    title: a
+    link: a
+  base_url: https://www.nudt.edu.cn/xwgg/kdyw/
+  keyword_filter: []
+  detail_selectors:
+    content: div.pageCon
+  tags:
+  - university
+  - nudt
+  - news
+- id: sysu_news
+  name: 中山大学新闻网
+  group: university_news
+  url: https://news.sysu.edu.cn/
+  crawl_method: dynamic
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  wait_for: div.swiper-slide
+  wait_timeout: 15000
+  selectors:
+    list_item: div.swiper-slide
+    title: h4 a
+    link: h4 a
+  base_url: https://news.sysu.edu.cn
+  keyword_filter: []
+  detail_selectors:
+    content: div.v_news_content
+  tags:
+  - university
+  - sysu
+  - news
+- id: sustech_news
+  name: 南方科技大学新闻网
+  group: university_news
+  url: https://newshub.sustech.edu.cn/
+  crawl_method: static
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  selectors:
+    list_item: div.iban div.bd ul a
+    title: _self
+    link: _self
+  base_url: https://newshub.sustech.edu.cn
+  keyword_filter: []
+  detail_selectors:
+    content: div.u-content
+  tags:
+  - university
+  - sustech
+  - news
