@@ -3,8 +3,8 @@ import { ThemeProvider } from "next-themes";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Crawler Controller — 信息爬虫控制台",
-  description: "中关村人工智能研究院 · 数据智能平台爬虫管理界面",
+  title: "Nexus — Data Intelligence Control Panel",
+  description: "Nexus · Production-grade data pipeline management interface",
 };
 
 export default function RootLayout({

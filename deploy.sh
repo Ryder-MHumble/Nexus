@@ -13,7 +13,8 @@ LOG_FILE="$LOG_DIR/server.log"
 VERSION=$(grep '^version' "$PROJECT_DIR/pyproject.toml" 2>/dev/null \
     | head -1 | sed 's/.*"\(.*\)".*/\1/' || echo "0.0.0")
 
-PORT=8001
+PORT=${NEXUS_PORT:-8001}
+HOST=${NEXUS_HOST:-localhost}
 WORKERS=1
 TAIL_LINES=50
 FOLLOW=false
@@ -62,7 +63,7 @@ show_banner() {
     printf "  ${P6}${BOLD}╚═════╝ ╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝${NC}\n"
     printf "\n"
     printf "  ${P3}%s${NC}\n" "$(printf '%.0s═' {1..56})"
-    printf "  ${P2}${BOLD}院长智能体${NC} ${D}·${NC} ${D}Dean AI Agent — Backend Service${NC}\n"
+    printf "  ${P2}${BOLD}Nexus${NC} ${D}·${NC} ${D}Data Intelligence Platform — Backend Service${NC}\n"
     printf "  ${P3}%s${NC}\n" "$(printf '%.0s═' {1..56})"
     printf "\n"
     local _branch _py _time
@@ -71,7 +72,7 @@ show_banner() {
     _time=$(date '+%Y-%m-%d  %H:%M:%S')
     printf "  ${D}TIME${NC}   ${BW}%s${NC}    ${D}PORT${NC}   ${BC}${BOLD}:%s${NC}\n" "$_time" "$PORT"
     printf "  ${D}BRANCH${NC} ${Y}%s${NC}          ${D}PYTHON${NC} ${G}%s${NC}\n" "$_branch" "$_py"
-    printf "  ${D}TARGET${NC} ${D}43.98.254.243${NC}    ${D}v%s${NC}\n" "$VERSION"
+    printf "  ${D}HOST${NC}   ${D}${HOST}${NC}    ${D}v%s${NC}\n" "$VERSION"
     printf "\n"
     _hr
 }
@@ -253,7 +254,7 @@ _wait_health() {
     local chars='⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏'
     printf " ${C}⟳${NC} Waiting for health check..."
     while [[ $i -lt $max ]]; do
-        if curl -sf "http://43.98.254.243:$PORT/api/v1/health/" >/dev/null 2>&1; then
+        if curl -sf "http://${HOST}:$PORT/api/v1/health/" >/dev/null 2>&1; then
             printf "\r ${G}✓${NC}  Health check passed           \n"
             return 0
         fi
@@ -299,7 +300,7 @@ show_dashboard() {
 
         # Pipeline status
         local pipe_json
-        pipe_json=$(curl -sf "http://43.98.254.243:$PORT/api/v1/health/pipeline-status" 2>/dev/null) || pipe_json=""
+        pipe_json=$(curl -sf "http://${HOST}:$PORT/api/v1/health/pipeline-status" 2>/dev/null) || pipe_json=""
         if [[ -n "$pipe_json" ]]; then
             printf "\n"
             printf "   ${BOLD}PIPELINE${NC}\n"
@@ -343,9 +344,9 @@ if stages:
         # Endpoints
         printf "\n"
         printf "   ${BOLD}ENDPOINTS${NC}\n"
-        printf "   ${D}Docs${NC}     http://43.98.254.243:%s/docs\n" "$PORT"
-        printf "   ${D}Health${NC}   http://43.98.254.243:%s/api/v1/health/\n" "$PORT"
-        printf "   ${D}Pipeline${NC} http://43.98.254.243:%s/api/v1/health/pipeline-status\n" "$PORT"
+        printf "   ${D}Docs${NC}     http://${HOST}:%s/docs\n" "$PORT"
+        printf "   ${D}Health${NC}   http://${HOST}:%s/api/v1/health/\n" "$PORT"
+        printf "   ${D}Pipeline${NC} http://${HOST}:%s/api/v1/health/pipeline-status\n" "$PORT"
     else
         printf "\n"
         printf "   ${BOLD}SERVICE${NC}\n"
@@ -367,7 +368,7 @@ _check_pipeline_hint() {
     if [[ ! -f "$feed" ]]; then
         printf "\n"
         warn "Processed data missing — Pipeline will auto-trigger on startup"
-        dim "   Or trigger manually: curl -X POST http://43.98.254.243:$PORT/api/v1/health/pipeline-trigger"
+        dim "   Or trigger manually: curl -X POST http://${HOST}:$PORT/api/v1/health/pipeline-trigger"
         return
     fi
 
@@ -383,7 +384,7 @@ _check_pipeline_hint() {
     if [[ $age_hours -gt 24 ]]; then
         printf "\n"
         warn "Pipeline data is ${BOLD}${age_hours}h${NC}${Y} old — consider re-running:${NC}"
-        dim "   curl -X POST http://43.98.254.243:$PORT/api/v1/health/pipeline-trigger"
+        dim "   curl -X POST http://${HOST}:$PORT/api/v1/health/pipeline-trigger"
     fi
 }
 

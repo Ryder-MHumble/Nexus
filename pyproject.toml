@@ -6,9 +6,9 @@ build-backend = "setuptools.build_meta"
 include = ["app*"]
 
 [project]
-name = "information-crawler"
+name = "nexus"
 version = "0.2.0"
-description = "Information monitoring system for AI research academy"
+description = "Production-grade data pipeline for AI-ready structured knowledge"
 requires-python = ">=3.11"
 dependencies = [
     "fastapi>=0.115",

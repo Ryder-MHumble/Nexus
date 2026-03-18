@@ -11,7 +11,7 @@ Example YAML:
     dimension: sentiment
     group: social_media
     crawler_class: twitter_search
-    twitter_query: '"中关村人工智能研究院" OR "BAAI" OR "智源研究院"'
+    twitter_query: '"Your Organization" OR "your-alias"'  # Replace with your search terms
     twitter_query_type: Latest
     max_tweets: 20
 """

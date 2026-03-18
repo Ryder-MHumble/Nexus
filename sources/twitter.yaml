@@ -122,15 +122,15 @@ sources:
   # ============================================================
   # 学院舆情 - 社交媒体提及
   # ============================================================
-  - id: twitter_zgci_sentiment
-    name: "Twitter 学院舆情监控"
+  - id: twitter_org_sentiment
+    name: "Twitter 机构舆情监控"
     dimension: sentiment
     group: social_media
     crawler_class: twitter_search
     schedule: "4h"
-    is_enabled: true
+    is_enabled: false  # Configure twitter_query with your organization name
     tags: ["twitter", "sentiment"]
-    twitter_query: '"中关村人工智能研究院" OR "ZGCI AI" OR "Beijing Academy of AI"'
+    twitter_query: '"Your Organization Name" OR "your-org-alias"'  # Replace with your org
     twitter_query_type: "Latest"
     max_tweets: 20
     min_likes: 0

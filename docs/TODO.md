@@ -1,7 +1,7 @@
 # 后续任务清单
 
 > 最后更新: 2026-03-10 (v39: 社媒舆情数据迁移 — 将社媒 Supabase（dfpijqpgsupvdmidztup）的 contents/comments/creators 三表迁移至主库 sentiment_contents/sentiment_comments/sentiment_creators，服务层改为从主库读取，删除旧 supabase_client.py)
-> 基于前端 (Dean-Agent) 需求反推的优先级排序
+> 基于前端需求反推的优先级排序
 
 ---
 

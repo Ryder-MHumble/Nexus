@@ -1,3 +1,10 @@
+# ─────────────────────────────────────────────────────────────────
+# USAGE NOTICE: The source configurations in this file are provided
+# as reference examples for academic and research purposes only.
+# Users are responsible for complying with the terms of service of
+# each website and applicable laws when deploying these sources.
+# ─────────────────────────────────────────────────────────────────
+
 dimension: "personnel"
 dimension_name: "对人事"
 description: "国务院及各部委人事任免、高校及科研机构领导变动"

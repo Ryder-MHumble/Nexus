@@ -162,6 +162,17 @@ Edit `sources/{dimension}.yaml`:
   name: "My Data Source"
   url: "https://example.com/news"
   crawl_method: "static"  # or dynamic, rss, snapshot
+
+  # Content filtering (3 options - see sources/README.md for details):
+  # Option 1: Domain-based (recommended)
+  domain_filter: "technology.ai"
+
+  # Option 2: Custom keywords
+  # keyword_filter: ["AI", "machine learning"]
+  # keyword_blacklist: ["advertisement"]
+
+  # Option 3: No filter (keep all)
+
   selectors:
     list: ".article-list .item"
     title: ".title"
@@ -173,6 +184,8 @@ Edit `sources/{dimension}.yaml`:
     - technology
     - ai
 ```
+
+**Filtering Guide**: See [sources/README.md](sources/README.md) for complete filtering options.
 
 ### Test Single Source
 
@@ -230,7 +243,7 @@ articles = requests.get("http://nexus/api/v1/articles?dimension=technology&sourc
 
 **Solution**: Automated daily briefings with intelligent filtering.
 
-**Real deployment**: Serving Zhongguancun AI Institute's leadership team with policy intelligence and scholar tracking.
+**Real deployment**: Battle-tested in production at a leading Chinese AI research institution, serving leadership teams with policy intelligence and scholar tracking.
 
 ### 🏢 Enterprise Intelligence Teams
 

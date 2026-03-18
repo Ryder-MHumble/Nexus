@@ -1,6 +1,6 @@
 """Pydantic schemas for Tech Frontier (科技前沿) API.
 
-Aligned 1:1 with Dean-Agent frontend types in lib/types/tech-frontier.ts.
+Aligned 1:1 with frontend types in lib/types/tech-frontier.ts.
 """
 from __future__ import annotations
 

@@ -1,3 +1,10 @@
+# ─────────────────────────────────────────────────────────────────
+# USAGE NOTICE: The source configurations in this file are provided
+# as reference examples for academic and research purposes only.
+# Users are responsible for complying with the terms of service of
+# each website and applicable laws when deploying these sources.
+# ─────────────────────────────────────────────────────────────────
+
 dimension: scholars
 dimension_name: 高校师资
 sources:

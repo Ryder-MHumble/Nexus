@@ -53,6 +53,10 @@ class Settings(BaseSettings):
     # Startup behavior
     STARTUP_CRAWL_ENABLED: bool = True  # trigger pipeline on first start if no data
 
+    # Organization context (used in LLM prompts — customize for your institution)
+    ORGANIZATION_NAME: str = "Your Organization"
+    ORGANIZATION_FOCUS: str = "AI research, technology policy, and talent development"
+
     # Paths
     SOURCES_DIR: Path = BASE_DIR / "sources"
 

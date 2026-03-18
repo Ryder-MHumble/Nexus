@@ -1,8 +1,8 @@
-# OpenClaw 数据智能平台 — 架构设计文档
+# Nexus — 架构设计文档
 
 > 最后更新: 2026-03-06 | 版本: v2.0
 
-中关村人工智能研究院信息基础设施平台，为 Dean-Agent、ScholarDB-System、Athena、NanoBot 提供统一的数据采集、处理与 API 服务。
+Nexus 是一个生产级数据情报平台，为下游 AI 应用提供统一的数据采集、处理与 API 服务。
 
 ---
 
@@ -13,8 +13,8 @@
 ```
 ╔══════════════════════════════════════════════════════════════════╗
 ║  📱 应用层                                                        ║
-║  Dean-Agent (院长智能体) │ ScholarDB (学者知识库)                  ║
-║  Athena (战略情报引擎)   │ NanoBot (钉钉统一入口)                  ║
+║  App A (政策情报助手)    │ App B (学者知识图谱)                    ║
+║  App C (战略情报引擎)   │ App D (企业智能助理)                  ║
 ╠══════════════════════════════════════════════════════════════════╣
 ║  🔌 API 服务层  /api/v1 — 65+ REST 端点                           ║
 ║  文章/信源/维度/健康  │  政策/人事/科技/高校/简报(intel)            ║
@@ -39,10 +39,10 @@
 ```mermaid
 graph TB
     subgraph APP["应用层"]
-        DA["Dean-Agent 院长智能体"]
-        SDB["ScholarDB 学者知识库"]
-        ATH["Athena 情报引擎"]
-        NB["NanoBot 钉钉入口"]
+        DA["App A - 政策情报助手"]
+        SDB["App B - 学者知识图谱"]
+        ATH["App C - 战略情报引擎"]
+        NB["App D - 企业智能助理"]
     end
 
     subgraph API["API 服务层 65+ 端点"]
@@ -355,7 +355,7 @@ app/services/llm/
 | intel/university | `/intel/university` | 4 | 高校 Feed/概览/研究成果 |
 | intel/daily-briefing | `/intel/daily-briefing` | 3 | 今日/最新/历史简报 |
 
-基础路径：`/api/v1`。Swagger UI：`http://43.98.254.243:8001/docs`
+基础路径：`/api/v1`。Swagger UI：`http://localhost:8001/docs`
 
 ### 5.2 通用过滤参数
 
@@ -376,31 +376,31 @@ app/services/llm/
 
 | 消费端 | 服务对象 | 主要接入 API |
 |--------|---------|------------|
-| **Dean-Agent** | 院长办、院领导 | `/intel/policy` `/intel/personnel` `/intel/daily-briefing` |
-| **ScholarDB-System** | 科研管理办 | `/scholars` `/institutions` `/projects` `/events` |
-| **Athena** | 战略发展部 | `/articles` `/intel/*` `/sentiment` |
-| **NanoBot** | 全院各部门 | 全量 API（MCP 协议封装，钉钉 bot 调用） |
+| **政策情报助手** | 管理层、决策者 | `/intel/policy` `/intel/personnel` `/intel/daily-briefing` |
+| **学者知识图谱** | 科研管理 | `/scholars` `/institutions` `/projects` `/events` |
+| **战略情报引擎** | 战略分析部门 | `/articles` `/intel/*` `/sentiment` |
+| **企业智能助理** | 全员（MCP 协议） | 全量 API（MCP 协议封装） |
 
 ### 6.2 典型调用路径
 
 ```
-Dean-Agent 每日情报
+政策情报助手 — 每日情报
   GET /intel/daily-briefing/today      → 当日综合简报
   GET /intel/policy/feed               → 政策动态（规则+LLM评分）
   GET /intel/personnel/enriched-feed   → 人事变动（LLM 富化）
   GET /intel/tech-frontier/topics      → 8 大科技主题热度
 
-ScholarDB-System 学者管理
-  GET /scholars/?university=清华大学&keyword=计算机视觉
+学者知识图谱 — 学者管理
+  GET /scholars/?keyword=计算机视觉
   GET /scholars/{url_hash}             → 学者详情（含 AMiner 补全）
   POST /scholars/{url_hash}/students   → 添加导学关系
   GET /projects/?status=在研           → 在研项目列表
 
-NanoBot 自然语言查询（MCP 封装）
+企业智能助理 — 自然语言查询（MCP 封装）
   用户：「最近 AI 政策有哪些变化？」
     → MCP 调用 GET /intel/policy/feed?keyword=人工智能
-  用户：「帮我找清华计算机系的学者」
-    → MCP 调用 GET /scholars/?university=清华大学&department=计算机系
+  用户：「帮我找某院校计算机系的学者」
+    → MCP 调用 GET /scholars/?department=计算机系
 ```
 
 ---

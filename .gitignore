@@ -95,3 +95,13 @@ nohup.out
 
 # Git worktrees
 .worktrees/
+
+# Internal context files (contains server IPs, institution-specific config)
+CLAUDE.md
+.claude/
+
+# Auto-generated OpenAPI spec (re-generate with: uvicorn app.main:app then /openapi.json)
+openapi.json
+
+# Private source configs (use sources/*.yaml for examples only)
+sources/*.local.yaml

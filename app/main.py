@@ -216,43 +216,44 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="Information Crawler API",
-    summary="中关村人工智能研究院 — 信息监测系统",
+    title="Nexus — Data Intelligence API",
+    summary="Production-grade data pipeline for AI-ready structured knowledge",
     description=(
-        "## 概述\n\n"
-        "信息监测系统 API，自动爬取 **134 个信源**（109 个启用），覆盖 **9 个维度**，"
-        "为中关村人工智能研究院提供全方位的信息监测与商业智能服务。\n\n"
-        "## 功能模块\n\n"
-        "| 模块 | 说明 |\n"
-        "|------|------|\n"
-        "| **文章管理** | 全量文章的查询、搜索、统计 |\n"
-        "| **信源管理** | 134 个信源的配置、状态监控、手动触发 |\n"
-        "| **维度视图** | 9 大维度的文章聚合浏览 |\n"
-        "| **政策智能** | 规则引擎 + LLM 二级管线，政策机会挖掘 |\n"
-        "| **人事情报** | 任免信息自动提取，LLM 相关性分析 |\n"
-        "| **系统健康** | 调度器、爬取健康度监控 |\n\n"
-        "## 维度说明\n\n"
-        "- `national_policy` — 国家政策（国务院、部委）\n"
-        "- `beijing_policy` — 北京政策（市/区政府）\n"
-        "- `technology` — 技术动态（ArXiv、GitHub Trending、Hacker News 等）\n"
-        "- `talent` — 人才政策\n"
-        "- `industry` — 产业动态\n"
-        "- `universities` — 高校动态（46 所高校 AI 院系）\n"
-        "- `events` — 活动会议\n"
-        "- `personnel` — 人事变动\n"
-        "- `twitter` — Twitter/X KOL 动态\n\n"
-        "## 技术栈\n\n"
-        "FastAPI + Local JSON Storage + APScheduler + "
-        "httpx + BeautifulSoup4 + Playwright"
+        "## Overview\n\n"
+        "Nexus API — automatically crawls **181 data sources** (138 active) across **9 dimensions**, "
+        "transforming unstructured web content into structured, AI-ready knowledge.\n\n"
+        "## Modules\n\n"
+        "| Module | Description |\n"
+        "|--------|-------------|\n"
+        "| **Articles** | Full-text article search, filter, and statistics |\n"
+        "| **Sources** | Source configuration, status monitoring, manual trigger |\n"
+        "| **Dimensions** | Aggregate article views across 9 domains |\n"
+        "| **Policy Intel** | Rule engine + LLM pipeline for policy opportunity mining |\n"
+        "| **Personnel** | Auto-extraction of appointments/changes with LLM analysis |\n"
+        "| **Scholars** | Academic knowledge graph (profiles, institutions, projects) |\n"
+        "| **Health** | Scheduler, crawler, and database health monitoring |\n\n"
+        "## Dimensions\n\n"
+        "- `national_policy` — National policy (configure for your target country)\n"
+        "- `beijing_policy` — Regional policy (configure for your target region)\n"
+        "- `technology` — Tech trends (arXiv, GitHub Trending, Hacker News, etc.)\n"
+        "- `talent` — Talent & recruitment policies\n"
+        "- `industry` — Industry reports & company news\n"
+        "- `universities` — Academic institution news\n"
+        "- `events` — Conferences & seminars\n"
+        "- `personnel` — Leadership changes & appointments\n"
+        "- `twitter` — Twitter/X KOL monitoring\n\n"
+        "## Tech Stack\n\n"
+        "FastAPI + Supabase PostgreSQL + APScheduler + httpx + BeautifulSoup4 + Playwright"
     ),
     version="0.2.0",
     openapi_tags=TAG_METADATA,
     contact={
-        "name": "中关村人工智能研究院",
-        "url": "https://www.zgcaiia.com",
+        "name": "Nexus",
+        "url": "https://github.com/yourusername/nexus",
     },
     license_info={
-        "name": "Internal Use",
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT",
     },
     lifespan=lifespan,
     # Keep default /docs (Swagger UI) and add Scalar at /scalar
