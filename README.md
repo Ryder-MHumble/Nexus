@@ -137,7 +137,7 @@ cd nexus
 ./deploy.sh  # Handles everything: venv, dependencies, Playwright, services
 ```
 
-That's it! Backend runs at `http://localhost:8001`, frontend at `http://localhost:8003`.
+That's it! Backend runs at `http://localhost:43817`, frontend at `http://localhost:43819`.
 
 ### Try It Out
 
@@ -147,7 +147,7 @@ That's it! Backend runs at `http://localhost:8001`, frontend at `http://localhos
 python scripts/crawl/run_single.py --source arxiv_cs_ai
 
 # Query the API
-curl "http://localhost:8001/api/v1/articles?dimension=technology&limit=5"
+curl "http://localhost:43817/api/v1/articles?dimension=technology&limit=5"
 ```
 
 
@@ -210,13 +210,13 @@ python scripts/crawl/run_single.py --source my_source --domain-group tech_all
 
 ```bash
 # Get articles
-curl "http://localhost:8001/api/v1/articles?dimension=technology&limit=10"
+curl "http://localhost:43817/api/v1/articles?dimension=technology&limit=10"
 
 # Get source status
-curl "http://localhost:8001/api/v1/sources/stats"
+curl "http://localhost:43817/api/v1/sources/stats"
 
 # Get scholars
-curl "http://localhost:8001/api/v1/scholars?institution=清华大学"
+curl "http://localhost:43817/api/v1/scholars?institution=清华大学"
 ```
 
 ## 🎯 Real-World Use Cases
@@ -256,7 +256,7 @@ articles = requests.get("http://nexus/api/v1/articles?dimension=technology&sourc
 ## 📚 Documentation
 
 - **[Architecture Guide](docs/architecture.md)** - System design & decisions
-- **[API Reference](http://localhost:8001/docs)** - Interactive Swagger docs
+- **[API Reference](http://localhost:43817/docs)** - Interactive Swagger docs
 - **[Source Catalog](docs/SourceOverview.md)** - All 181 data sources
 - **[Development Roadmap](docs/TODO.md)** - Upcoming features
 

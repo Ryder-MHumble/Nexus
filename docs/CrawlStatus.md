@@ -356,7 +356,6 @@ python scripts/process_tech_frontier.py --dry-run
 | beijing_ywdt | 首都之窗-要闻 | static | ✅ | 2 | ✅ (2/2) |
 | bjd_news | 北京日报 | static | ❌ | — | 布局复杂 |
 | bjrd_renshi | 北京市人大常委会 | static | ✅ | 1 | ✅ (1/1) |
-| beijing_rsrm | 首都之窗-人事任免 | static | ❌ | — | URL 404 |
 
 ### 详细状态：industry (对产业) — 6/10 启用 + 1 Twitter
 

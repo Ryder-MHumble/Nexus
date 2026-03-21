@@ -380,20 +380,3 @@ sources:
     detail_selectors:
       content: "div.TRS_UEDITOR"
     tags: ["personnel", "bjrd"]
-
-  - id: "beijing_rsrm"
-    name: "首都之窗-人事任免"
-    group: "news_personnel"
-    url: "https://www.beijing.gov.cn/gongkai/rsrm/"
-    crawl_method: "static"
-    schedule: "daily"
-    priority: 1
-    is_enabled: false  # URL returns 404
-    selectors:
-      list_item: "ul.listTxt li"
-      title: "a"
-      link: "a"
-      date: "span"
-      date_format: "%Y-%m-%d"
-    base_url: "https://www.beijing.gov.cn"
-    tags: ["personnel", "beijing_gov"]

@@ -58,7 +58,6 @@
 | beijing_ywdt | 首都之窗-要闻 | static | 4h | ✅ |
 | bjd_news | 北京日报 | static | daily | ❌ |
 | bjrd_renshi | 北京市人大常委会 | static | daily | ✅ |
-| beijing_rsrm | 首都之窗-人事任免 | static | daily | ❌ |
 
 ### 2.3 技术动态（34 源，33 启用）
 

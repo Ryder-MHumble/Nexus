@@ -12,8 +12,8 @@ FRONTEND_PID_FILE="$PID_DIR/frontend.pid"
 BACKEND_LOG_FILE="$LOG_DIR/backend.log"
 FRONTEND_LOG_FILE="$LOG_DIR/frontend.log"
 
-BACKEND_PORT="${NEXUS_BACKEND_PORT:-8001}"
-FRONTEND_PORT="${NEXUS_FRONTEND_PORT:-8003}"
+BACKEND_PORT="${NEXUS_BACKEND_PORT:-43817}"
+FRONTEND_PORT="${NEXUS_FRONTEND_PORT:-43819}"
 
 FOLLOW_LOGS=false
 TAIL_LINES=80
@@ -60,7 +60,20 @@ read_pid() {
 
 port_listener_pid() {
     local port="$1"
-    lsof -ti "tcp:$port" 2>/dev/null | head -n 1 || true
+    lsof -nP -tiTCP:"$port" -sTCP:LISTEN 2>/dev/null | head -n 1 || true
+}
+
+warn_unmanaged_listener() {
+    local pid_file="$1"
+    local name="$2"
+    local port="$3"
+    local pid listener_pid
+    pid="$(read_pid "$pid_file")"
+    listener_pid="$(port_listener_pid "$port")"
+
+    if [[ -n "$listener_pid" ]] && [[ "$listener_pid" != "$pid" ]]; then
+        warn "$name port $port is still occupied by unmanaged PID $listener_pid; leaving it untouched"
+    fi
 }
 
 ensure_backend_env() {
@@ -157,6 +170,8 @@ start_frontend() {
     ensure_frontend_env
     (
         cd "$FRONTEND_DIR"
+        NEXT_PUBLIC_API_BASE_URL="http://localhost:$BACKEND_PORT/api/v1" \
+        PORT="$FRONTEND_PORT" \
         nohup npm run dev >> "$FRONTEND_LOG_FILE" 2>&1 &
         echo $! > "$FRONTEND_PID_FILE"
     )
@@ -183,29 +198,19 @@ start_all() {
 
 stop_backend() {
     stop_pid_file "$BACKEND_PID_FILE" "Backend"
+    warn_unmanaged_listener "$BACKEND_PID_FILE" "Backend" "$BACKEND_PORT"
 }
 
 stop_frontend() {
     stop_pid_file "$FRONTEND_PID_FILE" "Frontend"
+    warn_unmanaged_listener "$FRONTEND_PID_FILE" "Frontend" "$FRONTEND_PORT"
 }
 
 stop_all() {
     banner
     stop_frontend
     stop_backend
-    # Clean stale listeners not tracked by pid file.
-    local bpid fpid
-    bpid="$(port_listener_pid "$BACKEND_PORT")"
-    fpid="$(port_listener_pid "$FRONTEND_PORT")"
-    if [[ -n "$fpid" ]]; then
-        warn "Force stopping remaining process on frontend port $FRONTEND_PORT (PID $fpid)"
-        kill "$fpid" 2>/dev/null || true
-    fi
-    if [[ -n "$bpid" ]]; then
-        warn "Force stopping remaining process on backend port $BACKEND_PORT (PID $bpid)"
-        kill "$bpid" 2>/dev/null || true
-    fi
-    ok "All services stopped"
+    ok "Tracked Nexus services stopped"
 }
 
 status_line() {
