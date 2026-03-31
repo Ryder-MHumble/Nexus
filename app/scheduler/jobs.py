@@ -74,3 +74,21 @@ async def execute_crawl_job(source_config: dict[str, Any]) -> None:
         result.items_total,
         result.duration_seconds,
     )
+
+
+async def execute_university_leadership_monthly_job() -> None:
+    """Run monthly full crawl for university leadership sources and sync dedicated tables."""
+    from app.services.core.institution import run_university_leadership_full_crawl
+
+    logger.info("Starting monthly university leadership full crawl job")
+    result = await run_university_leadership_full_crawl(
+        max_concurrency=4,
+        include_disabled=False,
+    )
+    logger.info(
+        "Monthly university leadership crawl done | total=%d success=%d failed=%d changed=%d",
+        result.get("total_sources", 0),
+        result.get("success_sources", 0),
+        result.get("failed_sources", 0),
+        result.get("changed_sources", 0),
+    )

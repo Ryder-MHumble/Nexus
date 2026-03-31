@@ -1,6 +1,6 @@
 """Pydantic schemas for Tech Frontier (科技前沿) API.
 
-Aligned 1:1 with frontend types in lib/types/tech-frontier.ts.
+Aligned 1:1 with Dean-Agent frontend types in lib/types/tech-frontier.ts.
 """
 from __future__ import annotations
 
@@ -51,7 +51,7 @@ class TopicNews(BaseModel):
     impact: Literal["重大", "较大", "一般"] = Field(description="影响力")
     summary: str = Field(description="摘要")
     aiAnalysis: str = Field(default="", description="AI 分析 (Tier 2 LLM)")
-    relevance: str = Field(default="", description="与院方的相关性 (Tier 2 LLM)")
+    relevance: str = Field(default="", description="与当前主题布局的相关性 (Tier 2 LLM)")
 
 
 class KOLVoice(BaseModel):
@@ -90,7 +90,7 @@ class TechTopic(BaseModel):
     )
     heatLabel: str = Field(description="热度标签", examples=["+180%"])
     ourStatus: Literal["deployed", "weak", "none"] = Field(
-        description="我院布局状态"
+        description="当前布局状态"
     )
     ourStatusLabel: str = Field(description="布局状态标签", examples=["已布局"])
     gapLevel: Literal["high", "medium", "low"] = Field(

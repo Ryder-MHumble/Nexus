@@ -13,6 +13,7 @@ from typing import Any
 
 from app.config import BASE_DIR
 from app.services.intel.personnel.rules import change_id, enrich_by_rules
+from app.services.intel.personnel.source_scope import filter_personnel_scoped_articles
 from app.services.intel.pipeline.base import HashTracker, save_output_json
 from app.services.intel.shared import article_date
 from app.services.stores.json_reader import get_articles
@@ -69,6 +70,7 @@ async def process_personnel_pipeline(
     Returns summary dict for the pipeline orchestrator.
     """
     articles = await get_articles(DIMENSION)
+    articles = filter_personnel_scoped_articles(articles)
     logger.info("Personnel pipeline: loaded %d articles", len(articles))
 
     # Deduplicate by url_hash
@@ -214,6 +216,7 @@ async def process_personnel_llm_enrichment(
     )
 
     articles = await get_articles(DIMENSION)
+    articles = filter_personnel_scoped_articles(articles)
 
     # Deduplicate
     seen: set[str] = set()

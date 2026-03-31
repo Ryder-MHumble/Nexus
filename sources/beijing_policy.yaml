@@ -1,36 +1,15 @@
-# ─────────────────────────────────────────────────────────────────
-# USAGE NOTICE: The source configurations in this file are provided
-# as reference examples for academic and research purposes only.
-# Users are responsible for complying with the terms of service of
-# each website and applicable laws when deploying these sources.
-# Replace or remove sources that are not applicable to your use case.
-# ─────────────────────────────────────────────────────────────────
-
 dimension: "beijing_policy"
 dimension_name: "对北京"
 description: "北京市政策文件、市领导动态、委办局人事变动"
 
-# ─────────────────────────────────────────────────────────────────
-# FILTERING OPTIONS:
-# See sources/README.md for detailed filtering guide
-#
-# Recommended: Use domain_filter for consistent classification
-#   domain_filter: "technology.ai"  # or "economy.finance", etc.
-#
-# Alternative: Custom keywords for region-specific needs
-#   keyword_filter: ["科技", "创新", "人才"]
-#   keyword_blacklist: ["供水", "绿化"]
-# ─────────────────────────────────────────────────────────────────
-
-# Legacy: Dimension-level defaults (consider migrating to source-level domain_filter)
 default_keyword_filter:
   - "教育"
   - "科技"
   - "人工智能"
   - "AI"
   - "人才"
-  - "中关村"  # Region-specific (replace with your target region)
-  - "海淀"    # Region-specific
+  - "中关村"
+  - "海淀"
   - "创新"
   - "数字经济"
   - "智能"
@@ -380,3 +359,4 @@ sources:
     detail_selectors:
       content: "div.TRS_UEDITOR"
     tags: ["personnel", "bjrd"]
+

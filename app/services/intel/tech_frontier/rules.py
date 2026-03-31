@@ -180,7 +180,7 @@ _PLATFORM_MAP: dict[str, str] = {
     "twitter_ai_papers": "X",
     "twitter_ai_industry": "X",
     "twitter_ai_talent": "X",
-    "twitter_zgci_sentiment": "X",
+    "twitter_ai_ecosystem_sentiment": "X",
 }
 
 _KOL_SOURCE_IDS = {"twitter_ai_kol_international", "twitter_ai_kol_chinese"}

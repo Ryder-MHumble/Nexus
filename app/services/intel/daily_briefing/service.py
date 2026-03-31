@@ -108,7 +108,7 @@ async def generate_daily_briefing(target_date: date) -> dict[str, Any]:
     if total_count == 0:
         # No articles — return placeholder
         narrative = {
-            "paragraphs": [["院长，今日暂无新的信息更新。各维度数据将在下次爬取后自动更新。"]],
+            "paragraphs": [["今日暂无新的信息更新。各维度数据将在下次爬取后自动更新。"]],
             "summary": "今日暂无新的信息更新。",
         }
     elif settings.ENABLE_LLM_ENRICHMENT and settings.OPENROUTER_API_KEY:

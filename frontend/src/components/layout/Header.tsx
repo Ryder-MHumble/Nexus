@@ -25,11 +25,9 @@ export function Header() {
             <Webhook className="h-4 w-4" />
           </div>
           <div>
-            <h1 className="text-sm font-semibold leading-none">
-              Crawler Controller
-            </h1>
+            <h1 className="text-sm font-semibold leading-none">Nexus Console</h1>
             <p className="text-xs text-muted-foreground leading-none mt-0.5">
-              信息爬虫控制台
+              增量爬虫与知识能力控制台
             </p>
           </div>
         </div>

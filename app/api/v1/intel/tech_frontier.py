@@ -17,14 +17,14 @@ router = APIRouter()
     response_model=TechFrontierTopicsResponse,
     summary="科技前沿主题列表",
     description="获取 8 个技术主题的完整数据，包含热度趋势、产业新闻、KOL 言论、AI 分析等。"
-    "支持按热度趋势、院方布局状态和关键词过滤。",
+    "支持按热度趋势、当前布局状态和关键词过滤。",
 )
 async def get_topics(
     heat_trend: str | None = Query(
         None, description="热度趋势: surging / rising / stable / declining"
     ),
     our_status: str | None = Query(
-        None, description="院方布局状态: deployed / weak / none"
+        None, description="当前布局状态: deployed / weak / none"
     ),
     keyword: str | None = Query(
         None, description="关键词搜索（主题名/描述/标签）"

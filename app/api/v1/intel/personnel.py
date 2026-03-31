@@ -88,7 +88,7 @@ async def get_personnel_stats():
     response_model=PersonnelEnrichedFeedResponse,
     summary="LLM 富化人事动态",
     description="获取经 LLM 分析富化后的人事变动列表。相比基础 Feed，额外包含：\n\n"
-    "- **relevance**: 与研究院业务的相关性得分（0-100）\n"
+    "- **relevance**: 与平台关注主题的相关性得分（0-100）\n"
     "- **group**: action（需行动）/ watch（关注即可）\n"
     "- **actionSuggestion**: LLM 建议的行动方案\n"
     "- **background**: 人员背景信息\n"

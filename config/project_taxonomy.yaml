@@ -1,0 +1,46 @@
+# Project Taxonomy Configuration
+# 项目分类体系配置（两级结构）
+#
+# L1（一级分类）：教育培养 / 科研学术 / 人才引育
+# L2（二级分类）：具体项目子类（用于前端筛选按钮）
+
+taxonomy:
+  - id: education
+    name: 教育培养
+    sort_order: 1
+    children:
+      - id: education_tech_education_committee
+        name: 科技教育委员会
+        sort_order: 1
+      - id: education_academic_committee
+        name: 学术委员会
+        sort_order: 2
+      - id: education_teaching_committee
+        name: 教学委员会
+        sort_order: 3
+      - id: education_student_high_school_mentor
+        name: 学院学生高校导师
+        sort_order: 4
+      - id: education_adjunct_supervisor
+        name: 兼职导师
+        sort_order: 5
+
+  - id: research
+    name: 科研学术
+    sort_order: 2
+    children:
+      - id: research_fund_project
+        name: 科研立项
+        sort_order: 1
+
+  - id: talent
+    name: 人才引育
+    sort_order: 3
+    children:
+      - id: talent_zhuogong_dispatch
+        name: 卓工公派
+        sort_order: 1
+
+default_mapping:
+  category: 教育培养
+  subcategory: 学术委员会

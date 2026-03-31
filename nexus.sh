@@ -36,7 +36,9 @@ banner() {
     printf "\n"
     printf " ${C}${BOLD}Nexus Unified Service Runner${NC}\n"
     hr
-    printf " ${D}Backend${NC}  http://localhost:%s\n" "$BACKEND_PORT"
+    printf " ${D}API${NC}      http://localhost:%s\n" "$BACKEND_PORT"
+    printf " ${D}Docs${NC}     http://localhost:%s/docs\n" "$BACKEND_PORT"
+    printf " ${D}Swagger${NC}  http://localhost:%s/swagger\n" "$BACKEND_PORT"
     printf " ${D}Frontend${NC} http://localhost:%s\n" "$FRONTEND_PORT"
     printf " ${D}Logs${NC}     %s\n" "$LOG_DIR"
     hr

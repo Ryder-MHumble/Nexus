@@ -1,32 +1,7 @@
-# ─────────────────────────────────────────────────────────────────
-# USAGE NOTICE: The source configurations in this file are provided
-# as reference examples for academic and research purposes only.
-# Users are responsible for complying with the terms of service of
-# each website and applicable laws when deploying these sources.
-# Replace or remove sources that are not applicable to your use case.
-# ─────────────────────────────────────────────────────────────────
-
 dimension: "national_policy"
 dimension_name: "对国家"
 description: "国家级政策文件、人事任免、领导讲话"
 
-# ─────────────────────────────────────────────────────────────────
-# FILTERING OPTIONS (3 modes available):
-#
-# 1. Domain-based (Recommended):
-#    domain_filter: "technology.ai"  # Use predefined domains from config/domains.yaml
-#
-# 2. Custom keywords (Source-specific):
-#    keyword_filter: ["AI", "人工智能"]  # Whitelist
-#    keyword_blacklist: ["广告"]         # Blacklist
-#
-# 3. No filtering (Default):
-#    # Omit both domain_filter and keyword_filter to keep all articles
-#
-# Runtime override: python scripts/crawl/run_single.py --source <id> --domain technology.ai
-# ─────────────────────────────────────────────────────────────────
-
-# Legacy: Dimension-level default filters (deprecated, use source-level domain_filter instead)
 default_keyword_filter:
   - "教育"
   - "科技"
@@ -157,12 +132,14 @@ sources:
     name: "国家网信办-政策法规"
     group: "policy"
     url: "https://www.cac.gov.cn/wxzw/zcfg/A093703index_1.htm"
-    crawl_method: "static"
+    crawl_method: "dynamic"
     schedule: "4h"
     priority: 1
-    is_enabled: false  # Cloudflare 521 (Web Server Is Down) - server unreachable
+    is_enabled: true
+    wait_for: "#loadingInfoPage li"
+    wait_timeout: 15000
     selectors:
-      list_item: "div.default li"
+      list_item: "#loadingInfoPage li"
       title: "h5 a"
       link: "h5 a"
       date: "div.times"
@@ -191,15 +168,7 @@ sources:
     priority: 2
     is_enabled: true
     base_url: "https://www.samr.gov.cn"
-    keyword_filter:
-      - "人工智能"
-      - "AI"
-      - "算法"
-      - "数据"
-      - "反垄断"
-      - "平台"
-      - "科技"
-      - "智能"
+    keyword_filter: []  # Major regulatory body - all news relevant, no filtering needed
     detail_selectors:
       content: "#zoom"
     tags: ["policy", "samr", "regulation"]
@@ -235,24 +204,19 @@ sources:
     tags: ["policy", "miit", "industry"]
 
   - id: "nsfc_news"
-    name: "国家自然科学基金委-通知公告"
+    name: "国家自然科学基金委-国际合作局通知公告"
     group: "policy"
-    url: "https://www.nsfc.gov.cn/publish/portal0/tab434/"
+    url: "https://www.nsfc.gov.cn/p1/2828/2831/tzgg11.html"
     crawl_method: "static"
     schedule: "daily"
     priority: 2
-    is_enabled: false  # URL 404 - NSFC has changed site structure, needs URL update
+    is_enabled: true
     selectors:
-      list_item: "ul.list li"
-      title: "a"
-      link: "a"
-      date: "span"
+      list_item: "ul.sciences-content-right-content a"
+      title: "div.item-right-content"
+      link: "_self"  # href is on the list_item itself
+      date: "div.date"
       date_format: "%Y-%m-%d"
     base_url: "https://www.nsfc.gov.cn"
-    keyword_filter:
-      - "人工智能"
-      - "AI"
-      - "智能"
-      - "计算"
-      - "信息"
+    keyword_filter: []  # Funding announcements - all relevant, no filtering needed
     tags: ["funding", "nsfc"]

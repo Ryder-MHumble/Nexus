@@ -6,6 +6,7 @@ fetches their detail pages for richer information using heading-based section ex
 
 URL: http://www.iscas.ac.cn/rcdw2016/yjyzgjgcs2016/
 """
+
 from __future__ import annotations
 
 import asyncio
@@ -105,7 +106,7 @@ class ISCASFacultyCrawler(BaseCrawler):
                     for el in soup.find_all(["p", "li"]):
                         text = el.get_text(strip=True)
                         if text.startswith(label_prefix):
-                            value = text[len(label_prefix):].strip()
+                            value = text[len(label_prefix) :].strip()
                             if value:
                                 if field == "research_areas":
                                     result[field] = parse_research_areas(value)
@@ -124,7 +125,7 @@ class ISCASFacultyCrawler(BaseCrawler):
         return result
 
     async def fetch_and_parse(self) -> list[CrawledItem]:
-        university = self.config.get("university", "中国科学院")
+        university = self.config.get("university", "中国科学院大学")
         department = self.config.get("department", "软件研究所")
         source_id = self.source_id
         source_url = self.config.get("url")
@@ -145,7 +146,8 @@ class ISCASFacultyCrawler(BaseCrawler):
 
         # Get list_item selector from config (default: div.text)
         list_item_selector = self.config.get("faculty_selectors", {}).get(
-            "list_item", "div.text p, div.text li, ul li a, div.faculty a, p a, div.content a, table a"
+            "list_item",
+            "div.text p, div.text li, ul li a, div.faculty a, p a, div.content a, table a",
         )
 
         # Try multiple selectors to find faculty elements
@@ -231,10 +233,7 @@ class ISCASFacultyCrawler(BaseCrawler):
                 email_text = ""
                 research_areas: list[str] = []
 
-                if (
-                    detail_selectors
-                    and not profile_url.startswith(f"{source_url}#")
-                ):
+                if detail_selectors and not profile_url.startswith(f"{source_url}#"):
                     if request_delay:
                         await asyncio.sleep(request_delay)
                     detail = await self._fetch_detail(profile_url, detail_selectors)

@@ -8,7 +8,7 @@ Endpoints:
   GET  /scholars/{url_hash}                             单条学者详情
   DELETE /scholars/{url_hash}                           删除学者记录
   PATCH /scholars/{url_hash}/basic                      更新基础信息（直接修改原始 JSON）
-  PATCH /scholars/{url_hash}/relation                   更新「与两院关系」字段（用户管理）
+  PATCH /scholars/{url_hash}/relation                   更新合作关系字段（用户管理）
   POST  /faculty/{url_hash}/updates                    新增用户备注动态
   DELETE /scholars/{url_hash}/updates/{update_idx}      删除用户备注动态
   PATCH /scholars/{url_hash}/achievements               更新学术成就（论文、专利、奖项）
@@ -75,11 +75,29 @@ async def list_scholars(
         None, description="地区筛选：国内 | 国际（根据高校名称自动推断）"
     ),
     affiliation_type: str | None = Query(
-        None, description="机构类型筛选：高校 | 企业 | 研究机构 | 其他（根据高校名称自动推断）"
+        None, description="机构类型筛选：高校 | 企业（公司） | 研究机构 | 其他（根据高校名称自动推断）"
     ),
     keyword: str | None = Query(
         None, description="关键词搜索（姓名/英文名/bio/研究方向/关键词）"
     ),
+    community_name: str | None = Query(None, description="社群名称筛选（如 AAAI）"),
+    community_type: str | None = Query(None, description="社群类型筛选（如 顶会/期刊）"),
+    project_category: str | None = Query(None, description="按项目一级分类筛选（如 教育培养）"),
+    project_subcategory: str | None = Query(None, description="按项目二级子类筛选（如 学术委员会）"),
+    project_categories: str | None = Query(
+        None,
+        description="按多个项目一级分类筛选（逗号分隔，如 教育培养,科研学术）",
+    ),
+    project_subcategories: str | None = Query(
+        None,
+        description="按多个项目二级子类筛选（逗号分隔）",
+    ),
+    event_types: str | None = Query(
+        None,
+        description="按多个活动类型筛选（event_tags.event_type，逗号分隔）",
+    ),
+    participated_event_id: str | None = Query(None, description="按参与活动 ID 筛选"),
+    is_cobuild_scholar: bool | None = Query(None, description="是否共建学者（项目分类标签非空）"),
     institution_group: str | None = Query(
         None, description="机构顶层分组（共建高校/兄弟院校/海外高校/其他高校/科研院所/行业学会）"
     ),
@@ -103,6 +121,15 @@ async def list_scholars(
         region=region,
         affiliation_type=affiliation_type,
         keyword=keyword,
+        community_name=community_name,
+        community_type=community_type,
+        project_category=project_category,
+        project_subcategory=project_subcategory,
+        project_categories=project_categories,
+        project_subcategories=project_subcategories,
+        event_types=event_types,
+        participated_event_id=participated_event_id,
+        is_cobuild_scholar=is_cobuild_scholar,
         institution_group=institution_group,
         institution_category=institution_category,
         page=page,
@@ -116,10 +143,60 @@ async def list_scholars(
     "/stats",
     response_model=ScholarStatsResponse,
     summary="学者统计",
-    description="返回学者库总览统计：总数、院士数、潜在招募数、按高校/职称分布、完整度分布。",
+    description="返回学者库总览统计：总数、院士数、潜在招募数、按高校/职称分布、完整度分布。支持与列表接口相同的筛选参数。",
 )
-async def get_stats():
-    return await svc.get_scholar_stats()
+async def get_stats(
+    university: str | None = Query(None, description="高校名称（模糊匹配）"),
+    department: str | None = Query(None, description="院系名称（模糊匹配）"),
+    position: str | None = Query(None, description="职称（精确匹配）"),
+    is_academician: bool | None = Query(None, description="仅统计院士"),
+    is_potential_recruit: bool | None = Query(None, description="仅统计潜在招募对象"),
+    is_advisor_committee: bool | None = Query(None, description="仅统计顾问委员会成员"),
+    is_adjunct_supervisor: bool | None = Query(None, description="仅统计兼职导师"),
+    has_email: bool | None = Query(None, description="仅统计有邮箱的学者"),
+    region: str | None = Query(None, description="地区筛选：国内 | 国际"),
+    affiliation_type: str | None = Query(None, description="机构类型筛选：高校 | 企业（公司） | 研究机构 | 其他"),
+    keyword: str | None = Query(None, description="关键词搜索"),
+    community_name: str | None = Query(None, description="社群名称筛选（如 AAAI）"),
+    community_type: str | None = Query(None, description="社群类型筛选（如 顶会/期刊）"),
+    project_category: str | None = Query(None, description="按项目一级分类筛选"),
+    project_subcategory: str | None = Query(None, description="按项目二级子类筛选"),
+    project_categories: str | None = Query(None, description="按多个项目一级分类筛选（逗号分隔）"),
+    project_subcategories: str | None = Query(None, description="按多个项目二级子类筛选（逗号分隔）"),
+    event_types: str | None = Query(None, description="按多个活动类型筛选（逗号分隔）"),
+    participated_event_id: str | None = Query(None, description="按参与活动 ID 筛选"),
+    is_cobuild_scholar: bool | None = Query(None, description="是否共建学者"),
+    institution_group: str | None = Query(None, description="机构顶层分组"),
+    institution_category: str | None = Query(None, description="机构细粒度分类"),
+    custom_field_key: str | None = Query(None, description="自定义字段名"),
+    custom_field_value: str | None = Query(None, description="自定义字段值"),
+):
+    return await svc.get_scholar_stats(
+        university=university,
+        department=department,
+        position=position,
+        is_academician=is_academician,
+        is_potential_recruit=is_potential_recruit,
+        is_advisor_committee=is_advisor_committee,
+        is_adjunct_supervisor=is_adjunct_supervisor,
+        has_email=has_email,
+        region=region,
+        affiliation_type=affiliation_type,
+        keyword=keyword,
+        community_name=community_name,
+        community_type=community_type,
+        project_category=project_category,
+        project_subcategory=project_subcategory,
+        project_categories=project_categories,
+        project_subcategories=project_subcategories,
+        event_types=event_types,
+        participated_event_id=participated_event_id,
+        is_cobuild_scholar=is_cobuild_scholar,
+        institution_group=institution_group,
+        institution_category=institution_category,
+        custom_field_key=custom_field_key,
+        custom_field_value=custom_field_value,
+    )
 
 
 @router.post(
@@ -235,9 +312,9 @@ async def update_basic(url_hash: str, body: ScholarBasicUpdate):
 @router.patch(
     "/{url_hash}/relation",
     response_model=ScholarDetailResponse,
-    summary="更新与两院关系",
+    summary="更新合作关系",
     description=(
-        "更新指定学者的「与两院关系」字段（顾问委员会、兼职导师、潜在招募等）。"
+        "更新指定学者的合作关系字段（顾问委员会、兼职导师、潜在招募等）。"
         "所有字段均可选，仅传入需要修改的字段。relation_updated_at 由服务端自动填写。"
         "这些字段永不被爬虫覆盖。"
     ),
@@ -352,7 +429,7 @@ async def _assert_faculty_exists(url_hash: str) -> None:
 )
 async def list_students(url_hash: str):
     await _assert_faculty_exists(url_hash)
-    students = student_store.list_students(url_hash)
+    students = await student_store.list_students(url_hash)
     return SupervisedStudentListResponse(
         total=len(students),
         faculty_url_hash=url_hash,
@@ -372,7 +449,7 @@ async def list_students(url_hash: str):
 )
 async def add_student(url_hash: str, body: SupervisedStudentCreate):
     await _assert_faculty_exists(url_hash)
-    record = student_store.add_student(url_hash, body.model_dump())
+    record = await student_store.add_student(url_hash, body.model_dump())
     return record
 
 
@@ -384,7 +461,7 @@ async def add_student(url_hash: str, body: SupervisedStudentCreate):
 )
 async def get_student(url_hash: str, student_id: str):
     await _assert_faculty_exists(url_hash)
-    record = student_store.get_student(url_hash, student_id)
+    record = await student_store.get_student(url_hash, student_id)
     if record is None:
         raise HTTPException(status_code=404, detail=f"Student '{student_id}' not found")
     return record
@@ -402,7 +479,7 @@ async def get_student(url_hash: str, student_id: str):
 async def update_student(url_hash: str, student_id: str, body: SupervisedStudentUpdate):
     await _assert_faculty_exists(url_hash)
     updates = body.model_dump(exclude_none=True)
-    record = student_store.update_student(url_hash, student_id, updates)
+    record = await student_store.update_student(url_hash, student_id, updates)
     if record is None:
         raise HTTPException(status_code=404, detail=f"Student '{student_id}' not found")
     return record
@@ -416,6 +493,6 @@ async def update_student(url_hash: str, student_id: str, body: SupervisedStudent
 )
 async def delete_student(url_hash: str, student_id: str):
     await _assert_faculty_exists(url_hash)
-    deleted = student_store.delete_student(url_hash, student_id)
+    deleted = await student_store.delete_student(url_hash, student_id)
     if not deleted:
         raise HTTPException(status_code=404, detail=f"Student '{student_id}' not found")

@@ -5,7 +5,7 @@ import httpx
 
 from app.config import settings
 
-BASE_URL = "https://datacenter.aminer.cn/gateway/open_platform/api"
+OFFICIAL_BASE_URL = "https://datacenter.aminer.cn/gateway/open_platform/api"
 
 
 class AMinerClient:
@@ -13,15 +13,18 @@ class AMinerClient:
 
     def __init__(self):
         self.api_key = settings.AMINER_API_KEY
-        if not self.api_key:
-            raise ValueError("AMINER_API_KEY not configured in .env")
+        self.scholar_detail_url = settings.AMINER_SCHOLAR_DETAIL_URL
 
-    def _get_headers(self) -> dict[str, str]:
+    def _get_headers(self, require_auth: bool = True) -> dict[str, str]:
         """Build request headers with Authorization token."""
-        return {
+        headers = {
             "Content-Type": "application/json;charset=utf-8",
-            "Authorization": self.api_key,
         }
+        if require_auth:
+            if not self.api_key:
+                raise ValueError("AMINER_API_KEY not configured in .env")
+            headers["Authorization"] = self.api_key
+        return headers
 
     async def search_scholars(
         self,
@@ -44,7 +47,7 @@ class AMinerClient:
         Raises:
             httpx.HTTPStatusError: If API call fails
         """
-        url = f"{BASE_URL}/person/search"
+        url = f"{OFFICIAL_BASE_URL}/person/search"
         payload = {
             "name": name,
             "org": org,
@@ -74,41 +77,69 @@ class AMinerClient:
         Raises:
             httpx.HTTPStatusError: If API call fails
         """
-        url = f"{BASE_URL}/org/search"
-        params = {"name": name, "size": size}
+        url = f"{OFFICIAL_BASE_URL}/organization/search"
+        payload = {"name": name, "size": size}
 
         async with httpx.AsyncClient(timeout=15.0) as client:
-            response = await client.get(
+            response = await client.post(
                 url,
-                params=params,
+                json=payload,
                 headers=self._get_headers(),
             )
             response.raise_for_status()
             return response.json()
 
-    async def get_scholar_detail(self, aminer_id: str) -> dict:
-        """Get scholar detailed information by AMiner ID.
-
-        Args:
-            aminer_id: AMiner scholar ID
-
-        Returns:
-            AMiner API response dict
-
-        Raises:
-            httpx.HTTPStatusError: If API call fails
-        """
-        url = f"{BASE_URL}/person/detail"
-        params = {"id": aminer_id}
+    async def _get_scholar_detail_from_official(
+        self,
+        aminer_id: str,
+        force_refresh: bool = False,
+    ) -> dict:
+        """Fallback path: query official AMiner detail endpoint."""
+        url = f"{OFFICIAL_BASE_URL}/person/detail"
+        params = {"id": aminer_id, "force_refresh": force_refresh}
 
         async with httpx.AsyncClient(timeout=30.0) as client:
             response = await client.get(
                 url,
                 params=params,
-                headers=self._get_headers(),
+                headers=self._get_headers(require_auth=True),
             )
             response.raise_for_status()
             return response.json()
+
+    async def get_scholar_detail(
+        self,
+        aminer_id: str,
+        force_refresh: bool = False,
+    ) -> dict:
+        """Get scholar detailed information by scholar ID.
+
+        Args:
+            aminer_id: AMiner scholar ID
+            force_refresh: Whether to bypass cache in upstream service
+
+        Returns:
+            Scholar detail API response dict
+
+        Raises:
+            httpx.HTTPStatusError: If API call fails
+        """
+        params = {"id": aminer_id, "force_refresh": force_refresh}
+
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            try:
+                # Primary detail source: proxy endpoint, no AMINER_API_KEY required.
+                response = await client.get(self.scholar_detail_url, params=params)
+                response.raise_for_status()
+                return response.json()
+            except httpx.HTTPError:
+                # Fallback to official endpoint when key exists.
+                if self.api_key:
+                    return await self._get_scholar_detail_from_official(
+                        aminer_id,
+                        force_refresh=force_refresh,
+                    )
+                raise
 
 
 # Singleton instance

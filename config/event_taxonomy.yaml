@@ -1,0 +1,72 @@
+# Event Taxonomy Configuration
+# 活动分类体系配置（三级结构）
+#
+# 结构说明：
+# - L1（一级分类）：教育培养、科研学术、人才引育
+# - L2（二级分类）：具体活动系列
+# - L3（活动类型）：可选，用于更细粒度分类
+
+taxonomy:
+  # ========== 教育培养 ==========
+  - id: education
+    name: 教育培养
+    level: 1
+    sort_order: 1
+    children:
+      - id: education_opening_ceremony
+        name: 开学典礼
+        level: 2
+        sort_order: 1
+
+      - id: education_school_talk
+        name: 共建高校座谈会
+        level: 2
+        sort_order: 2
+
+      - id: education_committee_meeting
+        name: 委员会会议
+        level: 2
+        sort_order: 3
+
+  # ========== 科研学术 ==========
+  - id: research
+    name: 科研学术
+    level: 1
+    sort_order: 2
+    children:
+      - id: research_international_conference
+        name: 国际AI科学家大会
+        level: 2
+        sort_order: 1
+
+      - id: research_xai_forum
+        name: XAI智汇讲坛
+        level: 2
+        sort_order: 2
+
+      - id: research_academic_conference
+        name: 学术年会
+        level: 2
+        sort_order: 3
+
+  # ========== 人才引育 ==========
+  - id: talent
+    name: 人才引育
+    level: 1
+    sort_order: 3
+    children:
+      - id: talent_youth_forum
+        name: 青年论坛
+        level: 2
+        sort_order: 1
+
+      - id: talent_international_summer_school
+        name: 国际暑校
+        level: 2
+        sort_order: 2
+
+# 默认分类映射（用于数据迁移）
+# 当前数据库中的活动都应该归类到「科研学术 - XAI智汇讲坛」
+default_mapping:
+  category: 科研学术
+  series: XAI智汇讲坛

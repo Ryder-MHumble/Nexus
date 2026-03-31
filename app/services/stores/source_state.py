@@ -15,7 +15,6 @@ State file (fallback): data/state/source_state.json
 """
 from __future__ import annotations
 
-import asyncio
 import json
 import logging
 from datetime import datetime, timezone
@@ -30,7 +29,6 @@ STATE_DIR = BASE_DIR / "data" / "state"
 STATE_FILE = STATE_DIR / "source_state.json"
 
 _lock = Lock()  # used only for JSON fallback path
-DB_TIMEOUT_SECONDS = 2.0
 
 
 # ---------------------------------------------------------------------------
@@ -68,10 +66,7 @@ def _get_client():
 async def get_source_state(source_id: str) -> dict[str, Any]:
     try:
         client = _get_client()
-        res = await asyncio.wait_for(
-            client.table("source_states").select("*").eq("source_id", source_id).execute(),
-            timeout=DB_TIMEOUT_SECONDS,
-        )
+        res = await client.table("source_states").select("*").eq("source_id", source_id).execute()
         if res.data:
             return res.data[0]
         return {}
@@ -85,10 +80,7 @@ async def get_source_state(source_id: str) -> dict[str, Any]:
 async def get_all_source_states() -> dict[str, dict[str, Any]]:
     try:
         client = _get_client()
-        res = await asyncio.wait_for(
-            client.table("source_states").select("*").execute(),
-            timeout=DB_TIMEOUT_SECONDS,
-        )
+        res = await client.table("source_states").select("*").execute()
         return {row["source_id"]: row for row in (res.data or [])}
     except RuntimeError:
         return _load_state()
@@ -111,12 +103,9 @@ async def update_source_state(
         client = _get_client()
 
         # Read current failures to increment if needed
-        res = await asyncio.wait_for(
-            client.table("source_states").select("consecutive_failures").eq(
-                "source_id", source_id
-            ).execute(),
-            timeout=DB_TIMEOUT_SECONDS,
-        )
+        res = await client.table("source_states").select("consecutive_failures").eq(
+            "source_id", source_id
+        ).execute()
         current_failures: int = 0
         if res.data:
             current_failures = res.data[0].get("consecutive_failures") or 0
@@ -138,10 +127,7 @@ async def update_source_state(
         if last_success_at is not None:
             row["last_success_at"] = last_success_at.isoformat()
 
-        await asyncio.wait_for(
-            client.table("source_states").upsert(row, on_conflict="source_id").execute(),
-            timeout=DB_TIMEOUT_SECONDS,
-        )
+        await client.table("source_states").upsert(row, on_conflict="source_id").execute()
         return
     except RuntimeError:
         pass
@@ -173,10 +159,7 @@ async def set_enabled_override(source_id: str, is_enabled: bool) -> None:
             "is_enabled_override": is_enabled,
             "updated_at": datetime.now(timezone.utc).isoformat(),
         }
-        await asyncio.wait_for(
-            client.table("source_states").upsert(row, on_conflict="source_id").execute(),
-            timeout=DB_TIMEOUT_SECONDS,
-        )
+        await client.table("source_states").upsert(row, on_conflict="source_id").execute()
         return
     except RuntimeError:
         pass
@@ -193,12 +176,9 @@ async def set_enabled_override(source_id: str, is_enabled: bool) -> None:
 async def get_enabled_override(source_id: str) -> bool | None:
     try:
         client = _get_client()
-        res = await asyncio.wait_for(
-            client.table("source_states").select("is_enabled_override").eq(
-                "source_id", source_id
-            ).execute(),
-            timeout=DB_TIMEOUT_SECONDS,
-        )
+        res = await client.table("source_states").select("is_enabled_override").eq(
+            "source_id", source_id
+        ).execute()
         if res.data:
             return res.data[0].get("is_enabled_override")
         return None

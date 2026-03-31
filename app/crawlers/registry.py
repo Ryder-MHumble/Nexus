@@ -14,6 +14,7 @@ _TEMPLATE_MAP: dict[str, str] = {
     "static": "app.crawlers.templates.static_crawler.StaticHTMLCrawler",
     "snapshot": "app.crawlers.templates.snapshot_crawler.SnapshotDiffCrawler",
     "dynamic": "app.crawlers.templates.dynamic_crawler.DynamicPageCrawler",
+    "university_leadership": "app.crawlers.templates.university_leadership_crawler.UniversityLeadershipCrawler",
     "social": "app.crawlers.templates.social_crawler.SocialMediaCrawler",
     "faculty": "app.crawlers.templates.faculty_crawler.ScholarCrawler",
 }

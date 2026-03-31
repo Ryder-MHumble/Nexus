@@ -2,19 +2,6 @@ dimension: "technology"
 dimension_name: "对技术"
 description: "AI 技术进展、国际热点讨论、KOL 观点"
 
-# ─────────────────────────────────────────────────────────────────
-# FILTERING GUIDE:
-#
-# This dimension focuses on technology news. Recommended approach:
-#
-# 1. For AI-focused sources: domain_filter: "technology.ai"
-# 2. For biotech sources: domain_filter: "technology.biotech"
-# 3. For general tech: No filter (keep all)
-#
-# See sources/README.md for complete filtering options
-# ─────────────────────────────────────────────────────────────────
-
-# Legacy: Dimension-level defaults (most sources override this)
 default_keyword_filter:
   - "AI"
   - "人工智能"
@@ -47,10 +34,7 @@ sources:
     priority: 2
     is_enabled: true
     max_entries: 20
-    # Option 1 (Recommended): Use domain classification
-    domain_filter: "technology.ai"  # Automatically applies AI-related keywords
-    # Option 2 (Alternative): Custom keywords
-    # keyword_filter: ["AI", "人工智能", "大模型", "GPT", "LLM", "机器学习"]
+    keyword_filter: ["AI", "人工智能", "大模型", "GPT", "LLM", "机器学习"]
     tags: ["tech_media", "domestic"]
 
   # === B. 国际科技源 (RSS) ===

@@ -28,6 +28,10 @@ grouped:
   # Examples: JavaScript-heavy sites, interactive content
   dynamic: 8
 
+  # University leadership crawlers: Playwright + multi-detail fetching
+  # Similar to dynamic crawlers, keep conservative concurrency.
+  university_leadership: 6
+
   # Snapshot crawlers: medium weight, browser snapshot without full page interaction
   # Lighter than dynamic but heavier than static
   # Examples: capturing page state at specific moments

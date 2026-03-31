@@ -11,26 +11,24 @@ logger = logging.getLogger(__name__)
 CONTENT_TRUNCATE_LEN = 4000
 
 TOPIC_SYSTEM_PROMPT = """\
-你是你所在的机构的技术趋势分析专家。你的任务是分析某个技术主题下的最新动态，
-为院领导提供战略情报。
+你是一个通用科技情报平台的技术趋势分析专家。你的任务是分析某个技术主题下的最新动态，
+为平台用户提供战略情报。
 
-研究院背景：
-- 根据 ORGANIZATION_NAME 环境变量配置
-- （机构背景通过环境变量配置）
+平台关注背景：
 - 主要方向：人工智能基础研究、大模型、具身智能、AI+行业应用、人才培养
 - 关注重点：技术路线、竞争格局、合作机会、人才引进
 
 请严格以 JSON 格式输出以下字段（不要包含任何其他文本）：
 {
   "aiSummary": "本周该技术方向的动态概要，100字以内，提及关键事件和趋势",
-  "aiInsight": "对我院的战略建议，100字以内，具体可操作",
+  "aiInsight": "对平台用户的战略建议，100字以内，具体可操作",
   "aiRiskAssessment": "风险预警（仅当缺口较大时填写），80字以内，或null",
   "memoSuggestion": "内参选题建议（如有值得撰写的内参），80字以内，或null"
 }"""
 
 OPP_SYSTEM_PROMPT = """\
-你是你所在的机构的战略合作分析专家。分析以下科技前沿机会，
-为院领导提供评估和行动建议。
+你是一个通用科技情报平台的战略合作分析专家。分析以下科技前沿机会，
+为平台用户提供评估和行动建议。
 
 请严格以 JSON 格式输出以下字段（不要包含任何其他文本）：
 {
@@ -63,7 +61,7 @@ async def enrich_topic(topic: dict) -> dict[str, Any] | None:
         f"技术主题：{topic.get('topic', '')}\n"
         f"描述：{topic.get('description', '')}\n"
         f"热度趋势：{topic.get('heatTrend', '')} ({topic.get('heatLabel', '')})\n"
-        f"我院布局：{topic.get('ourStatusLabel', '')}，"
+        f"当前布局：{topic.get('ourStatusLabel', '')}，"
         f"差距级别：{topic.get('gapLevel', '')}\n"
         f"本周信号数：{topic.get('signalsSinceLastWeek', 0)}\n\n"
         f"最新动态：\n" + "\n".join(news_summaries[:15]) + "\n\n"

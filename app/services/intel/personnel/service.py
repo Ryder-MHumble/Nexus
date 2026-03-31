@@ -21,6 +21,7 @@ from app.services.intel.personnel.rules import (
     compute_match_score,
     extract_changes,
 )
+from app.services.intel.personnel.source_scope import filter_personnel_scoped_articles
 from app.services.intel.shared import article_date, parse_source_filter
 from app.services.stores.json_reader import get_articles
 
@@ -100,6 +101,7 @@ async def _compute_live_changes() -> list[dict[str, Any]]:
     then by relevance desc, then by date desc.
     """
     articles = await get_articles("personnel")
+    articles = filter_personnel_scoped_articles(articles)
 
     # Deduplicate by url_hash
     seen_hashes: set[str] = set()
@@ -144,6 +146,8 @@ async def _compute_live_changes() -> list[dict[str, Any]]:
                 "department": change.get("department"),
                 "date": change.get("date", _article_date(article)),
                 "source": article.get("source_name", ""),
+                "source_id": article.get("source_id", ""),
+                "source_name": article.get("source_name", ""),
                 "sourceUrl": article.get("url"),
                 "relevance": 10,
                 "importance": "一般",
@@ -179,6 +183,8 @@ async def _compute_live_changes() -> list[dict[str, Any]]:
             "department": dept or article.get("source_name", ""),
             "date": _article_date(article),
             "source": article.get("source_name", ""),
+            "source_id": article.get("source_id", ""),
+            "source_name": article.get("source_name", ""),
             "sourceUrl": article.get("url"),
             "relevance": max(match_score // 5, 5),
             "importance": "关注" if match_score >= 30 else "一般",

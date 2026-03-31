@@ -30,6 +30,16 @@ from app.services.core.institution.taxonomy import (
     get_institution_stats,
     get_institution_taxonomy,
 )
+from app.services.core.institution.leadership import (
+    get_all_university_leadership_current,
+    get_university_leadership_current,
+    get_university_leadership_history,
+    list_university_leadership_current,
+    run_university_leadership_full_crawl,
+    search_institution_scholar_candidates,
+    sync_university_leadership_from_json_dir,
+    update_institution_manual_people_config,
+)
 
 __all__ = [
     # CRUD
@@ -44,6 +54,16 @@ __all__ = [
     # Stats
     "get_institution_stats",
     "get_institution_taxonomy",
+    # University leadership
+    "get_all_university_leadership_current",
+    "list_university_leadership_current",
+    "get_university_leadership_current",
+    "get_university_leadership_history",
+    "run_university_leadership_full_crawl",
+    "sync_university_leadership_from_json_dir",
+    # Institution manual people config
+    "search_institution_scholar_candidates",
+    "update_institution_manual_people_config",
     # AMiner
     "search_institutions_for_aminer",  # Legacy
 ]

@@ -1,10 +1,3 @@
-# ─────────────────────────────────────────────────────────────────
-# USAGE NOTICE: The source configurations in this file are provided
-# as reference examples for academic and research purposes only.
-# Users are responsible for complying with the terms of service of
-# each website and applicable laws when deploying these sources.
-# ─────────────────────────────────────────────────────────────────
-
 dimension: universities
 dimension_name: 对高校
 description: 高校相关信源 - university_news

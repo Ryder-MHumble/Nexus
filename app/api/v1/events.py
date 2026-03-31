@@ -53,7 +53,7 @@ class EventBatchRequest(BaseModel):
     response_model=EventListResponse,
     summary="活动列表",
     description=(
-        "获取活动列表，支持三级分类筛选（category/series/event_type）、讲者、日期范围、"
+        "获取活动列表，支持三级分类筛选（category/series/event_type）、日期范围、"
         "关联学者、关键词筛选，按日期倒序排列。"
     ),
 )
@@ -61,7 +61,6 @@ async def list_events(
     category: str | None = Query(None, description="一级分类筛选（精确匹配，如：科研学术/教育培养/人才引育）"),
     event_type: str | None = Query(None, description="活动类型筛选（精确匹配，如：学术前沿讲座/前沿沙龙）"),
     series: str | None = Query(None, description="二级系列筛选（精确匹配，如：XAI智汇讲坛/国际AI科学家大会）"),
-    speaker_name: str | None = Query(None, description="讲者姓名搜索（模糊匹配）"),
     start_date: str | None = Query(None, description="开始日期 YYYY-MM-DD"),
     end_date: str | None = Query(None, description="结束日期 YYYY-MM-DD"),
     scholar_id: str | None = Query(None, description="按关联学者筛选"),
@@ -75,7 +74,6 @@ async def list_events(
         category=category,
         event_type=event_type,
         series=series,
-        speaker_name=speaker_name,
         start_date=start_date,
         end_date=end_date,
         scholar_id=scholar_id,
@@ -91,7 +89,7 @@ async def list_events(
     "/stats",
     response_model=EventStatsResponse,
     summary="活动统计",
-    description="返回活动总览统计：总数、按一级分类/活动类型/月份分布、总讲者数、平均时长。",
+    description="返回活动总览统计：总数、按一级分类/系列/类型/月份分布、活动-学者关联总数。",
 )
 async def get_stats():
     return await svc.get_event_stats()
@@ -177,7 +175,7 @@ async def delete_taxonomy_node(node_id: str):
     "/{event_id}",
     response_model=EventDetailResponse,
     summary="活动详情",
-    description="根据活动 ID 获取完整活动信息（讲者、时间、地点、关联学者等）。",
+    description="根据活动 ID 获取完整活动信息（分类、时间地点、摘要、关联学者等）。",
 )
 async def get_event(event_id: str):
     result = await svc.get_event_detail(event_id)
@@ -192,8 +190,8 @@ async def get_event(event_id: str):
     summary="创建活动",
     description=(
         "创建新的活动记录。ID 自动生成（UUID）。\n\n"
-        "建议先调用 `GET /events/taxonomy` 获取可用的 category/series/event_type 值，"
-        "再填入对应字段。"
+        "建议先调用 `GET /events/taxonomy` 获取可用的 category/series/event_type 标签值，"
+        "再填入对应字段并关联学者。"
     ),
     status_code=201,
 )
@@ -206,7 +204,7 @@ async def create_event(body: EventCreate):
     summary="批量创建活动",
     description=(
         "通过 JSON 列表批量创建活动。\n\n"
-        "**重复判定：** 相同标题 + 相同日期 + 相同讲者视为重复，"
+        "**重复判定：** 相同标题 + 相同日期 + 相同系列 + 相同活动类型视为重复，"
         "skip_duplicates=true 时跳过，false 时报错。\n\n"
         "**返回：** 每条记录的处理结果汇总。"
     ),

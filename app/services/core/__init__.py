@@ -5,6 +5,8 @@ from app.services.core import (
     dimension_service,
     event_service,
     institution_builder,
+    project_service,
+    project_taxonomy_service,
     source_service,
 )
 from app.services.core import institution as institution_service
@@ -16,5 +18,7 @@ __all__ = [
     "event_service",
     "institution_builder",
     "institution_service",
+    "project_service",
+    "project_taxonomy_service",
     "source_service",
 ]

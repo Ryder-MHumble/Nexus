@@ -22,9 +22,11 @@ from app.schemas.project import (
     ProjectDetailResponse,
     ProjectListResponse,
     ProjectStatsResponse,
+    ProjectTaxonomyTree,
     ProjectUpdate,
 )
 from app.services.core import project_service as svc
+from app.services.core import project_taxonomy_service as taxonomy_svc
 
 logger = logging.getLogger(__name__)
 
@@ -46,24 +48,20 @@ class ProjectBatchRequest(BaseModel):
     response_model=ProjectListResponse,
     summary="项目列表",
     description=(
-        "获取项目库列表，支持多维度过滤和分页。\n\n"
+        "获取项目标签列表，支持分类和学者关联过滤。\n\n"
         "**过滤参数：**\n"
-        "- `status`: 项目状态（申请中/在研/已结题/暂停/终止）\n"
-        "- `category`: 项目类别（国家级/省部级/横向课题/院内课题/国际合作/其他）\n"
-        "- `funder`: 资助机构（模糊匹配）\n"
-        "- `pi_name`: 负责人姓名（模糊匹配）\n"
-        "- `tag`: 标签（精确匹配）\n"
-        "- `keyword`: 全文搜索（匹配项目名称/简介/关键词）\n"
+        "- `category`: 一级分类（教育培养/科研学术/人才引育）\n"
+        "- `subcategory`: 二级子类（如 学术委员会）\n"
+        "- `scholar_id`: 关联学者 ID\n"
+        "- `keyword`: 标题/摘要关键词\n"
     ),
 )
 async def list_projects(
     page: int = Query(default=1, ge=1, description="页码"),
     page_size: int = Query(default=20, ge=1, le=100, description="每页条数"),
-    status: str | None = Query(default=None, description="项目状态"),
-    category: str | None = Query(default=None, description="项目类别"),
-    funder: str | None = Query(default=None, description="资助机构（模糊匹配）"),
-    pi_name: str | None = Query(default=None, description="负责人姓名（模糊匹配）"),
-    tag: str | None = Query(default=None, description="标签（精确匹配）"),
+    category: str | None = Query(default=None, description="一级分类"),
+    subcategory: str | None = Query(default=None, description="二级子类"),
+    scholar_id: str | None = Query(default=None, description="关联学者 ID"),
     keyword: str | None = Query(default=None, description="全文关键词搜索"),
     custom_field_key: str | None = Query(default=None, description="自定义字段名（需配合 custom_field_value 使用）"),
     custom_field_value: str | None = Query(default=None, description="自定义字段值"),
@@ -71,11 +69,9 @@ async def list_projects(
     return await svc.list_projects(
         page=page,
         page_size=page_size,
-        status=status,
         category=category,
-        funder=funder,
-        pi_name=pi_name,
-        tag=tag,
+        subcategory=subcategory,
+        scholar_id=scholar_id,
         keyword=keyword,
         custom_field_key=custom_field_key,
         custom_field_value=custom_field_value,
@@ -86,10 +82,20 @@ async def list_projects(
     "/stats",
     response_model=ProjectStatsResponse,
     summary="项目统计",
-    description="返回项目库的聚合统计信息：按状态、类别、资助机构分布，以及资助总金额和在研项目数。",
+    description="返回项目标签的聚合统计信息：按一级分类、二级子类分布，以及项目-学者关联总数。",
 )
 async def get_stats():
     return await svc.get_stats()
+
+
+@router.get(
+    "/taxonomy",
+    response_model=ProjectTaxonomyTree,
+    summary="项目分类树",
+    description="返回项目的二级分类树（一级分类 + 二级子类），用于前端筛选按钮渲染。",
+)
+async def get_taxonomy():
+    return taxonomy_svc.get_taxonomy_tree()
 
 
 @router.get(
@@ -97,12 +103,10 @@ async def get_stats():
     response_model=ProjectDetailResponse,
     summary="项目详情",
     description=(
-        "根据项目 ID 获取完整项目记录，包含：\n"
-        "- 基本信息（名称、负责人、资助机构、金额、年份、状态）\n"
-        "- 项目简介与关键词\n"
-        "- 相关学者列表（负责人 + 参与老师）\n"
-        "- 合作机构\n"
-        "- 项目成果（论文/专利等）\n"
+        "根据项目 ID 获取完整项目标签记录，包含：\n"
+        "- 分类信息（category/subcategory）\n"
+        "- 标题与摘要\n"
+        "- 关联学者列表\n"
     ),
 )
 async def get_project(project_id: str):
@@ -122,11 +126,9 @@ async def get_project(project_id: str):
     response_model=ProjectDetailResponse,
     summary="创建项目",
     description=(
-        "创建新的项目记录。\n\n"
-        "**必填字段：** `name`（项目名称）、`pi_name`（负责人）\n\n"
-        "**项目 ID** 由系统自动生成（12 位随机 hex），无需手动传入。\n\n"
-        "**状态枚举：** 申请中 | 在研（默认）| 已结题 | 暂停 | 终止\n\n"
-        "**类别枚举：** 国家级 | 省部级 | 横向课题 | 院内课题 | 国际合作 | 其他"
+        "创建新的项目标签记录。\n\n"
+        "**必填字段：** `category`、`subcategory`、`title`\n\n"
+        "**项目 ID** 由系统自动生成，无需手动传入。"
     ),
     status_code=201,
 )
@@ -139,8 +141,8 @@ async def create_project(body: ProjectCreate):
     "/batch",
     summary="批量创建项目",
     description=(
-        "通过 JSON 列表批量创建项目。\n\n"
-        "**重复判定：** 相同项目名称 + 相同负责人（name + pi_name，大小写不敏感）视为重复，"
+        "通过 JSON 列表批量创建项目标签。\n\n"
+        "**重复判定：** 相同标题 + 相同一级分类 + 相同二级子类视为重复，"
         "skip_duplicates=true 时跳过，false 时报错。\n\n"
         "**返回：** 每条记录的处理结果汇总。"
     ),

@@ -40,7 +40,7 @@ async def _get_browser() -> Browser:
 
 
 @asynccontextmanager
-async def get_page() -> AsyncGenerator[Page, None]:
+async def get_page(*, apply_webdriver_patch: bool = True) -> AsyncGenerator[Page, None]:
     """Acquire a browser page from the pool, yield it, then close.
 
     Limits concurrent contexts to PLAYWRIGHT_MAX_CONTEXTS to avoid resource exhaustion.
@@ -53,12 +53,13 @@ async def get_page() -> AsyncGenerator[Page, None]:
             locale="zh-CN",
             timezone_id="Asia/Shanghai",
         )
-        # Inject script to hide webdriver property
-        await context.add_init_script("""
-            Object.defineProperty(navigator, 'webdriver', {
-                get: () => undefined
-            });
-        """)
+        if apply_webdriver_patch:
+            # Some sites detect automation through navigator.webdriver.
+            await context.add_init_script("""
+                Object.defineProperty(navigator, 'webdriver', {
+                    get: () => undefined
+                });
+            """)
         page = await context.new_page()
         try:
             yield page

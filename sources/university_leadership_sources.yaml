@@ -1,0 +1,1323 @@
+dimension: personnel
+dimension_name: 对人事
+description: 高校现任领导官方信源（截图名单）
+generated_at: '2026-03-30T00:00:00'
+sources:
+- id: leaders_official_uedb1d57ad7
+  name: 清华大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.tsinghua.edu.cn/xxgk/xrld.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: .xleader ul li
+    role: h3
+    name: p
+    profile_link: a[href]
+  detail_selectors:
+    content_wait: form[name="_newscontent_fromname"]
+    content:
+    - form[name="_newscontent_fromname"]
+    - .teachDetail3
+    - ".textBox #vsb_content"
+    avatar:
+    - .picbox2 .pic img
+    - .picbox2 img
+    name:
+    - .xName
+  wait_for: .xleader li
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_u5563b44c2e
+  name: 北京大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.pku.edu.cn/leaders.html
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: .leaders .p
+    role: .th, div.th, th, .post, .job, h3
+    name: .td a[href], .td, div.name, .xm, .leader-name, p
+    profile_link: .td a[href], a[href]
+  detail_selectors:
+    content_wait: .person_detail .content
+    content:
+    - .person_detail .content .txt
+    avatar:
+    - .person_detail .content .pic img
+    name:
+    - .person_detail .content .h1
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_ub473cd9fc3
+  name: 中国科学院大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.ucas.ac.cn/xxgk/xrld/index.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: .list1.list6 li table tbody tr
+    role: td:first-child
+    name: td:nth-child(2) a[href]
+    profile_link: td:nth-child(2) a[href]
+  detail_selectors:
+    content_wait: '#articleDiv'
+    content:
+    - '#articleDiv'
+    - .list7 .listCon
+    - .list7
+    avatar:
+    - .list7 span.img img
+    name:
+    - .articleTitle03 span
+    - .listTitle b
+  wait_for: .list1.list6 li
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_u9fc7ee8be8
+  name: 北京理工大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.bit.edu.cn/gbxxgk/xxld_sjb/index.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: .bit3Mode1.clear > .col.lf > .leaderList01 > li, .bit3Mode1.clear > .col.rt > .leaderList01 > li
+    role: strong
+    name: div span a
+    profile_link: div span a[href]
+  detail_selectors:
+    content_wait: .article2.article
+    content:
+    - .article2.article
+    avatar:
+    - .article2.article p img
+    name:
+    - .articleTitle h3
+  wait_for: .bit3Mode1.clear > .col .leaderList01 li
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_u4ad256b2b9
+  name: 北京师范大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.bnu.edu.cn/xxgk/xrld/index.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: .leader_row
+    role: .leader_title
+    name: .leader_list01 li .leader-txt01
+    profile_link: .leader_list01 li a[href]
+    avatar: .leader_list01 li .leader-img01 img
+  detail_selectors:
+    content_wait: .article
+    content:
+    - .article
+    name:
+    - .articleTitle h3
+  wait_for: .leader_row .leader_list01 li
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_u4f8236249d
+  name: 中国人民大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.ruc.edu.cn/xianrenlingdao1924735163695271937.html
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: .xrld-box.xrld-box1 .row
+    role: .xrld-title
+    name: .xrld-list1 a
+  wait_for: .xrld-box .xrld-title
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_u5a23d396fa
+  name: 中国科学技术大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.ustc.edu.cn/xxgk/xrld.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_ub0510ef464
+  name: 复旦大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.fudan.edu.cn/448/list.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: .wp_articlecontent table tr
+    role: td:first-child
+    name: td a[href]
+    profile_link: td a[href]
+  detail_selectors:
+    content_wait: .wp_articlecontent
+    content:
+    - .wp_articlecontent
+    avatar:
+    - '.wp_articlecontent p[style*="text-align:center"] img[data-layer="photo"]'
+    - '.wp_articlecontent p[style*="text-align: center"] img[data-layer="photo"]'
+    - .wp_articlecontent img[data-layer="photo"]
+    name:
+    - .arti_title h2
+    - .article_title h2
+  wait_for: .wp_articlecontent table tr
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_uc4afb07615
+  name: 哈尔滨工业大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.hit.edu.cn/11542/list.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: .about-leader .common-table tbody tr
+    role: td:nth-child(2)
+    name: td:nth-child(3)
+  wait_for: .about-leader .common-table tbody tr
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_u0ffd977d5a
+  name: 西安交通大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.xjtu.edu.cn/jdgk/xxld.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: '#vsb_content .xxld tr, #vsb_content .xxld'
+    name: a[href*="../info/2147/"], a[href*="/info/2147/"]
+    profile_link: a[href*="../info/2147/"], a[href*="/info/2147/"]
+  detail_selectors:
+    content_wait: '#vsb_content .v_news_content'
+    content:
+    - '#vsb_content .v_news_content'
+    - .v_news_content
+    avatar:
+    - .v_news_content p img[src*="/__local/"]
+    - .v_news_content img[src*="/__local/"]
+    name:
+    - .xxtitle1 h1
+  wait_for: '#vsb_content .xxld tr'
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_u64801675d6
+  name: 同济大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.tongji.edu.cn/xxgk1/xrld1.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: .leader .leader-item .leader-con .inner-item:not(.item2)
+    role: h4
+    name: .inner-con a[href]
+    profile_link: .inner-con a[href]
+  detail_selectors:
+    content_wait: .v_news_content
+    content:
+    - .v_news_content
+    avatar:
+    - '.v_news_content p[style*="text-align: center"] img'
+    - .v_news_content img[src*="/__local/"]
+    name:
+    - .summary h2
+    - .title h2
+  wait_for: .leader .leader-item .leader-con .inner-item
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_ucd21fba316
+  name: 华东师范大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.ecnu.edu.cn/wzcd/xxgk/xxld.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: .m2atcTable table tr
+    role: td:nth-child(1), td:nth-child(3)
+    name: td:nth-child(2) a[href], td:nth-child(4) a[href]
+    profile_link: td:nth-child(2) a[href], td:nth-child(4) a[href]
+  detail_selectors:
+    content_wait: form[name="_newscontent_fromname"]
+    content:
+    - '#vsb_content_2'
+    - form[name="_newscontent_fromname"]
+    avatar:
+    - .m3tmPimg img
+    name:
+    - .m3tmEditor h4 strong
+  wait_for: .m2atcTable table tr
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_u0a26ec6523
+  name: 东南大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.seu.edu.cn/28446/list.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+  detail_selectors:
+    avatar:
+    - .arti_img img
+    - .arti-img img
+    - .article_img img
+    - .picbox2 .pic img
+    - .picbox2 img
+    - img
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_u968b58913d
+  name: 南开大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.nankai.edu.cn/178/list.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: table.detail_tb.teachers_con_2 tbody tr
+    role: td:first-child
+    name: td.tb_line a[href]
+    profile_link: td.tb_line a[href]
+  detail_selectors:
+    content_wait: .wp_articlecontent
+    content:
+    - '.wp_articlecontent td[style*="padding-left:40px"]'
+    - .wp_articlecontent
+    avatar:
+    - '.wp_articlecontent td[style*="word-break:break-all"] img'
+    - .wp_articlecontent img[data-layer="photo"]
+    name:
+    - '.wp_articlecontent td[style*="padding-left:40px"] strong'
+    - '.wp_articlecontent td[style*="padding-left:40px"] span'
+  wait_for: table.detail_tb.teachers_con_2 tbody tr
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_u98a6c51926
+  name: 天津大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.tju.edu.cn/tdgk/xrld.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: .xrld > ul > li
+    role: h3
+    name: div a
+    profile_link: div a[href]
+  detail_selectors:
+    content_wait: .left_img img, .v_news_content
+    content:
+    - .v_news_content
+    avatar:
+    - .left_img img
+    - .v_news_content img
+    name:
+    - .right_des > p.sz_zc:first-child
+    - .right_des p.sz_zc
+  wait_for: .xrld > ul > li
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_u4af12268f0
+  name: 山东大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.sdu.edu.cn/sdgk/xrld.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: .nyMain.nyxrld .item .items
+    role: .tit
+    name: .names a[href]
+    profile_link: .names a[href]
+  detail_selectors:
+    content_wait: .v_news_content
+    content:
+    - .v_news_content
+    avatar: []
+    name:
+    - .nrtitle h2
+  wait_for: .nyMain.nyxrld .item .items
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_u0949a19600
+  name: 中山大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.sysu.edu.cn/xxg/xrld.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: .nyrcon .nyldlist li
+    role: h4 span
+    name: h4 em
+    profile_link: a.ablink[href]
+  detail_selectors:
+    content_wait: form[name="_newscontent_fromname"]
+    content:
+    - '#vsb_content_4'
+    - form[name="_newscontent_fromname"]
+    avatar:
+    - .pic img
+    - '#vsb_content_4 img'
+    name:
+    - .articleTitle h3
+  wait_for: .nyrcon .nyldlist li
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_ub3856cafae
+  name: 厦门大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.xmu.edu.cn/sdgl/xrld.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: .hidden .fancyhost
+    role: h3
+    name: p:first-of-type
+    name_first_only: true
+    avatar: img
+  wait_for: .content2.table-responsive table.table.table-bordered
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_u1b0dd0f74c
+  name: 武汉大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.whu.edu.cn/xxgk/xrld.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: .bottom .con .dl
+    role: dt
+    name: .dd a
+    profile_link: .dd a[href]
+  detail_selectors:
+    content_wait: .v_news_content
+    content:
+    - '#vsb_content_2 .v_news_content'
+    - .v_news_content
+    avatar:
+    - '.v_news_content p[style*="text-align: center"] img'
+    - .v_news_content a[href*="/__local/"]
+    - .v_news_content img[src*="/__local/"]
+    name:
+    - .ar_tit h3
+  wait_for: .bottom .con .dl
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_u1101924827
+  name: 吉林大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.jlu.edu.cn/xxgk/xrld.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: ul.list.fl li
+    role: a
+    name: a
+    profile_link: a[href]
+  detail_selectors:
+    content_wait: .v_news_content
+    content:
+    - .v_news_content
+    avatar:
+    - '.v_news_content p[style*="text-align:center"] img'
+    - .v_news_content img[src*="/__local/"]
+    name:
+    - 'div[style*="font-size:16pt"][style*="font-weight:bold"]'
+    - .arti_title h2
+  wait_for: ul.list.fl li
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_ud7dc5b7419
+  name: 西北工业大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.nwpu.edu.cn/xxgk/ld.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: '#vsb_content .v_news_content td'
+    role: ul.leaderPost
+    name: ul.leaderlist a[href]
+    profile_link: ul.leaderlist a[href]
+  detail_selectors:
+    content_wait: '#vsb_content .v_news_content, .v_news_content'
+    content:
+    - '#vsb_content .v_news_content'
+    - .v_news_content
+    avatar:
+    - 'div[style*="width: 25%"][style*="float: left"] img'
+    - .v_news_content img[src*="/__local/"]
+    name:
+    - .nry123
+  wait_for: '#vsb_content .v_news_content td'
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_u7817f5e95b
+  name: 西安电子科技大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.xidian.edu.cn/xxgk.htm#B
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: .Profile_left.fl .Profile_left_div:nth-of-type(3) .Profile_left_content tbody td[valign="top"], .Profile_left.fl .Profile_left_div:nth-of-type(3) .Profile_left_content tbody td[colspan="3"]
+    role: p
+    name: a[href]
+    profile_link: a[href]
+  detail_selectors:
+    content_wait: .v_news_content
+    content:
+    - .v_news_content
+    avatar:
+    - .v_news_content p.vsbcontent_img img
+    - .v_news_content img[src*="/__local/"]
+    name:
+    - .content-bt-k
+  wait_for: .Profile_left.fl .Profile_left_div:nth-of-type(3) .Profile_left_content a[href*="/info/1067/"]
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_u30bce2146c
+  name: 华中科技大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.hust.edu.cn/xxgk/xrld.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: .ldlist > ul > li
+    role: .tit
+    name: .names ul li a
+    profile_link: .names ul li a[href]
+  detail_selectors:
+    content_wait: form[name="_newscontent_fromname"]
+    content:
+    - '#vsb_content_4'
+    - .arc-con.clearfix
+    avatar:
+    - '#vsb_content_4 img'
+    - .arc-con.clearfix img
+    name:
+    - .arc-tit h1
+  wait_for: .ldlist > ul > li
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_u449352dce4
+  name: 电子科技大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.uestc.edu.cn/xxgk/xrld.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: .leader-detail .leader-detail-content
+    role: .position
+    name: .name
+    avatar: img
+  wait_for: .leader-list .leader-item
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_ub6dda14d14
+  name: 南方科技大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.sustech.edu.cn/zh/leadership.html
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: .xrld_box .wp_wrap
+    role: .vc_col-sm-8 p
+    name: .vc_col-sm-4 a[href]
+    profile_link: .vc_col-sm-4 a[href]
+  detail_selectors:
+    content_wait: .ld_wrap, .leadership, .vc_single_image-wrapper
+    content:
+    - .wpb_wrapper.leadership
+    - .leadership
+    avatar:
+    - .vc_single_image-wrapper img.vc_single_image-img
+    - .vc_single_image-wrapper img
+    name:
+    - .tc_name
+  wait_for: .xrld_box .wp_wrap
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_u2c51c2a8a1
+  name: 中国政法大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.cupl.edu.cn/xxgk/xrld.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: .leaderList1 .leaderListItem1
+    role: .xrldsubtit
+    name: .leaderTxt h3
+    profile_link: a[href*="/info/"]
+    avatar: .leaderImg img
+  detail_selectors:
+    content_wait: form[name="_newscontent_fromname"]
+    content:
+    - '#vsb_content_2'
+    - '.article #vsb_content_2'
+    - '.article .v_news_content'
+    avatar:
+    - '#vsb_content_2 img.img_vsb_content'
+    - '#vsb_content_2 img'
+    name:
+    - .articleTitle h3
+  wait_for: .leaderList1 .leaderListItem1
+  wait_timeout: 25000
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_u8f9de1a6b2
+  name: 中央民族大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.muc.edu.cn/xxgk1/xrld.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: .n_xrld .box dl
+    role: dt
+    name: .box1 dd h5
+    profile_link: .box1 dd a[href*="/info/"]
+    avatar: .box1 dd .img img
+  detail_selectors:
+    content_wait: form[name="_newscontent_fromname"]
+    content:
+    - .sur_leadernr #vsb_content
+    - .sur_leadernr .v_news_content
+    - '#vsb_content'
+    avatar:
+    - .sur_leadertop img.img01
+    - .sur_leadertop img
+    name:
+    - .sur_leadertop .nrtitle h2 .span01
+    - .sur_leadertop .nrtitle h2
+  wait_for: .n_xrld .box dl
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_u1f6cbb8e75
+  name: 首都师范大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.cnu.edu.cn/xxgk/xrld/index.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: .now_leaders .leader_info
+    role: .job01
+    name: .name_con a[href]
+    profile_link: .name_con a[href]
+  detail_selectors:
+    content_wait: .sub_0132 .article
+    content:
+    - .sub_0132 .article
+    - .pageArticle .article
+    avatar:
+    - .sub_0132 .left img
+    - .sub_0132 .left .img img
+    name:
+    - .sub_0132 .left .title
+    - .articleTitle h3
+  wait_for: .now_leaders .leader_info
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_u63c0ab4d21
+  name: 北京体育大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.bsu.edu.cn/xxgk/xrld/index.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: .bsu-list09 .teacherList02
+    role: strong
+    name: '.teacherList02 > span'
+    avatar: .teacher-left img
+  wait_for: .bsu-list09 .teacherList02
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_u7c4e2d91fa
+  name: 北京舞蹈学院-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.bda.edu.cn/xygk/xrld/index.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  role_aliases:
+    院长: 校长
+    常务副院长: 常务副校长
+    副院长: 副校长
+  selectors:
+    content_area: body
+    list_item: .leaderList01 > li
+    role: .item-txt02 h3
+    name: .item-txt02 h3
+    profile_link: a[href$=".htm"]
+    avatar: .item-img02 img
+  detail_selectors:
+    content_wait: .articleList03 .article
+    content:
+    - .pageArticle .article
+    - .articleList03 .article
+    avatar: []
+    name:
+    - .articleTitle h3
+  wait_for: .leaderList01 > li
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_buaa
+  name: 北京航空航天大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.buaa.edu.cn/xygk/xxld.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_cau
+  name: 中国农业大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.cau.edu.cn/xxgk/xxld/index.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_dlut
+  name: 大连理工大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.dlut.edu.cn/xxgk/xrld.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: ul.nyleadlist1 > li
+    role: div.info p
+    name: div.name h4
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_sjtu
+  name: 上海交通大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://gk.sjtu.edu.cn/Data/View/1535
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: div.view-cnt > p:has(strong)
+    role: span[style*="font-family:仿宋_GB2312"]
+    name: strong span, strong
+    name_first_only: true
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_nju
+  name: 南京大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.nju.edu.cn/ndgk/xrld.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_zju
+  name: 浙江大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.zju.edu.cn/xrld/list.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: div.lead-list div.lead-item
+    role: div.lead-post
+    name: div.lead-name .item-name .names, div.lead-name .item-name > div
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_ouc
+  name: 中国海洋大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.ouc.edu.cn/31003/list.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: div.leaderList > div.ld:not(.ld-100):not(.jk)
+    role: div.career:not(.hidden)
+    name: div.nameList div.name a[href], div.nameList div.name
+    profile_link: div.nameList div.name a[href]
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_hnu
+  name: 湖南大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.hnu.edu.cn/hdgk/xrld.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_csu
+  name: 中南大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.csu.edu.cn/zjzn/xxld.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: div.list1 dl
+    role: dt
+    name: dd a[href], dd
+    profile_link: dd a[href]
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_nudt
+  name: 国防科技大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.nudt.edu.cn/xxgk/xxld/index.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_scut
+  name: 华南理工大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.scut.edu.cn/new/9019/list.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_scu
+  name: 四川大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.scu.edu.cn/xxgk/xrld.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_cqu
+  name: 重庆大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.cqu.edu.cn/xqgk/xrld.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_nwafu
+  name: 西北农林科技大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.nwafu.edu.cn/xxgk/xrld/index.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_lzu
+  name: 兰州大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.lzu.edu.cn/xxgk/xrld.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_neu
+  name: 东北大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.neu.edu.cn/xygk/xrld.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: div.ldy ul li.flex
+    role: p.flex
+    name: div.span a[href], div.span
+    profile_link: div.span a[href]
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_bupt
+  name: 北京邮电大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.bupt.edu.cn/bygk/ldjg.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  disable_webdriver_patch: true
+  selectors:
+    content_area: body
+    list_item: div.present-leader table tr
+    role: ul.leaderPost
+    name: ul.leaderlist a[href], ul.leaderlist
+    profile_link: ul.leaderlist a[href]
+  detail_selectors:
+    avatar: div.cont img
+    content: '#vsb_content'
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_sufe
+  name: 上海财经大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.sufe.edu.cn/xxgk/xrld.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_cufe
+  name: 中央财经大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.cufe.edu.cn/xxgk/xrld.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: div.xrld-left div.xrld2
+    role: h3
+    name: div.xrld3 ul li a[href], div.xrld3 ul li
+    profile_link: div.xrld3 ul li a[href]
+  detail_selectors:
+    avatar: div.ldxq-img img
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official
+- id: leaders_official_nuaa
+  name: 南京航空航天大学-现任领导(官方)
+  group: university_leadership_official
+  url: https://www.nuaa.edu.cn/481/list.htm
+  crawl_method: university_leadership
+  schedule: weekly
+  priority: 1
+  is_enabled: true
+  selectors:
+    content_area: body
+    list_item: .wp_articlecontent tr
+    role: td:nth-child(2)
+    name: td:nth-child(1)
+    name_first_only: true
+  ignore_patterns:
+  - 更新时间[:：]?\s*\d{4}-\d{1,2}-\d{1,2}
+  - \d{4}年\d{1,2}月\d{1,2}日
+  tags:
+  - personnel
+  - university
+  - leadership
+  - official

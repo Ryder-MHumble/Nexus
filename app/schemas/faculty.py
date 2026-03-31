@@ -181,7 +181,7 @@ class InstituteRelationUpdate(BaseModel):
     supervised_students: list[Any] | None = Field(default=None, description="指导学生列表（字符串或对象均可）")
     joint_research_projects: list[str] | None = Field(default=None, description="联合科研项目列表")
     joint_management_roles: list[Any] | None = Field(
-        default=None, description="在两院联合管理职务列表（字符串或对象均可）"
+        default=None, description="联合管理职务列表（字符串或对象均可）"
     )
     academic_exchange_records: list[Any] | None = Field(
         default=None, description="学术交流活动记录列表（字符串或对象均可）"

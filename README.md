@@ -1,279 +1,163 @@
 <div align="center">
   <img src="docs/NEXUS-Banner.png" alt="Nexus Banner" width="800" />
 
-<h1>Nexus: $100/month LLM browsing → $1/month Nexus API</h1>
-  <p><strong>The Missing Infrastructure Layer for AI Applications</strong></p>
+<h1>Nexus</h1>
+  <p><strong>Structured knowledge infrastructure for AI applications</strong></p>
 
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
   [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-  [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
+  [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-green.svg)](https://fastapi.tiangolo.com/)
   [![Next.js 16](https://img.shields.io/badge/Next.js-16-black.svg)](https://nextjs.org/)
-
-<p>Transform unstructured web content into AI-ready structured knowledge</p>
-  <p><strong>10-100x cheaper</strong> than real-time LLM browsing | <strong>Production-ready</strong> | <strong>Domain-focused</strong></p>
 </div>
 
----
+Nexus turns multi-source web content into structured, queryable knowledge for downstream AI products. It combines configurable crawlers, scheduled processing pipelines, a typed FastAPI surface, and a Next.js operations console.
 
-## 💡 Why Nexus?
+## Snapshot
 
-Everyone believes AI agents can "just browse the web" — but in production, this approach fails:
+- `245` configured sources, `168` enabled
+- `10` source dimensions: policy, technology, talent, industry, universities, events, personnel, scholars, sentiment, and regional policy
+- `100` OpenAPI paths across source management, crawler control, knowledge graph, intelligence, and report generation
+- `49` scholar acquisition sources and `50` university leadership sources
+- Dual runtime support: local PostgreSQL recommended, Supabase-compatible facade retained
 
-| Problem                   | Reality                                                                           | Nexus Solution                        |
-| ------------------------- | --------------------------------------------------------------------------------- | ------------------------------------- |
-| 🔥**Cost**          | LLM browsing costs $0.10-1.00 per query | Pre-process once, serve 1000x at $0.001 |                                       |
-| 🎯**Reliability**   | LLMs hallucinate on complex HTML                                                  | Structured extraction with validation |
-| ⚡**Speed**         | 10-30s per page load                                                              | Instant API response (<100ms)         |
-| 🔄**Freshness**     | Manual refresh needed                                                             | Automated scheduled updates           |
-| 🌐**Chinese Sites** | Poor LLM performance                                                              | Optimized parsers for CN web          |
+## What Shipped
 
-**The truth**: Production AI applications need a **data infrastructure layer** between raw web and LLM reasoning. That's Nexus.
+The current Nexus workspace includes:
 
+- Expanded source catalog APIs with facets, keyword search, grouping, health status, and pagination
+- Knowledge APIs for institutions, scholars, projects, events, students, AMiner lookup, and university leadership
+- Report APIs for dimension discovery and sentiment report generation
+- Updated Next.js console with:
+  - enhanced source directory and source health visibility
+  - knowledge capability overview cards
+  - intelligence panel for reports and leadership previews
+- Verification coverage for source filtering, source catalog, institution hierarchy, scholar filters, and crawler orchestration
 
+## Quick Start
 
-## ✨ What Makes Nexus Different
-
-### 🎯 Built for Production, Not Demos
-
-Most web scrapers are toys. Nexus is battle-tested infrastructure:
-
-- **181 data sources** running in production (138 active)
-- **2,200+ articles** processed daily across 9 domains
-- **2,600+ scholar profiles** from top universities
-- **65+ REST API endpoints** serving 4 production applications
-
-### 🧠 Smart Extraction, Not Brute Force
-
-**6 specialized crawler types** for different scenarios:
-
-| Type                 | Use Case               | Example                              |
-| -------------------- | ---------------------- | ------------------------------------ |
-| 🌐**Static**   | Standard HTML pages    | Government portals, news sites       |
-| ⚡**Dynamic**  | JavaScript-heavy sites | Modern web apps (Playwright)         |
-| 📡**RSS**      | Feed-based content     | Blogs, podcasts                      |
-| 📸**Snapshot** | Change detection       | Policy documents, regulations        |
-| 🔌**API**      | Direct integrations    | GitHub, arXiv, Twitter               |
-| 🤖**LLM**      | Zero-config extraction | Any website (AI-powered, $0.01/page) |
-
-### 🎨 Domain Intelligence, Not Generic Data
-
-Pre-built pipelines for vertical domains:
-
-- **Policy Intelligence**: Funding opportunities, regulatory changes
-- **Tech Frontier**: Research trends, breakthrough signals
-- **Scholar Graph**: Academic networks, collaboration patterns
-- **Personnel Tracking**: Leadership changes, appointments
-
-### 🎛️ Control Panel, Not CLI Hell
-
-Web UI for non-technical users:
-
-- Visual source management
-- Real-time monitoring
-- One-click exports (JSON/CSV/DB)
-- Domain filtering controls
-
-## 🏗️ Architecture
-
-<details>
-<summary><strong>Click to view system architecture</strong></summary>
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                     YAML Configurations                      │
-│  sources/*.yaml (181 sources × 9 dimensions)                │
-└────────────────────┬────────────────────────────────────────┘
-                     │
-                     ▼
-┌─────────────────────────────────────────────────────────────┐
-│                   Crawler Registry                           │
-│  Routes to appropriate crawler based on config               │
-└──┬──────────┬──────────┬──────────┬──────────┬─────────────┘
-   │          │          │          │          │
-   ▼          ▼          ▼          ▼          ▼
-┌──────┐  ┌────────┐  ┌─────┐  ┌─────────┐  ┌─────┐
-│Static│  │Dynamic │  │ RSS │  │Snapshot │  │ API │
-│httpx │  │Playwrt │  │Feed │  │ Hash    │  │ GH  │
-│ BS4  │  │  BS4   │  │Parse│  │ Diff    │  │arXiv│
-└──┬───┘  └───┬────┘  └──┬──┘  └────┬────┘  └──┬──┘
-   │          │          │          │          │
-   └──────────┴──────────┴──────────┴──────────┘
-                     │
-                     ▼
-┌─────────────────────────────────────────────────────────────┐
-│              Supabase PostgreSQL Database                    │
-│  • 2,200+ articles  • 2,600+ scholars  • Deduplication      │
-└────────────────────┬────────────────────────────────────────┘
-                     │
-                     ▼
-┌─────────────────────────────────────────────────────────────┐
-│              Business Intelligence Pipeline                  │
-│  Policy → Personnel → Tech Frontier → Daily Briefing        │
-└────────────────────┬────────────────────────────────────────┘
-                     │
-         ┌───────────┴───────────┐
-         ▼                       ▼
-┌──────────────────┐    ┌──────────────────┐
-│   FastAPI (65+)  │    │  Next.js Frontend│
-│   REST Endpoints │    │  Control Panel   │
-└──────────────────┘    └──────────────────┘
-```
-
-**Key Components**:
-
-- **Crawler Templates**: Reusable extraction patterns
-- **Source Registry**: Dynamic routing based on YAML config
-- **Deduplication**: SHA-256 URL hashing + content fingerprinting
-- **Scheduler**: APScheduler for automated updates
-- **Intelligence Layer**: Domain-specific processing pipelines
-
-## ⚡ Quick Start (5 minutes)
-
-### One-Command Deploy
+### 1. Install dependencies
 
 ```bash
-git clone https://github.com/yourusername/nexus.git
-cd nexus
-./deploy.sh  # Handles everything: venv, dependencies, Playwright, services
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e ".[dev]"
+
+cd frontend
+npm install
+cd ..
 ```
 
-That's it! Backend runs at `http://localhost:43817`, frontend at `http://localhost:43819`.
-
-### Try It Out
+### 2. Configure environment
 
 ```bash
-# Add a data source (edit sources/technology.yaml)
-# Run a test crawl
-python scripts/crawl/run_single.py --source arxiv_cs_ai
-
-# Query the API
-curl "http://localhost:43817/api/v1/articles?dimension=technology&limit=5"
+cp .env.example .env
 ```
 
+Recommended local backend:
 
-## 📖 Usage Examples
-
-### Add a New Data Source
-
-Edit `sources/{dimension}.yaml`:
-
-```yaml
-- id: "my_source"
-  name: "My Data Source"
-  url: "https://example.com/news"
-  crawl_method: "static"  # or dynamic, rss, snapshot
-
-  # Content filtering (3 options - see sources/README.md for details):
-  # Option 1: Domain-based (recommended)
-  domain_filter: "technology.ai"
-
-  # Option 2: Custom keywords
-  # keyword_filter: ["AI", "machine learning"]
-  # keyword_blacklist: ["advertisement"]
-
-  # Option 3: No filter (keep all)
-
-  selectors:
-    list: ".article-list .item"
-    title: ".title"
-    link: "a"
-    date: ".date"
-  schedule: "daily"
-  is_enabled: true
-  tags:
-    - technology
-    - ai
+```env
+DB_BACKEND=postgres
+POSTGRES_HOST=127.0.0.1
+POSTGRES_PORT=5432
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=your-password
+POSTGRES_DB=nexus
 ```
 
-**Filtering Guide**: See [sources/README.md](sources/README.md) for complete filtering options.
+You can also point Nexus at Supabase by setting `DB_BACKEND=supabase` together with `SUPABASE_URL` and `SUPABASE_KEY`.
 
-### Test Single Source
+### 3. Start the stack
 
 ```bash
-python scripts/crawl/run_single.py --source my_source
+./nexus.sh start
 ```
 
-### Apply Domain Filtering
+Default local endpoints:
+
+- API: `http://localhost:43817`
+- Scalar docs: `http://localhost:43817/docs`
+- Swagger UI: `http://localhost:43817/swagger`
+- Frontend console: `http://localhost:43819`
+
+Useful lifecycle commands:
 
 ```bash
-# Filter by AI domain
-python scripts/crawl/run_single.py --source my_source --domain technology.ai
-
-# Multiple domains
-python scripts/crawl/run_single.py --source my_source --domain technology.ai,economy.finance
-
-# Use domain group
-python scripts/crawl/run_single.py --source my_source --domain-group tech_all
+./nexus.sh status
+./nexus.sh logs backend -f
+./nexus.sh logs frontend -f
+./nexus.sh restart
+./nexus.sh stop
 ```
 
-### Access API
+## Development
+
+### Backend only
 
 ```bash
-# Get articles
-curl "http://localhost:43817/api/v1/articles?dimension=technology&limit=10"
-
-# Get source status
-curl "http://localhost:43817/api/v1/sources/stats"
-
-# Get scholars
-curl "http://localhost:43817/api/v1/scholars?institution=清华大学"
+source .venv/bin/activate
+uvicorn app.main:app --reload --host 0.0.0.0 --port 43817
 ```
 
-## 🎯 Real-World Use Cases
+### Frontend only
 
-### 🤖 AI Application Developers
-
-**Problem**: Your AI agent needs to "know" what's happening in your industry, but LLM browsing is expensive and unreliable.
-
-**Solution**: Point your agent to Nexus APIs. Get structured, validated data at 1/100th the cost.
-
-```python
-# Instead of this (expensive, slow, unreliable):
-response = llm.browse("https://arxiv.org/list/cs.AI/recent")
-
-# Do this (fast, cheap, reliable):
-articles = requests.get("http://nexus/api/v1/articles?dimension=technology&source=arxiv_cs_ai")
+```bash
+cd frontend
+NEXT_PUBLIC_API_BASE_URL=http://localhost:43817/api/v1 npm run dev
 ```
 
-**ROI**: $100/month LLM browsing → $1/month Nexus API
+### Validate the workspace
 
-### 🏛️ Research Institutions
+```bash
+python3 -m compileall app
+./.venv/bin/pytest
 
-**Problem**: Manually tracking policy changes, funding opportunities, and academic movements across dozens of sources.
+cd frontend
+npm run lint
+npm run build
+```
 
-**Solution**: Automated daily briefings with intelligent filtering.
+## Key API Areas
 
-**Real deployment**: Battle-tested in production at a leading Chinese AI research institution, serving leadership teams with policy intelligence and scholar tracking.
+Core operations:
 
-### 🏢 Enterprise Intelligence Teams
+- `/api/v1/sources`
+- `/api/v1/sources/catalog`
+- `/api/v1/sources/facets`
+- `/api/v1/crawler/start`
+- `/api/v1/crawler/status`
 
-**Problem**: Competitive intelligence requires monitoring hundreds of sources daily.
+Knowledge graph:
 
-**Solution**: Domain-specific pipelines with keyword filtering and trend detection.
+- `/api/v1/institutions`
+- `/api/v1/scholars`
+- `/api/v1/projects`
+- `/api/v1/events`
+- `/api/v1/students`
+- `/api/v1/leadership`
 
-**Example**: Track AI startup funding, tech breakthroughs, and talent movements in one dashboard.
+Intelligence and reports:
 
-## 📚 Documentation
+- `/api/v1/intel/policy/*`
+- `/api/v1/intel/personnel/*`
+- `/api/v1/intel/tech-frontier/*`
+- `/api/v1/intel/university/*`
+- `/api/v1/reports/dimensions`
+- `/api/v1/reports/sentiment/latest`
 
-- **[Architecture Guide](docs/architecture.md)** - System design & decisions
-- **[API Reference](http://localhost:43817/docs)** - Interactive Swagger docs
-- **[Source Catalog](docs/SourceOverview.md)** - All 181 data sources
-- **[Development Roadmap](docs/TODO.md)** - Upcoming features
+Generated schema:
 
-## 🤝 Contributing
+- [`openapi.json`](openapi.json)
 
-We welcome contributions! Whether you're adding new data sources, improving crawler templates, or building domain-specific pipelines.
+## Repository Guide
 
-**Quick start**: Check [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+- [`docs/architecture.md`](docs/architecture.md): current system architecture and runtime flow
+- [`docs/SourceOverview.md`](docs/SourceOverview.md): source counts, dimensions, and grouping summary
+- [`docs/TODO.md`](docs/TODO.md): current roadmap
+- [`frontend/README.md`](frontend/README.md): frontend console notes
+- [`scripts/README.md`](scripts/README.md): supported script entry points
 
-## 📧 Get in Touch
+## Notes
 
-- **GitHub Issues**: [Report bugs or request features](https://github.com/yourusername/nexus/issues)
-- **Email**: mhumble010221@gmail.com
-
-<div align="center">
-  <strong>Stop paying $100/month for LLM browsing.</strong><br>
-  <strong>Start building on reliable data infrastructure.</strong>
-
-<p>⭐ Star us on GitHub if Nexus helps your project!</p>
-</div>
+- Scholar sources are intentionally present in config but currently disabled by default in this checkout.
+- The backend keeps a PostgreSQL-like query facade so newer modules can run locally while older Supabase-oriented code paths still work.
+- `openapi.json` is generated from the live FastAPI app and should be refreshed whenever routes or schema metadata change.

@@ -27,7 +27,7 @@ class PolicyFeedItem(BaseModel):
         default=[], description="标签", examples=[["人工智能", "规划"]]
     )
     matchScore: int | None = Field(
-        default=None, description="与研究院业务的匹配度（0-100）", examples=[92]
+        default=None, description="与平台关注主题的匹配度（0-100）", examples=[92]
     )
     funding: str | None = Field(
         default=None, description="涉及资金规模", examples=["5000万元"]
@@ -44,7 +44,7 @@ class PolicyFeedItem(BaseModel):
     signals: list[str] | None = Field(
         default=None,
         description="关键信号词列表",
-        examples=[["人工智能", "专项资金", "中关村"]],
+        examples=[["人工智能", "专项资金", "算力"]],
     )
     sourceUrl: str | None = Field(
         default=None, description="原文链接"

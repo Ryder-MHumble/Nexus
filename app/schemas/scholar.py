@@ -25,7 +25,7 @@ Sections
 主页链接      profile_url, lab_url, google_scholar_url, dblp_url, orcid
 教育经历      phd_institution, phd_year, education
 学术指标      publications_count, h_index, citations_count, metrics_updated_at
-与两院关系    is_advisor_committee, is_adjunct_supervisor, supervised_students,
+合作关系      is_advisor_committee, is_adjunct_supervisor, supervised_students,
               joint_research_projects, joint_management_roles,
               academic_exchange_records, is_potential_recruit,
               institute_relation_notes, relation_updated_by, relation_updated_at
@@ -36,6 +36,7 @@ Sections
 from __future__ import annotations
 
 import re as _re
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -147,6 +148,41 @@ class AdjunctSupervisorInfo(BaseModel):
     """推荐主体，如 '培养部' | '科研部'"""
 
 
+class ScholarProjectTag(BaseModel):
+    """学者所属项目分类标签。"""
+
+    category: str = ""
+    """一级分类，如 '教育培养'"""
+
+    subcategory: str = ""
+    """二级子分类，如 '学术委员会'"""
+
+    project_id: str = ""
+    """来源项目标签 ID（可选）"""
+
+    project_title: str = ""
+    """来源项目标签标题（可选）"""
+
+
+class ScholarEventTag(BaseModel):
+    """学者参与活动分类标签。"""
+
+    category: str = ""
+    """一级分类，如 '科研学术'"""
+
+    series: str = ""
+    """二级系列，如 'XAI智汇讲坛'"""
+
+    event_type: str = ""
+    """三级活动类型，如 '学术报告'"""
+
+    event_id: str = ""
+    """来源活动 ID（可选）"""
+
+    event_title: str = ""
+    """来源活动标题（可选）"""
+
+
 class DynamicUpdate(BaseModel):
     """A single time-stamped dynamic event for a scholar.
 
@@ -196,7 +232,7 @@ class ScholarRecord(BaseModel):
     Designed for forward-compatibility with a relational scholars table.
 
     Two sections require special handling:
-    - 与两院关系: user-editable fields ([用户]), never overwritten by crawler
+    - 合作关系: user-editable fields ([用户]), never overwritten by crawler
     - 动态更新: primarily crawled but also user-addable via API
     """
 
@@ -305,9 +341,8 @@ class ScholarRecord(BaseModel):
     awards: list[AwardRecord] = Field(default_factory=list)
     """获奖/荣誉列表（来源：个人主页，或用户录入）"""
 
-    # ===== 与两院关系 [用户] =====
-    # 备注：合并了来自两个不同机构的学者数据
-    # 所有字段由内部工作人员手动维护，爬虫绝不覆盖这些字段
+    # ===== 合作关系 [用户] =====
+    # 所有字段由用户手动维护，爬虫绝不覆盖这些字段
     # -------------------------------------------------------------------------
     is_advisor_committee: bool = False
     """顾问委员（顾问委员会成员）[用户 - 综办/培养部/科研部]"""
@@ -319,25 +354,37 @@ class ScholarRecord(BaseModel):
     """指导学生列表（学生姓名或 ID）[用户 - 培养部]"""
 
     joint_research_projects: list[str] = Field(default_factory=list)
-    """与两院联合承担的科研项目名称列表 [用户 - 科研部]"""
+    """联合承担的科研项目名称列表 [用户]"""
 
     joint_management_roles: list[str] = Field(default_factory=list)
-    """在两院担任的联合管理职务，如 '教学委员会委员' [用户 - 学工部]"""
+    """担任的联合管理职务，如 '教学委员会委员' [用户]"""
 
     academic_exchange_records: list[str] = Field(default_factory=list)
     """学术交流活动记录（XAI 讲坛/联合研讨会/专题报告等）[用户 - 活动数据]"""
+
+    participated_event_ids: list[str] = Field(default_factory=list)
+    """参与活动 ID 列表（由活动关联自动维护）"""
+
+    event_tags: list[ScholarEventTag] = Field(default_factory=list)
+    """参与活动分类标签（创建/编辑时可配置）"""
+
+    project_tags: list[ScholarProjectTag] = Field(default_factory=list)
+    """所属项目分类标签（由项目关联自动维护）"""
+
+    is_cobuild_scholar: bool = False
+    """是否共建学者（project_tags 非空即为 True）"""
 
     is_potential_recruit: bool = False
     """潜在引进对象（通过学术顶会/青年论坛等活动识别）[用户 - 活动数据]"""
 
     institute_relation_notes: str = ""
-    """与两院关系补充备注（自由文本）[用户]"""
+    """合作关系补充备注（自由文本）[用户]"""
 
     relation_updated_by: str = ""
-    """两院关系数据最后更新人（内部用户名/姓名）[用户]"""
+    """合作关系数据最后更新人（内部用户名/姓名）[用户]"""
 
     relation_updated_at: str = ""
-    """两院关系数据最后更新时间 ISO8601 [用户]"""
+    """合作关系数据最后更新时间 ISO8601 [用户]"""
 
     # ===== 动态更新 [爬虫+用户] =====
     # 爬虫自动追加，内部人员也可通过 API 手动录入
@@ -398,7 +445,7 @@ def compute_scholar_completeness(r: ScholarRecord) -> int:
     """Return crawl data completeness score 0–100 for a ScholarRecord.
 
     Only evaluates automatically-populated fields ([爬虫] / [富化]).
-    User-maintained 与两院关系 fields are intentionally excluded.
+    User-maintained relationship fields are intentionally excluded.
 
     Typical scores:
     - List-page only (name + photo): ~25
@@ -628,6 +675,10 @@ class ScholarListItem(BaseModel):
     is_potential_recruit: bool = False
     is_advisor_committee: bool = False
     adjunct_supervisor: AdjunctSupervisorInfo = Field(default_factory=AdjunctSupervisorInfo)
+    is_cobuild_scholar: bool = False
+    project_tags: list[ScholarProjectTag] = Field(default_factory=list)
+    participated_event_ids: list[str] = Field(default_factory=list)
+    event_tags: list[ScholarEventTag] = Field(default_factory=list)
 
 
 class ScholarListResponse(BaseModel):
@@ -646,7 +697,6 @@ class ScholarDetailResponse(BaseModel):
     url_hash: str = ""
     url: str = ""
     content: str = ""
-    tags: list[str] = Field(default_factory=list)
     name: str = ""
     name_en: str = ""
     gender: str = ""
@@ -685,13 +735,17 @@ class ScholarDetailResponse(BaseModel):
     joint_research_projects: list[str] = Field(default_factory=list)
     joint_management_roles: list[str] = Field(default_factory=list)
     academic_exchange_records: list[str] = Field(default_factory=list)
+    participated_event_ids: list[str] = Field(default_factory=list)
+    event_tags: list[ScholarEventTag] = Field(default_factory=list)
+    project_tags: list[ScholarProjectTag] = Field(default_factory=list)
+    is_cobuild_scholar: bool = False
     is_potential_recruit: bool = False
     institute_relation_notes: str = ""
     relation_updated_by: str = ""
     relation_updated_at: str = ""
     recent_updates: list[DynamicUpdate] = Field(default_factory=list)
     supervised_students_count: int = 0
-    custom_fields: dict[str, str] = Field(default_factory=dict, description="用户自定义字段")
+    custom_fields: dict[str, Any] = Field(default_factory=dict, description="用户自定义字段")
 
 
 class UniversityCount(BaseModel):
@@ -791,6 +845,10 @@ class InstituteRelationUpdate(BaseModel):
     joint_research_projects: list[str] | None = None
     joint_management_roles: list[str] | None = None
     academic_exchange_records: list[str] | None = None
+    participated_event_ids: list[str] | None = None
+    event_tags: list[ScholarEventTag] | None = None
+    project_tags: list[ScholarProjectTag] | None = None
+    is_cobuild_scholar: bool | None = None
     is_potential_recruit: bool | None = None
     institute_relation_notes: str | None = None
     relation_updated_by: str | None = None
@@ -869,6 +927,12 @@ class ScholarCreateRequest(BaseModel):
     phd_institution: str = ""
     phd_year: str = ""
     education: list[EducationRecord] = Field(default_factory=list)
+
+    # 标签关系
+    participated_event_ids: list[str] = Field(default_factory=list)
+    event_tags: list[ScholarEventTag] = Field(default_factory=list)
+    project_tags: list[ScholarProjectTag] = Field(default_factory=list)
+    is_cobuild_scholar: bool = False
 
     # 审计字段
     added_by: str = Field(default="user", description="操作人，用于审计")

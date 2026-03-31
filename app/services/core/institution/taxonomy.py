@@ -9,6 +9,7 @@ from collections import defaultdict
 
 from app.db.client import get_client
 from app.schemas.institution import InstitutionStatsResponse
+from app.services.core.institution.classification import normalize_org_type
 from app.services.core.institution.sorting import (
     CLASSIFICATION_ORDER,
     ORG_TYPE_ORDER,
@@ -55,6 +56,8 @@ async def get_institution_stats() -> InstitutionStatsResponse:
     total_scholars = scholars_resp.count or 0
 
     return InstitutionStatsResponse(
+        total_primary_institutions=len(organizations),
+        total_secondary_institutions=len(departments),
         total_universities=len(organizations),
         total_departments=len(departments),
         total_scholars=total_scholars,
@@ -74,7 +77,11 @@ async def get_institution_taxonomy() -> dict:
     all_records = await fetch_all_institutions()
 
     # Build taxonomy structure
-    taxonomy = {"total": len(all_records), "regions": {}}
+    taxonomy = {
+        "total": len(all_records),
+        "org_type_aliases": {"公司": "企业", "科研院所": "研究机构"},
+        "regions": {},
+    }
 
     for region in REGION_ORDER:
         region_records = [r for r in all_records if r.get("region") == region]
@@ -84,11 +91,19 @@ async def get_institution_taxonomy() -> dict:
         region_data = {"count": len(region_records), "org_types": {}}
 
         for org_type in ORG_TYPE_ORDER:
-            org_type_records = [r for r in region_records if r.get("org_type") == org_type]
+            org_type_records = [
+                r
+                for r in region_records
+                if normalize_org_type(r.get("org_type")) == org_type
+            ]
             if not org_type_records:
                 continue
 
-            org_type_data = {"count": len(org_type_records), "classifications": {}}
+            org_type_data = {
+                "count": len(org_type_records),
+                "display_name": "公司" if org_type == "企业" else org_type,
+                "classifications": {},
+            }
 
             for classification in CLASSIFICATION_ORDER:
                 classification_records = [

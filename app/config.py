@@ -6,7 +6,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=BASE_DIR / ".env", env_file_encoding="utf-8")
+    model_config = SettingsConfigDict(
+        env_file=BASE_DIR / ".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
 
     # RSSHub
     RSSHUB_BASE_URL: str = "https://rsshub.app"
@@ -18,7 +22,18 @@ class Settings(BaseSettings):
     MAX_CONCURRENT_CRAWLS: int = 5
     DEFAULT_REQUEST_DELAY: float = 1.0
 
-    # Supabase (主库 — 数据仓库)
+    # Database backend
+    DB_BACKEND: str = "postgres"  # postgres | supabase
+
+    # Local PostgreSQL (recommended)
+    POSTGRES_DSN: str = ""  # optional, e.g. postgresql://user:pass@127.0.0.1:5432/zgci_db
+    POSTGRES_HOST: str = "127.0.0.1"
+    POSTGRES_PORT: int = 5432
+    POSTGRES_USER: str = "postgres"
+    POSTGRES_PASSWORD: str = ""
+    POSTGRES_DB: str = "zgci_db"
+
+    # Supabase (legacy / optional fallback)
     SUPABASE_URL: str = ""
     SUPABASE_KEY: str = ""
 
@@ -41,6 +56,7 @@ class Settings(BaseSettings):
 
     # AMiner API
     AMINER_API_KEY: str = ""
+    AMINER_SCHOLAR_DETAIL_URL: str = "https://data.ihainan.me/api/aminer/scholar/detail"
 
     # Pipeline schedule (UTC)
     PIPELINE_CRON_HOUR: int = 6
@@ -52,10 +68,6 @@ class Settings(BaseSettings):
 
     # Startup behavior
     STARTUP_CRAWL_ENABLED: bool = True  # trigger pipeline on first start if no data
-
-    # Organization context (used in LLM prompts — customize for your institution)
-    ORGANIZATION_NAME: str = "Your Organization"
-    ORGANIZATION_FOCUS: str = "AI research, technology policy, and talent development"
 
     # Paths
     SOURCES_DIR: Path = BASE_DIR / "sources"

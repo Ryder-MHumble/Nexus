@@ -8,12 +8,10 @@ from typing import Any
 
 from app.schemas.institution import (
     DepartmentInfo,
-    DepartmentSource,
     InstitutionDetailResponse,
     InstitutionListItem,
     InstitutionListResponse,
     InstitutionStatsResponse,
-    MentorInfo,
     ScholarInfo,
 )
 
@@ -337,7 +335,7 @@ async def get_institution_list(
         client = _get_client()
         q = client.table("institutions").select(
             "id,name,entity_type,region,org_type,classification,"
-            "priority,scholar_count,student_count_total,mentor_count,parent_id,custom_fields,avatar"
+            "priority,scholar_count,student_count_total,mentor_count,parent_id,avatar"
         )
 
         # 新字段过滤
@@ -368,12 +366,6 @@ async def get_institution_list(
         if group in ("科研院所", "行业学会") and not org_type:
             target_org_type = "研究机构" if group == "科研院所" else "行业学会"
             institutions = [i for i in institutions if i.get("org_type") == target_org_type]
-
-        if custom_field_key:
-            institutions = [
-                i for i in institutions
-                if (i.get("custom_fields") or {}).get(custom_field_key) == custom_field_value
-            ]
 
         institutions.sort(key=_institution_sort_key)
         total = len(institutions)
@@ -530,25 +522,12 @@ def _build_university_detail(univ: dict, last_updated: str | None = None) -> Ins
             elif isinstance(item, dict):
                 notable_scholars.append(ScholarInfo(**item))
 
-    # 解析导师信息（mentors 是对象列表）
-    mentor_info = None
-    mentors_list = univ.get("mentors", [])
-    if mentors_list and len(mentors_list) > 0:
-        # 取第一个导师作为 mentor_info
-        first_mentor = mentors_list[0]
-        mentor_info = MentorInfo(
-            name=first_mentor.get("name"),
-            category=first_mentor.get("category"),
-            department=first_mentor.get("department")
-        )
-
     # 解析院系信息
     departments = [
         DepartmentInfo(
             id=d["id"],
             name=d["name"],
             scholar_count=d.get("scholar_count", 0),
-            sources=[DepartmentSource(**s) for s in d.get("sources", [])],
             org_name=d.get("org_name")
         )
         for d in univ.get("departments", [])
@@ -570,30 +549,17 @@ def _build_university_detail(univ: dict, last_updated: str | None = None) -> Ins
         resident_leaders=univ.get("resident_leaders", []),
         degree_committee=univ.get("degree_committee", []),
         teaching_committee=univ.get("teaching_committee", []),
-        mentor_info=mentor_info,
         university_leaders=university_leaders,
         notable_scholars=notable_scholars,
-        key_departments=univ.get("key_departments", []),
-        joint_labs=univ.get("joint_labs", []),
-        training_cooperation=univ.get("training_cooperation", []),
-        academic_cooperation=univ.get("academic_cooperation", []),
-        talent_dual_appointment=univ.get("talent_dual_appointment", []),
-        recruitment_events=univ.get("recruitment_events", []),
-        visit_exchanges=univ.get("visit_exchanges", []),
-        cooperation_focus=univ.get("cooperation_focus", []),
         parent_id=None,
         departments=departments,
         scholar_count=univ.get("scholar_count", 0),
-        sources=[],
         last_updated=last_updated,
-        custom_fields=univ.get("custom_fields") or {},
     )
 
 
 def _build_department_detail(dept: dict, parent_id: str) -> InstitutionDetailResponse:
     """构建院系详情响应."""
-    sources = [DepartmentSource(**s) for s in dept.get("sources", [])]
-
     return InstitutionDetailResponse(
         id=dept["id"],
         name=dept["name"],
@@ -608,23 +574,12 @@ def _build_department_detail(dept: dict, parent_id: str) -> InstitutionDetailRes
         resident_leaders=[],
         degree_committee=[],
         teaching_committee=[],
-        mentor_info=None,
         university_leaders=[],
         notable_scholars=[],
-        key_departments=[],
-        joint_labs=[],
-        training_cooperation=[],
-        academic_cooperation=[],
-        talent_dual_appointment=[],
-        recruitment_events=[],
-        visit_exchanges=[],
-        cooperation_focus=[],
         parent_id=parent_id,
         departments=[],
         scholar_count=dept.get("scholar_count", 0),
-        sources=sources,
         last_updated=None,
-        custom_fields=dept.get("custom_fields") or {},
     )
 
 
@@ -641,17 +596,6 @@ def _build_university_detail_from_db(row: dict) -> InstitutionDetailResponse:
             elif isinstance(item, dict):
                 result.append(ScholarInfo(**{k: v for k, v in item.items() if k in ("name", "url", "department")}))
         return result
-
-    mentor_info = None
-    mentors_list = row.get("mentors") or []
-    if mentors_list:
-        m = mentors_list[0]
-        if isinstance(m, dict):
-            mentor_info = MentorInfo(
-                name=m.get("name"),
-                category=m.get("category"),
-                department=m.get("department"),
-            )
 
     # Build departments list (fetch separately or use empty list)
     departments: list[DepartmentInfo] = []
@@ -675,37 +619,17 @@ def _build_university_detail_from_db(row: dict) -> InstitutionDetailResponse:
         resident_leaders=row.get("resident_leaders") or [],
         degree_committee=row.get("degree_committee") or [],
         teaching_committee=row.get("teaching_committee") or [],
-        mentor_info=mentor_info,
         university_leaders=_parse_scholar_list(row.get("university_leaders")),
         notable_scholars=_parse_scholar_list(row.get("notable_scholars")),
-        key_departments=row.get("key_departments") or [],
-        joint_labs=row.get("joint_labs") or [],
-        training_cooperation=row.get("training_cooperation") or [],
-        academic_cooperation=row.get("academic_cooperation") or [],
-        talent_dual_appointment=row.get("talent_dual_appointment") or [],
-        recruitment_events=row.get("recruitment_events") or [],
-        visit_exchanges=row.get("visit_exchanges") or [],
-        cooperation_focus=row.get("cooperation_focus") or [],
         parent_id=None,
         departments=departments,
         scholar_count=row.get("scholar_count", 0),
-        sources=[],
         last_updated=None,
-        custom_fields=row.get("custom_fields") or {},
     )
 
 
 def _build_department_detail_from_db(row: dict) -> InstitutionDetailResponse:
     """Build InstitutionDetailResponse from a DB institutions row (type=department)."""
-    sources_raw = row.get("sources") or []
-    sources = []
-    for s in sources_raw:
-        if isinstance(s, dict):
-            try:
-                sources.append(DepartmentSource(**s))
-            except Exception:
-                pass
-
     return InstitutionDetailResponse(
         id=row["id"],
         name=row["name"],
@@ -714,9 +638,7 @@ def _build_department_detail_from_db(row: dict) -> InstitutionDetailResponse:
         parent_id=row.get("parent_id"),
         departments=[],
         scholar_count=row.get("scholar_count", 0),
-        sources=sources,
         last_updated=None,
-        custom_fields=row.get("custom_fields") or {},
     )
 
 

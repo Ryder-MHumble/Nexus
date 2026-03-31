@@ -1,4 +1,5 @@
 """Institution data builder — generates institutions.json from scholars.json."""
+
 from __future__ import annotations
 
 import json
@@ -19,6 +20,7 @@ def _normalize_university_id(name: str) -> str:
         "南京大学": "nju",
         "浙江大学": "zju",
         "中国科学院": "cas",
+        "中国科学院大学": "cas",
         "复旦大学": "fudan",
         "中国人民大学": "ruc",
         "上海交通大学": "sjtu",
@@ -149,23 +151,27 @@ def build_institutions_data() -> dict[str, Any]:
                 override = state.get("is_enabled_override")
                 is_enabled = override if override is not None else cfg.get("is_enabled", True)
 
-                source_items.append({
-                    "source_id": source_id,
-                    "source_name": cfg.get("name", source_id),
-                    "scholar_count": dept_scholar_count,  # Use actual count from scholars.json
-                    "is_enabled": is_enabled,
-                    "last_crawl_at": state.get("last_crawl_at"),
-                })
+                source_items.append(
+                    {
+                        "source_id": source_id,
+                        "source_name": cfg.get("name", source_id),
+                        "scholar_count": dept_scholar_count,  # Use actual count from scholars.json
+                        "is_enabled": is_enabled,
+                        "last_crawl_at": state.get("last_crawl_at"),
+                    }
+                )
 
         # If no YAML source found, create a placeholder
         if not source_items:
-            source_items.append({
-                "source_id": f"manual_{uni_data['id']}_{dept_id}",
-                "source_name": f"{university_name}-{dept_name}",
-                "scholar_count": dept_scholar_count,
-                "is_enabled": True,
-                "last_crawl_at": None,
-            })
+            source_items.append(
+                {
+                    "source_id": f"manual_{uni_data['id']}_{dept_id}",
+                    "source_name": f"{university_name}-{dept_name}",
+                    "scholar_count": dept_scholar_count,
+                    "is_enabled": True,
+                    "last_crawl_at": None,
+                }
+            )
 
         uni_data["departments"][dept_id] = {
             "id": dept_id,

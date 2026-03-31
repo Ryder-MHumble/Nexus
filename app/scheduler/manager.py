@@ -48,11 +48,16 @@ def load_all_source_configs() -> list[dict[str, Any]]:
             continue
 
         dimension = data.get("dimension", yaml_file.stem)
+        dimension_name = data.get("dimension_name")
+        dimension_description = data.get("description")
         default_keywords = data.get("default_keyword_filter", [])
         default_blacklist = data.get("default_keyword_blacklist", [])
 
         for source in data.get("sources", []):
             source.setdefault("dimension", dimension)
+            source.setdefault("dimension_name", dimension_name)
+            source.setdefault("dimension_description", dimension_description)
+            source.setdefault("source_file", yaml_file.name)
             if "keyword_filter" not in source:
                 source["keyword_filter"] = default_keywords
             if "keyword_blacklist" not in source:
@@ -106,7 +111,16 @@ class SchedulerManager:
             logger.debug("Registered crawl job: %s (schedule=%s)", job_id, schedule_key)
 
         # Register daily pipeline job (5 stages)
+        from app.scheduler.jobs import execute_university_leadership_monthly_job
         from app.scheduler.pipeline import execute_daily_pipeline
+
+        self.scheduler.add_job(
+            execute_university_leadership_monthly_job,
+            trigger=CronTrigger(day=1, hour=2, minute=30),
+            id="monthly_university_leadership_full",
+            replace_existing=True,
+            misfire_grace_time=3600,
+        )
 
         self.scheduler.add_job(
             execute_daily_pipeline,
@@ -124,7 +138,7 @@ class SchedulerManager:
             [c for c in self._source_configs if c.get("is_enabled", True)]
         )
         logger.info(
-            "Scheduler started with %d source jobs + daily pipeline (%02d:%02d UTC)",
+            "Scheduler started with %d source jobs + monthly leadership full crawl + daily pipeline (%02d:%02d UTC)",
             enabled_count,
             settings.PIPELINE_CRON_HOUR,
             settings.PIPELINE_CRON_MINUTE,

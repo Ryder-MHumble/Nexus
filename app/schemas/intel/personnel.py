@@ -93,7 +93,7 @@ class PersonnelChangeEnriched(BaseModel):
     # LLM enriched fields
     relevance: int = Field(
         default=0,
-        description="与研究院业务的相关性得分（0-100，LLM 评估）",
+        description="与平台关注主题的相关性得分（0-100，LLM 评估）",
         examples=[85],
     )
     importance: Literal["紧急", "重要", "关注", "一般"] = Field(
@@ -115,7 +115,7 @@ class PersonnelChangeEnriched(BaseModel):
     signals: list[str] = Field(
         default=[],
         description="关键信号词",
-        examples=[["AI领域", "中关村", "新任命"]],
+        examples=[["AI领域", "重点岗位", "新任命"]],
     )
     aiInsight: str | None = Field(
         default=None, description="AI 综合分析洞察"

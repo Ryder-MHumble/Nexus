@@ -38,6 +38,7 @@ async def get_institution_list(
             "department": ("department", None),
             "research_institute": ("organization", "研究机构"),
             "academic_society": ("organization", "行业学会"),
+            "company": ("organization", "企业"),
         }
         if type_filter in type_map:
             entity_type, mapped_org_type = type_map[type_filter]
@@ -65,6 +66,7 @@ async def get_institution_list(
         region=region,
         org_type=org_type,
         classification=classification,
+        sub_classification=sub_classification,
         keyword=keyword,
         page=page,
         page_size=page_size,

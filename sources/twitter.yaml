@@ -120,17 +120,17 @@ sources:
     min_likes: 20
 
   # ============================================================
-  # 学院舆情 - 社交媒体提及
+  # AI 生态舆情 - 社交媒体提及
   # ============================================================
-  - id: twitter_org_sentiment
-    name: "Twitter 机构舆情监控"
+  - id: twitter_ai_ecosystem_sentiment
+    name: "Twitter AI 生态舆情监控"
     dimension: sentiment
     group: social_media
     crawler_class: twitter_search
     schedule: "4h"
-    is_enabled: false  # Configure twitter_query with your organization name
+    is_enabled: true
     tags: ["twitter", "sentiment"]
-    twitter_query: '"Your Organization Name" OR "your-org-alias"'  # Replace with your org
+    twitter_query: '("open source AI" OR "AI infrastructure" OR "LLM platform" OR "AI agent") (launch OR release OR open source OR benchmark OR funding)'
     twitter_query_type: "Latest"
     max_tweets: 20
     min_likes: 0

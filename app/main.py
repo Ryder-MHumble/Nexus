@@ -9,6 +9,7 @@ from scalar_fastapi import get_scalar_api_reference
 from app.api.v1.router import v1_router
 from app.config import BASE_DIR, settings
 from app.db.client import close_client, init_client
+from app.db.pool import close_pool, init_pool
 from app.scheduler.manager import SchedulerManager
 
 logging.basicConfig(
@@ -29,7 +30,7 @@ TAG_METADATA = [
     {
         "name": "sources",
         "description": "信源管理 — 查看信源配置与状态，启用/禁用信源，手动触发爬取，查看爬取日志。"
-        "系统共 134 个信源（109 个启用），覆盖 9 个维度。",
+        "支持目录化筛选（维度/分组/标签/健康状态）与分面统计。",
     },
     {
         "name": "crawler-control",
@@ -76,6 +77,16 @@ TAG_METADATA = [
         "description": "学术社群 — AI 领域顶会与期刊知识库。"
         "维护顶会（AAAI/NeurIPS/CVPR 等）和期刊（Nature/TPAMI/JMLR 等）的级别、"
         "H5 指数、录用率、影响因子等元数据，支持按类型/级别/领域过滤。",
+    },
+    {
+        "name": "leadership",
+        "description": "高校领导 — 高校领导列表与机构领导详情查询。",
+    },
+    {
+        "name": "reports",
+        "description": "AI 分析报告 — 基于爬取数据生成多维度智能分析报告。"
+        "支持舆情监测、政策分析、科技前沿、人事情报、高校生态等维度，"
+        "提供数据洞察、风险预警、机会识别和行动建议。",
     },
 ]
 
@@ -141,16 +152,37 @@ async def _check_needs_initial_data() -> bool:
 async def lifespan(app: FastAPI):
     """Manage startup and shutdown of scheduler and other resources."""
     logger.info("=" * 60)
-    logger.info("  Information Crawler starting")
+    logger.info("  Nexus starting")
     logger.info("=" * 60)
 
-    # Step 0: Initialize Supabase client (optional — skipped if not configured)
+    # Step 0: Initialize database client
     try:
-        if settings.SUPABASE_URL and settings.SUPABASE_KEY:
-            await init_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
+        backend = settings.DB_BACKEND.strip().lower()
+        if backend in {"postgres", "postgresql", "local"}:
+            if settings.POSTGRES_DSN:
+                await init_pool(dsn=settings.POSTGRES_DSN)
+            else:
+                await init_pool(
+                    host=settings.POSTGRES_HOST,
+                    port=settings.POSTGRES_PORT,
+                    user=settings.POSTGRES_USER,
+                    password=settings.POSTGRES_PASSWORD,
+                    database=settings.POSTGRES_DB,
+                )
+            await init_client(backend="postgres")
+            logger.info(
+                "PostgreSQL client initialized (%s:%s/%s)",
+                settings.POSTGRES_HOST,
+                settings.POSTGRES_PORT,
+                settings.POSTGRES_DB,
+            )
+        elif settings.SUPABASE_URL and settings.SUPABASE_KEY:
+            await init_client(settings.SUPABASE_URL, settings.SUPABASE_KEY, backend="supabase")
             logger.info("Supabase client initialized")
+        else:
+            logger.warning("No database backend configured; DB features will fallback to local JSON")
     except Exception as e:
-        logger.warning("Supabase client initialization failed: %s", e)
+        logger.warning("Database client initialization failed: %s", e)
 
     # Step 1: Validate dependencies
     startup_issues = await _validate_startup()
@@ -198,6 +230,7 @@ async def lifespan(app: FastAPI):
 
     # Shutdown
     await close_client()
+    await close_pool()
 
     if scheduler:
         try:
@@ -216,34 +249,37 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="Nexus — Data Intelligence API",
-    summary="Production-grade data pipeline for AI-ready structured knowledge",
+    title="Nexus Data Intelligence API",
+    summary="Structured knowledge infrastructure for AI applications",
     description=(
         "## Overview\n\n"
-        "Nexus API — automatically crawls **181 data sources** (138 active) across **9 dimensions**, "
-        "transforming unstructured web content into structured, AI-ready knowledge.\n\n"
+        "Nexus turns multi-source web content into structured, queryable knowledge for "
+        "AI applications. The platform combines configurable crawlers, scheduled "
+        "processing pipelines, domain-specific intelligence modules, and management APIs.\n\n"
         "## Modules\n\n"
         "| Module | Description |\n"
         "|--------|-------------|\n"
-        "| **Articles** | Full-text article search, filter, and statistics |\n"
-        "| **Sources** | Source configuration, status monitoring, manual trigger |\n"
-        "| **Dimensions** | Aggregate article views across 9 domains |\n"
-        "| **Policy Intel** | Rule engine + LLM pipeline for policy opportunity mining |\n"
-        "| **Personnel** | Auto-extraction of appointments/changes with LLM analysis |\n"
-        "| **Scholars** | Academic knowledge graph (profiles, institutions, projects) |\n"
-        "| **Health** | Scheduler, crawler, and database health monitoring |\n\n"
-        "## Dimensions\n\n"
-        "- `national_policy` — National policy (configure for your target country)\n"
-        "- `beijing_policy` — Regional policy (configure for your target region)\n"
-        "- `technology` — Tech trends (arXiv, GitHub Trending, Hacker News, etc.)\n"
-        "- `talent` — Talent & recruitment policies\n"
-        "- `industry` — Industry reports & company news\n"
-        "- `universities` — Academic institution news\n"
-        "- `events` — Conferences & seminars\n"
-        "- `personnel` — Leadership changes & appointments\n"
-        "- `twitter` — Twitter/X KOL monitoring\n\n"
-        "## Tech Stack\n\n"
-        "FastAPI + Supabase PostgreSQL + APScheduler + httpx + BeautifulSoup4 + Playwright"
+        "| **Articles** | Search, filter, inspect, and analyze crawled content |\n"
+        "| **Sources** | Source catalog, runtime overrides, health status, and facets |\n"
+        "| **Crawler Control** | Batch crawl triggers, progress tracking, export workflows |\n"
+        "| **Knowledge Graph** | Scholars, institutions, projects, students, events, leadership |\n"
+        "| **Intelligence** | Policy, personnel, tech frontier, university, sentiment, reports |\n"
+        "| **System Health** | Scheduler, pipeline, and storage diagnostics |\n\n"
+        "## Data Dimensions\n\n"
+        "- `national_policy` — National policy and regulation tracking\n"
+        "- `beijing_policy` — Regional policy monitoring\n"
+        "- `technology` — Research and technology frontier signals\n"
+        "- `talent` — Talent and recruitment developments\n"
+        "- `industry` — Industry trends and company activity\n"
+        "- `universities` — University and research institution activity\n"
+        "- `events` — Conferences, salons, and seminars\n"
+        "- `personnel` — Leadership and appointment changes\n"
+        "- `twitter` — Social/KOL monitoring\n"
+        "- `scholars` — Scholar and faculty knowledge imports\n"
+        "- `sentiment` — Social sentiment intelligence\n\n"
+        "## Runtime\n\n"
+        "FastAPI + APScheduler + httpx + BeautifulSoup4 + Playwright + "
+        "PostgreSQL/Supabase-compatible data access"
     ),
     version="0.2.0",
     openapi_tags=TAG_METADATA,
@@ -284,7 +320,7 @@ if frontend_dir.exists():
 @app.get("/", tags=["default"], summary="API 入口", include_in_schema=False)
 async def root():
     return {
-        "message": "Information Crawler API",
+        "message": "Nexus Data Intelligence API",
         "version": "0.2.0",
         "docs": "/docs",
         "swagger": "/swagger",

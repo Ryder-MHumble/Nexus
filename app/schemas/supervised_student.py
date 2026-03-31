@@ -15,6 +15,7 @@ class SupervisedStudentBase(BaseModel):
     student_no: str = Field(default="", description="学号，如 '240101003'")
     name: str = Field(description="学生姓名")
     home_university: str = Field(default="", description="所属高校（联合培养来源，如 '北京大学'）")
+    major: str = Field(default="", description="专业方向，如 '计算机科学与技术'")
     degree_type: str = Field(
         default="",
         description="学历层次：'硕士' | '博士' | '博士后' | ''",
@@ -28,6 +29,7 @@ class SupervisedStudentBase(BaseModel):
     email: str = Field(default="", description="联系邮箱")
     phone: str = Field(default="", description="联系电话")
     notes: str = Field(default="", description="补充备注")
+    mentor_name: str = Field(default="", description="对应导师姓名（冗余展示字段）")
 
 
 class SupervisedStudentCreate(SupervisedStudentBase):
@@ -48,6 +50,7 @@ class SupervisedStudentUpdate(BaseModel):
     student_no: str | None = Field(default=None, description="学号")
     name: str | None = Field(default=None, description="学生姓名")
     home_university: str | None = Field(default=None, description="所属高校")
+    major: str | None = Field(default=None, description="专业方向")
     degree_type: str | None = Field(default=None, description="学历层次")
     enrollment_year: str | None = Field(default=None, description="入学年份")
     expected_graduation_year: str | None = Field(default=None, description="预计毕业年份")
@@ -55,6 +58,7 @@ class SupervisedStudentUpdate(BaseModel):
     email: str | None = Field(default=None, description="联系邮箱")
     phone: str | None = Field(default=None, description="联系电话")
     notes: str | None = Field(default=None, description="补充备注")
+    mentor_name: str | None = Field(default=None, description="对应导师姓名")
     updated_by: str = Field(default="", description="操作人用户名")
 
 

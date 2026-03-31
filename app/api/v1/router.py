@@ -10,9 +10,12 @@ from app.api.v1 import (
     institutions,
     llm_tracking,
     projects,
+    reports,
     scholars,
     sentiment,
     sources,
+    students,
+    university_leadership,
     venues,
 )
 from app.api.v1.intel.router import intel_router
@@ -26,11 +29,18 @@ v1_router.include_router(health.router, prefix="/health", tags=["health"])
 v1_router.include_router(dimensions.router, prefix="/dimensions", tags=["dimensions"])
 v1_router.include_router(intel_router, prefix="/intel", tags=["intel"])
 v1_router.include_router(sentiment.router, prefix="/sentiment", tags=["sentiment"])
+v1_router.include_router(reports.router, tags=["reports"])
 v1_router.include_router(llm_tracking.router)
 v1_router.include_router(scholars.router, prefix="/scholars", tags=["scholars"])
+v1_router.include_router(students.router, prefix="/students", tags=["students"])
 v1_router.include_router(events.router, prefix="/events", tags=["events"])
 v1_router.include_router(aminer.router, prefix="/aminer", tags=["aminer"])
 v1_router.include_router(projects.router, prefix="/projects", tags=["projects"])
 v1_router.include_router(venues.router, prefix="/venues", tags=["venues"])
+v1_router.include_router(
+    university_leadership.router,
+    prefix="/leadership",
+    tags=["leadership"],
+)
 # institutions.router 包含 /{institution_id} 通配符路由，必须最后注册
 v1_router.include_router(institutions.router, prefix="/institutions", tags=["institutions"])
