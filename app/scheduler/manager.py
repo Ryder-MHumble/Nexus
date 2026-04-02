@@ -21,16 +21,36 @@ def get_scheduler_manager() -> SchedulerManager | None:
     return _scheduler_manager
 
 
-def _make_trigger(schedule_key: str) -> IntervalTrigger | CronTrigger | None:
+def _make_trigger(config: dict[str, Any]) -> IntervalTrigger | CronTrigger | None:
+    cron_cfg = config.get("cron")
+    if isinstance(cron_cfg, dict) and cron_cfg:
+        # 允许在 YAML 中直接配置 cron 细节（如北京时间 4 点）
+        return CronTrigger(**cron_cfg)
+
+    schedule_key = str(config.get("schedule", "daily")).strip().lower()
     mapping = {
         "2h": lambda: IntervalTrigger(hours=2),
         "4h": lambda: IntervalTrigger(hours=4),
         "daily": lambda: CronTrigger(hour=6, minute=0),
+        "daily_bj_4": lambda: CronTrigger(hour=4, minute=0, timezone="Asia/Shanghai"),
         "weekly": lambda: CronTrigger(day_of_week="mon", hour=3),
         "monthly": lambda: CronTrigger(day=1, hour=2),
     }
     factory = mapping.get(schedule_key)
     return factory() if factory else None
+
+
+def is_schedulable_source(config: dict[str, Any]) -> bool:
+    """Whether this source should participate in timed crawl scheduling/catalog."""
+    dimension = str(config.get("dimension") or "").strip().lower()
+    crawl_method = str(config.get("crawl_method") or "").strip().lower()
+
+    # scholars/faculty 数据源不走定时爬虫调度与信源状态目录
+    if dimension == "scholars":
+        return False
+    if crawl_method == "faculty":
+        return False
+    return True
 
 
 def load_all_source_configs() -> list[dict[str, Any]]:
@@ -79,7 +99,9 @@ class SchedulerManager:
         global _scheduler_manager
         _scheduler_manager = self
 
-        self._source_configs = load_all_source_configs()
+        self._source_configs = [
+            cfg for cfg in load_all_source_configs() if is_schedulable_source(cfg)
+        ]
 
         # Import job function here to avoid circular imports
         from app.scheduler.jobs import execute_crawl_job
@@ -89,10 +111,13 @@ class SchedulerManager:
                 continue
 
             schedule_key = config.get("schedule", "daily")
-            trigger = _make_trigger(schedule_key)
+            trigger = _make_trigger(config)
             if trigger is None:
                 logger.warning(
-                    "Unknown schedule '%s' for source '%s'", schedule_key, config["id"]
+                    "Unknown schedule '%s' (cron=%s) for source '%s'",
+                    schedule_key,
+                    config.get("cron"),
+                    config["id"],
                 )
                 continue
 
@@ -138,7 +163,8 @@ class SchedulerManager:
             [c for c in self._source_configs if c.get("is_enabled", True)]
         )
         logger.info(
-            "Scheduler started with %d source jobs + monthly leadership full crawl + daily pipeline (%02d:%02d UTC)",
+            "Scheduler started with %d source jobs + monthly leadership full crawl + "
+            "daily pipeline (%02d:%02d UTC)",
             enabled_count,
             settings.PIPELINE_CRON_HOUR,
             settings.PIPELINE_CRON_MINUTE,

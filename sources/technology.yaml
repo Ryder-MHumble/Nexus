@@ -124,6 +124,7 @@ sources:
     group: "company_blogs"
     url: "https://openai.com/news/rss.xml"
     crawl_method: "rss"
+    extract_detail_images: true
     schedule: "daily"
     priority: 1
     is_enabled: true  # Fixed: switched from dynamic to RSS feed
@@ -188,6 +189,7 @@ sources:
     group: "company_blogs"
     url: "https://blogs.microsoft.com/ai/feed/"
     crawl_method: "rss"
+    extract_detail_images: true
     schedule: "daily"
     priority: 1
     is_enabled: true  # Fixed: switched from static (403) to RSS feed

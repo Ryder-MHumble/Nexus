@@ -23,19 +23,26 @@ def extract_images(html: str, base_url: str = "") -> list[dict[str, str]]:
     images: list[dict[str, str]] = []
     seen: set[str] = set()
 
-    for img in soup.find_all("img"):
-        src = (img.get("src") or "").strip()
+    def _append_image(src_raw: str, alt_raw: str = "") -> None:
+        src = src_raw.strip()
         if not src or src.startswith("data:"):
-            continue
+            return
 
         # Resolve relative URLs
         if base_url:
             src = urljoin(base_url, src)
 
         if src in seen:
-            continue
+            return
         seen.add(src)
 
+        entry: dict[str, str] = {"src": src}
+        alt = alt_raw.strip()
+        if alt:
+            entry["alt"] = alt
+        images.append(entry)
+
+    for img in soup.find_all("img"):
         # Skip tiny images (icons / tracking pixels)
         try:
             w = img.get("width", "")
@@ -45,10 +52,19 @@ def extract_images(html: str, base_url: str = "") -> list[dict[str, str]]:
         except (ValueError, TypeError):
             pass
 
-        entry: dict[str, str] = {"src": src}
-        alt = (img.get("alt") or "").strip()
-        if alt:
-            entry["alt"] = alt
-        images.append(entry)
+        _append_image(img.get("src") or "", img.get("alt") or "")
+
+    # Fallback for pages that use OpenGraph/Twitter card images but no inline <img>.
+    for meta in soup.find_all("meta"):
+        key = str(meta.get("property") or meta.get("name") or "").strip().lower()
+        if key not in {"og:image", "twitter:image", "twitter:image:src"}:
+            continue
+        _append_image(meta.get("content") or "", meta.get("content") or "")
+
+    for link in soup.find_all("link"):
+        rel = " ".join(link.get("rel") or []).strip().lower()
+        if rel not in {"image_src", "apple-touch-icon", "icon"}:
+            continue
+        _append_image(link.get("href") or "", "")
 
     return images

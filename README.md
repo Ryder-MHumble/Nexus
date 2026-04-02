@@ -14,10 +14,12 @@ Nexus turns multi-source web content into structured, queryable knowledge for do
 
 ## Snapshot
 
-- `245` configured sources, `168` enabled
-- `10` source dimensions: policy, technology, talent, industry, universities, events, personnel, scholars, sentiment, and regional policy
+- `268` configured sources, `191` enabled
+- `9` source dimensions: national policy, Beijing policy, technology, talent, industry, universities, events, personnel, and scholars
 - `100` OpenAPI paths across source management, crawler control, knowledge graph, intelligence, and report generation
 - `49` scholar acquisition sources and `50` university leadership sources
+- `29` auto university news sources powered by `university_news_auto`
+- `1` platform-level Twitter source with YAML cron scheduling and account-file driven crawling
 - Dual runtime support: local PostgreSQL recommended, Supabase-compatible facade retained
 
 ## What Shipped
@@ -27,6 +29,10 @@ The current Nexus workspace includes:
 - Expanded source catalog APIs with facets, keyword search, grouping, health status, and pagination
 - Knowledge APIs for institutions, scholars, projects, events, students, AMiner lookup, and university leadership
 - Report APIs for dimension discovery and sentiment report generation
+- University news auto-crawling coverage for top-tier schools via `sources/universities-top-tier.yaml`
+- Unified Twitter KOL crawling with external account inventory (`sources/twitter_kol_accounts.yaml`)
+- RSS detail-image enrichment (`extract_detail_images`) and broader image metadata extraction (including OpenGraph/Twitter card fallbacks)
+- Improved CLI crawl workflow that persists directly to DB and closes Playwright/DB resources explicitly
 - Updated Next.js console with:
   - enhanced source directory and source health visibility
   - knowledge capability overview cards

@@ -190,10 +190,15 @@ sources:
     schedule: "daily"
     priority: 2
     is_enabled: true
+    headers:
+      Accept: "text/html,application/xhtml+xml"
+      Referer: "https://www.beijing.gov.cn/"
+    keyword_filter: []  # 默认关键词会把人社政策公告压到2条，放开后由列表选择器精确控制
+    keyword_blacklist: []
     selectors:
-      list_item: "ul.allList li"
-      title: "a"
-      link: "a"
+      list_item: "list.head_news ul.allList li"
+      title: "a[href*='./2024zc']"
+      link: "a[href*='./2024zc']"
     detail_selectors:
       content: "div.TRS_UEDITOR"
     tags: ["policy", "hr", "beijing"]
@@ -359,4 +364,3 @@ sources:
     detail_selectors:
       content: "div.TRS_UEDITOR"
     tags: ["personnel", "bjrd"]
-

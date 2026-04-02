@@ -1,0 +1,526 @@
+dimension: universities
+dimension_name: 对高校
+description: 高校相关信源 - top_tier_expansion (985 + top 211)
+default_keyword_filter: []
+sources:
+- id: cau_news_auto
+  name: 中国农业大学-新闻动态(自动)
+  group: university_news
+  url: https://www.cau.edu.cn/
+  base_url: https://www.cau.edu.cn/
+  crawl_method: dynamic
+  crawler_class: university_news_auto
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  max_items: 12
+  auto_min_score: 3
+  fetch_detail: false
+  playwright_fallback: true
+  wait_timeout: 15000
+  keyword_filter: []
+  tags: [university, 985, auto, cau]
+
+- id: muc_news_auto
+  name: 中央民族大学-新闻动态(自动)
+  group: university_news
+  url: https://news.muc.edu.cn/zhxw.htm
+  base_url: https://news.muc.edu.cn/
+  crawl_method: dynamic
+  crawler_class: university_news_auto
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  max_items: 12
+  auto_min_score: 3
+  fetch_detail: false
+  playwright_fallback: true
+  wait_timeout: 15000
+  keyword_filter: []
+  tags: [university, 985, auto, muc]
+
+- id: dlut_news_auto
+  name: 大连理工大学-新闻动态(自动)
+  group: university_news
+  url: https://news.dlut.edu.cn/
+  base_url: https://news.dlut.edu.cn/
+  crawl_method: dynamic
+  crawler_class: university_news_auto
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  max_items: 12
+  auto_min_score: 3
+  fetch_detail: false
+  playwright_fallback: true
+  wait_timeout: 15000
+  keyword_filter: []
+  tags: [university, 985, auto, dlut]
+
+- id: ecnu_news_auto
+  name: 华东师范大学-新闻动态(自动)
+  group: university_news
+  url: https://www.ecnu.edu.cn/xwlm/xwrd.htm
+  base_url: https://www.ecnu.edu.cn/
+  crawl_method: dynamic
+  crawler_class: university_news_auto
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  max_items: 12
+  auto_min_score: 3
+  fetch_detail: false
+  playwright_fallback: true
+  wait_timeout: 15000
+  keyword_filter: []
+  tags: [university, 985, auto, ecnu]
+
+- id: scut_news_auto
+  name: 华南理工大学-新闻动态(自动)
+  group: university_news
+  url: https://news.scut.edu.cn/
+  base_url: https://news.scut.edu.cn/
+  crawl_method: dynamic
+  crawler_class: university_news_auto
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  max_items: 12
+  auto_min_score: 3
+  fetch_detail: false
+  playwright_fallback: true
+  wait_timeout: 15000
+  keyword_filter: []
+  tags: [university, 985, auto, scut]
+
+- id: cqu_news_auto
+  name: 重庆大学-新闻动态(自动)
+  group: university_news
+  url: https://www.cqu.edu.cn/zdxw/zhxw.htm
+  base_url: https://www.cqu.edu.cn/
+  crawl_method: dynamic
+  crawler_class: university_news_auto
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  max_items: 12
+  auto_min_score: 3
+  fetch_detail: false
+  playwright_fallback: true
+  wait_timeout: 15000
+  keyword_filter: []
+  tags: [university, 985, auto, cqu]
+
+- id: neu_news_auto
+  name: 东北大学-新闻动态(自动)
+  group: university_news
+  url: https://www.neu.edu.cn/
+  base_url: https://www.neu.edu.cn/
+  crawl_method: dynamic
+  crawler_class: university_news_auto
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  max_items: 12
+  auto_min_score: 3
+  fetch_detail: false
+  playwright_fallback: true
+  wait_timeout: 15000
+  keyword_filter: []
+  tags: [university, 985, auto, neu]
+
+- id: nwsuaf_news_auto
+  name: 西北农林科技大学-新闻动态(自动)
+  group: university_news
+  url: https://news.nwsuaf.edu.cn/
+  base_url: https://news.nwsuaf.edu.cn/
+  crawl_method: dynamic
+  crawler_class: university_news_auto
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  max_items: 12
+  auto_min_score: 3
+  fetch_detail: false
+  playwright_fallback: true
+  wait_timeout: 15000
+  keyword_filter: []
+  tags: [university, 985, auto, nwsuaf]
+
+- id: ouc_news_auto
+  name: 中国海洋大学-新闻动态(自动)
+  group: university_news
+  url: https://news.ouc.edu.cn/zhxw/list.htm
+  base_url: https://news.ouc.edu.cn/
+  crawl_method: dynamic
+  crawler_class: university_news_auto
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  max_items: 12
+  auto_min_score: 3
+  fetch_detail: false
+  playwright_fallback: true
+  wait_timeout: 15000
+  keyword_filter: []
+  tags: [university, 985, auto, ouc]
+
+- id: hnu_news_auto
+  name: 湖南大学-新闻动态(自动)
+  group: university_news
+  url: https://news.hnu.edu.cn/
+  base_url: https://news.hnu.edu.cn/
+  crawl_method: dynamic
+  crawler_class: university_news_auto
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  max_items: 12
+  auto_min_score: 3
+  fetch_detail: false
+  playwright_fallback: true
+  wait_timeout: 15000
+  keyword_filter: []
+  tags: [university, 985, auto, hnu]
+
+- id: zju_news_auto
+  name: 浙江大学-新闻动态(自动)
+  group: university_news
+  url: https://www.zju.edu.cn/38199/list.htm
+  base_url: https://www.zju.edu.cn/
+  crawl_method: dynamic
+  crawler_class: university_news_auto
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  max_items: 10
+  auto_min_score: 3
+  fetch_detail: false
+  playwright_fallback: true
+  wait_timeout: 15000
+  keyword_filter: []
+  tags: [university, 985, auto, zju]
+
+- id: nju_news_auto
+  name: 南京大学-新闻动态(自动)
+  group: university_news
+  url: https://news.nju.edu.cn/
+  base_url: https://news.nju.edu.cn/
+  crawl_method: dynamic
+  crawler_class: university_news_auto
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  max_items: 10
+  auto_min_score: 3
+  fetch_detail: false
+  playwright_fallback: true
+  wait_timeout: 15000
+  keyword_filter: []
+  tags: [university, 985, auto, nju]
+
+- id: nankai_news_auto
+  name: 南开大学-新闻动态(自动)
+  group: university_news
+  url: https://news.nankai.edu.cn/
+  base_url: https://news.nankai.edu.cn/
+  crawl_method: dynamic
+  crawler_class: university_news_auto
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  max_items: 10
+  auto_min_score: 3
+  fetch_detail: false
+  playwright_fallback: true
+  wait_timeout: 15000
+  keyword_filter: []
+  tags: [university, 985, auto, nankai]
+
+- id: nwpu_news_auto
+  name: 西北工业大学-新闻动态(自动)
+  group: university_news
+  url: https://www.nwpu.edu.cn/
+  base_url: https://www.nwpu.edu.cn/
+  crawl_method: dynamic
+  crawler_class: university_news_auto
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  max_items: 10
+  auto_min_score: 3
+  fetch_detail: false
+  playwright_fallback: true
+  wait_timeout: 15000
+  keyword_filter: []
+  tags: [university, 985, auto, nwpu]
+
+- id: scu_news_auto
+  name: 四川大学-新闻动态(自动)
+  group: university_news
+  url: https://www.scu.edu.cn/
+  base_url: https://www.scu.edu.cn/
+  crawl_method: dynamic
+  crawler_class: university_news_auto
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  max_items: 10
+  auto_min_score: 3
+  fetch_detail: false
+  playwright_fallback: true
+  wait_timeout: 15000
+  keyword_filter: []
+  tags: [university, 985, auto, scu]
+
+- id: lzu_news_auto
+  name: 兰州大学-新闻动态(自动)
+  group: university_news
+  url: https://news.lzu.edu.cn/
+  base_url: https://news.lzu.edu.cn/
+  crawl_method: dynamic
+  crawler_class: university_news_auto
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  max_items: 10
+  auto_min_score: 3
+  fetch_detail: false
+  playwright_fallback: true
+  wait_timeout: 15000
+  keyword_filter: []
+  tags: [university, 985, auto, lzu]
+
+- id: bupt_news_auto
+  name: 北京邮电大学-新闻动态(自动)
+  group: university_news
+  url: https://news.bupt.edu.cn/
+  base_url: https://news.bupt.edu.cn/
+  crawl_method: dynamic
+  crawler_class: university_news_auto
+  schedule: daily
+  priority: 2
+  is_enabled: true
+  max_items: 10
+  auto_min_score: 3
+  fetch_detail: false
+  playwright_fallback: true
+  wait_timeout: 15000
+  keyword_filter: []
+  tags: [university, 211, auto, bupt]
+
+- id: cupl_news_auto
+  name: 中国政法大学-新闻动态(自动)
+  group: university_news
+  url: https://news.cupl.edu.cn/
+  base_url: https://news.cupl.edu.cn/
+  crawl_method: dynamic
+  crawler_class: university_news_auto
+  schedule: daily
+  priority: 3
+  is_enabled: true
+  max_items: 10
+  auto_min_score: 3
+  fetch_detail: false
+  playwright_fallback: true
+  wait_timeout: 15000
+  keyword_filter: []
+  tags: [university, 211, auto, cupl]
+
+- id: cufe_news_auto
+  name: 中央财经大学-新闻动态(自动)
+  group: university_news
+  url: http://news.cufe.edu.cn/index.htm
+  base_url: http://news.cufe.edu.cn/
+  crawl_method: dynamic
+  crawler_class: university_news_auto
+  schedule: daily
+  priority: 3
+  is_enabled: true
+  max_items: 10
+  auto_min_score: 3
+  fetch_detail: false
+  playwright_fallback: true
+  wait_timeout: 15000
+  keyword_filter: []
+  tags: [university, 211, auto, cufe]
+
+- id: sufe_news_auto
+  name: 上海财经大学-新闻动态(自动)
+  group: university_news
+  url: https://www.sufe.edu.cn/
+  base_url: https://www.sufe.edu.cn/
+  crawl_method: dynamic
+  crawler_class: university_news_auto
+  schedule: daily
+  priority: 3
+  is_enabled: true
+  max_items: 10
+  auto_min_score: 3
+  fetch_detail: false
+  playwright_fallback: true
+  wait_timeout: 15000
+  keyword_filter: []
+  tags: [university, 211, auto, sufe]
+
+- id: nuaa_news_auto
+  name: 南京航空航天大学-新闻动态(自动)
+  group: university_news
+  url: http://newsweb.nuaa.edu.cn/zhyw1/list.htm
+  base_url: http://newsweb.nuaa.edu.cn/
+  crawl_method: dynamic
+  crawler_class: university_news_auto
+  schedule: daily
+  priority: 3
+  is_enabled: true
+  max_items: 10
+  auto_min_score: 3
+  fetch_detail: false
+  playwright_fallback: true
+  wait_timeout: 15000
+  keyword_filter: []
+  tags: [university, 211, auto, nuaa]
+
+- id: bjtu_news_auto
+  name: 北京交通大学-新闻动态(自动)
+  group: university_news
+  url: https://news.bjtu.edu.cn/
+  base_url: https://news.bjtu.edu.cn/
+  crawl_method: dynamic
+  crawler_class: university_news_auto
+  schedule: daily
+  priority: 3
+  is_enabled: true
+  max_items: 10
+  auto_min_score: 3
+  fetch_detail: false
+  playwright_fallback: true
+  wait_timeout: 15000
+  keyword_filter: []
+  tags: [university, 211, auto, bjtu]
+
+- id: ustb_news_auto
+  name: 北京科技大学-新闻动态(自动)
+  group: university_news
+  url: https://news.ustb.edu.cn/
+  base_url: https://news.ustb.edu.cn/
+  crawl_method: dynamic
+  crawler_class: university_news_auto
+  schedule: daily
+  priority: 3
+  is_enabled: true
+  max_items: 10
+  auto_min_score: 3
+  fetch_detail: false
+  playwright_fallback: true
+  wait_timeout: 15000
+  keyword_filter: []
+  tags: [university, 211, auto, ustb]
+
+- id: ncepu_news_auto
+  name: 华北电力大学-新闻动态(自动)
+  group: university_news
+  url: https://news.ncepu.edu.cn/
+  base_url: https://news.ncepu.edu.cn/
+  crawl_method: dynamic
+  crawler_class: university_news_auto
+  schedule: daily
+  priority: 3
+  is_enabled: true
+  max_items: 10
+  auto_min_score: 3
+  fetch_detail: false
+  playwright_fallback: true
+  wait_timeout: 15000
+  keyword_filter: []
+  tags: [university, 211, auto, ncepu]
+
+- id: whut_news_auto
+  name: 武汉理工大学-新闻动态(自动)
+  group: university_news
+  url: https://news.whut.edu.cn/
+  base_url: https://news.whut.edu.cn/
+  crawl_method: dynamic
+  crawler_class: university_news_auto
+  schedule: daily
+  priority: 3
+  is_enabled: true
+  max_items: 10
+  auto_min_score: 3
+  fetch_detail: false
+  playwright_fallback: true
+  wait_timeout: 15000
+  keyword_filter: []
+  tags: [university, 211, auto, whut]
+
+- id: swjtu_news_auto
+  name: 西南交通大学-新闻动态(自动)
+  group: university_news
+  url: https://news.swjtu.edu.cn/
+  base_url: https://news.swjtu.edu.cn/
+  crawl_method: dynamic
+  crawler_class: university_news_auto
+  schedule: daily
+  priority: 3
+  is_enabled: true
+  max_items: 10
+  auto_min_score: 3
+  fetch_detail: false
+  playwright_fallback: true
+  wait_timeout: 15000
+  keyword_filter: []
+  tags: [university, 211, auto, swjtu]
+
+- id: njust_news_auto
+  name: 南京理工大学-新闻动态(自动)
+  group: university_news
+  url: https://www.njust.edu.cn/xwzx.htm
+  base_url: https://www.njust.edu.cn/
+  crawl_method: dynamic
+  crawler_class: university_news_auto
+  schedule: daily
+  priority: 3
+  is_enabled: true
+  max_items: 10
+  auto_min_score: 3
+  fetch_detail: false
+  playwright_fallback: true
+  wait_timeout: 15000
+  keyword_filter: []
+  tags: [university, 211, auto, njust]
+
+- id: ecust_news_auto
+  name: 华东理工大学-新闻动态(自动)
+  group: university_news
+  url: https://news.ecust.edu.cn/
+  base_url: https://news.ecust.edu.cn/
+  crawl_method: dynamic
+  crawler_class: university_news_auto
+  schedule: daily
+  priority: 3
+  is_enabled: true
+  max_items: 10
+  auto_min_score: 3
+  fetch_detail: false
+  playwright_fallback: true
+  wait_timeout: 15000
+  keyword_filter: []
+  tags: [university, 211, auto, ecust]
+
+- id: uibe_news_auto
+  name: 对外经济贸易大学-新闻动态(自动)
+  group: university_news
+  url: https://news.uibe.edu.cn/
+  base_url: https://news.uibe.edu.cn/
+  crawl_method: dynamic
+  crawler_class: university_news_auto
+  schedule: daily
+  priority: 3
+  is_enabled: true
+  max_items: 10
+  auto_min_score: 3
+  fetch_detail: false
+  playwright_fallback: true
+  wait_timeout: 15000
+  keyword_filter: []
+  tags: [university, 211, auto, uibe]

@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 import logging
 from contextlib import asynccontextmanager
-from typing import AsyncGenerator
+from typing import Any, AsyncGenerator
 
 from playwright.async_api import Browser, Page, Playwright, async_playwright
 
@@ -15,6 +15,27 @@ _pw: Playwright | None = None
 _browser: Browser | None = None
 _lock = asyncio.Lock()
 _context_semaphore = asyncio.Semaphore(settings.PLAYWRIGHT_MAX_CONTEXTS)
+
+
+def _is_target_closed_error(exc: Exception) -> bool:
+    text = str(exc).lower()
+    markers = (
+        "target page, context or browser has been closed",
+        "target closed",
+        "browser has been closed",
+        "connection closed",
+    )
+    return any(marker in text for marker in markers)
+
+
+async def _safe_close(resource: Any, label: str) -> None:
+    try:
+        await resource.close()
+    except Exception as exc:  # noqa: BLE001
+        if _is_target_closed_error(exc):
+            logger.debug("Ignoring already-closed Playwright %s: %s", label, exc)
+            return
+        logger.warning("Failed to close Playwright %s: %s", label, exc)
 
 
 async def _get_browser() -> Browser:
@@ -60,12 +81,14 @@ async def get_page(*, apply_webdriver_patch: bool = True) -> AsyncGenerator[Page
                     get: () => undefined
                 });
             """)
-        page = await context.new_page()
+        page: Page | None = None
         try:
+            page = await context.new_page()
             yield page
         finally:
-            await page.close()
-            await context.close()
+            if page is not None:
+                await _safe_close(page, "page")
+            await _safe_close(context, "context")
 
 
 async def close_browser() -> None:

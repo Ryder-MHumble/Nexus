@@ -37,6 +37,7 @@ _CUSTOM_MAP: dict[str, str] = {
     "llm_faculty": "app.crawlers.parsers.llm_faculty.LLMFacultyCrawler",
     "tsinghua_cs_faculty": "app.crawlers.parsers.tsinghua_cs_faculty.TsinghuaCsFacultyCrawler",
     "samr_api": "app.crawlers.parsers.samr_api.SamrAPICrawler",
+    "university_news_auto": "app.crawlers.parsers.university_news_auto.UniversityNewsAutoCrawler",
 }
 
 

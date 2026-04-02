@@ -191,8 +191,8 @@ async def _crawl_single_source(config: dict, pbar=None) -> dict:
             1 for item in result.items if item.content
         )
 
-        # 保存 JSON
-        json_path = await save_crawl_result_json(result, config)
+        # 写入数据库
+        await save_crawl_result_json(result, config)
 
         status_str = result.status.value
 
@@ -210,7 +210,7 @@ async def _crawl_single_source(config: dict, pbar=None) -> dict:
             "items_with_content": items_with_content,
             "duration": result.duration_seconds,
             "error": result.error_message,
-            "json_path": str(json_path) if json_path else None,
+            "json_path": None,
         }
 
     except Exception as exc:

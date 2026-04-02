@@ -37,6 +37,7 @@ class RSSCrawler(BaseCrawler):
         feed_url = self._resolve_feed_url()
         max_entries = self.config.get("max_entries", 20)
         keyword_filter = self.config.get("keyword_filter", [])
+        extract_detail_images = bool(self.config.get("extract_detail_images", False))
 
         # Fetch raw XML/RSS
         raw = await fetch_page(
@@ -83,9 +84,28 @@ class RSSCrawler(BaseCrawler):
             content_html = sanitize_html(content, base_url=link) if content else None
             rss_images = extract_images(content, base_url=link) if content else None
 
+            detail_images = None
+            if extract_detail_images and not rss_images:
+                try:
+                    detail_html = await fetch_page(
+                        link,
+                        headers=self.config.get("headers"),
+                        request_delay=self.config.get("request_delay"),
+                    )
+                    detail_images = extract_images(detail_html, base_url=link)
+                except Exception as exc:  # noqa: BLE001
+                    logger.debug(
+                        "RSSCrawler[%s] detail image extraction failed for %s: %s",
+                        self.source_id,
+                        link,
+                        exc,
+                    )
+
             extra: dict[str, Any] = {}
             if rss_images:
                 extra["images"] = rss_images
+            elif detail_images:
+                extra["images"] = detail_images
 
             items.append(
                 CrawledItem(

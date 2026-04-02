@@ -1,0 +1,206 @@
+# Strategic source list for X(Twitter) KOL monitoring.
+# Maintained by strategy team.
+
+accounts:
+  - name: Aidan Gomez
+    username: aidangomez
+    category: researcher
+    cohort: core
+  - name: Andrej Karpathy
+    username: karpathy
+    category: researcher
+    cohort: core
+  - name: Dario Amodei
+    username: darioamodei
+    category: founder
+    cohort: core
+  - name: Demis Hassabis
+    username: demishassabis
+    category: founder
+    cohort: core
+  - name: Epoch AI
+    username: EpochAIResearch
+    category: org
+    cohort: core
+  - name: Fei-Fei Li
+    username: drfeifei
+    category: researcher
+    cohort: core
+  - name: François Chollet
+    username: fchollet
+    category: researcher
+    cohort: core
+  - name: Geoffrey Hinton
+    username: geoffreyhinton
+    category: researcher
+    cohort: core
+  - name: Greg Brockman
+    username: gdb
+    category: founder
+    cohort: core
+  - name: Ilya Sutskever
+    username: ilyasutskever
+    category: founder
+    cohort: core
+  - name: indigo
+    username: indigo
+    category: researcher
+    cohort: core
+  - name: Jack Clark
+    username: jackclarkSF
+    category: thinker
+    cohort: core
+  - name: Jeff Dean
+    username: JeffDean
+    category: researcher
+    cohort: core
+  - name: John Schulman
+    username: johnschulman2
+    category: researcher
+    cohort: core
+  - name: Mustafa Suleyman
+    username: mustafasuleyman
+    category: founder
+    cohort: core
+  - name: Noam Shazeer
+    username: noamshazeer
+    category: researcher
+    cohort: core
+  - name: Oriol Vinyals
+    username: OriolVinyalsML
+    category: researcher
+    cohort: core
+  - name: Pieter Abbeel
+    username: pabbeel
+    category: researcher
+    cohort: core
+  - name: Sebastian Raschka
+    username: rasbt
+    category: educator
+    cohort: core
+  - name: Sébastien Bubeck
+    username: SebastienBubeck
+    category: researcher
+    cohort: core
+  - name: Soumith Chintala
+    username: soumithchintala
+    category: researcher
+    cohort: core
+  - name: Wojciech Zaremba
+    username: woj_zaremba
+    category: founder
+    cohort: core
+  - name: Yoshua Bengio
+    username: Yoshua_Bengio
+    category: researcher
+    cohort: core
+  - name: Zephyr
+    username: Zephyr
+    category: researcher
+    cohort: core
+  - name: Andrew Ng
+    username: AndrewYNg
+    category: educator
+    cohort: core
+  - name: Jason Wei
+    username: _jasonwei
+    category: researcher
+    cohort: core
+  - name: Lenny Rachitsky
+    username: lennysan
+    category: investor
+    cohort: core
+  - name: Thinking Machines
+    username: thinkingmachines
+    category: org
+    cohort: core
+
+  # Expansion: top-tier AI bloggers + global leading AI labs/companies
+  - name: Yann LeCun
+    username: ylecun
+    category: researcher
+    cohort: expansion
+  - name: Sam Altman
+    username: sama
+    category: founder
+    cohort: expansion
+  - name: Lilian Weng
+    username: lilianweng
+    category: researcher
+    cohort: expansion
+  - name: Jim Fan
+    username: DrJimFan
+    category: researcher
+    cohort: expansion
+  - name: Ethan Mollick
+    username: emollick
+    category: educator
+    cohort: expansion
+  - name: Pedro Domingos
+    username: pmddomingos
+    category: researcher
+    cohort: expansion
+  - name: Lex Fridman
+    username: lexfridman
+    category: thinker
+    cohort: expansion
+  - name: OpenAI
+    username: OpenAI
+    category: org
+    cohort: expansion
+  - name: Anthropic
+    username: AnthropicAI
+    category: org
+    cohort: expansion
+  - name: Google DeepMind
+    username: GoogleDeepMind
+    category: org
+    cohort: expansion
+  - name: xAI
+    username: xAI
+    category: org
+    cohort: expansion
+  - name: Meta AI
+    username: MetaAI
+    category: org
+    cohort: expansion
+  - name: Mistral AI
+    username: MistralAI
+    category: org
+    cohort: expansion
+  - name: Cohere
+    username: Cohere
+    category: org
+    cohort: expansion
+  - name: AI21 Labs
+    username: AI21Labs
+    category: org
+    cohort: expansion
+  - name: Perplexity
+    username: perplexity_ai
+    category: org
+    cohort: expansion
+  - name: Hugging Face
+    username: huggingface
+    category: org
+    cohort: expansion
+  - name: Stability AI
+    username: StabilityAI
+    category: org
+    cohort: expansion
+  - name: NVIDIA AI
+    username: NVIDIAAI
+    category: org
+    cohort: expansion
+  - name: Sakana AI
+    username: SakanaAILabs
+    category: org
+    cohort: expansion
+  - name: AI2
+    username: allen_ai
+    category: org
+    cohort: expansion
+  - name: Nous Research
+    username: NousResearch
+    category: org
+    cohort: expansion

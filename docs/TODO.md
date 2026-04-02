@@ -1,10 +1,13 @@
 # Nexus Roadmap
 
-> Last updated: 2026-03-31
+> Last updated: 2026-04-02
 
 ## Done Recently
 
 - [x] Synchronized the newer crawler branch into Nexus
+- [x] Synced `university_news_auto` parser and `sources/universities-top-tier.yaml` for expanded top-tier university news crawling
+- [x] Synced unified Twitter platform crawling (`sources/twitter.yaml` + `sources/twitter_kol_accounts.yaml`) with YAML cron scheduling
+- [x] Synced crawl pipeline optimizations: RSS detail-image enrichment, image metadata fallback extraction, DB-first crawl persistence path
 - [x] Added source catalog facets, grouping, health filtering, and pagination
 - [x] Added institution, scholar, project, event, student, leadership, and report APIs
 - [x] Upgraded the frontend console to expose source health, knowledge overview, and intelligence previews
@@ -18,6 +21,7 @@
 - [ ] Add a repeatable command or script for regenerating `openapi.json`
 - [ ] Add CI coverage for backend tests plus frontend lint/build
 - [ ] Review source configs where `crawl_method` is `unknown` and document the intended routing more clearly
+- [ ] Add targeted regression tests for `university_news_auto` and `twitter_ai_kol_international` source behavior
 
 ### Knowledge Workflows
 

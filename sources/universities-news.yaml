@@ -471,15 +471,17 @@ sources:
 - id: csu_news
   name: 中南大学新闻网
   group: university_news
-  url: https://news.csu.edu.cn/
+  url: https://news.csu.edu.cn/zhxw.htm
   crawl_method: static
   schedule: daily
   priority: 2
   is_enabled: true
   selectors:
-    list_item: ul.mediaList li
+    list_item: ul.subNewList li
     title: a
     link: a
+    date: span
+    date_format: '[%Y年%m月%d日]'
   base_url: https://news.csu.edu.cn
   keyword_filter: []
   detail_selectors:
