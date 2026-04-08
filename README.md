@@ -14,12 +14,10 @@ Nexus turns multi-source web content into structured, queryable knowledge for do
 
 ## Snapshot
 
-- `268` configured sources, `191` enabled
-- `9` source dimensions: national policy, Beijing policy, technology, talent, industry, universities, events, personnel, and scholars
-- `100` OpenAPI paths across source management, crawler control, knowledge graph, intelligence, and report generation
-- `49` scholar acquisition sources and `50` university leadership sources
-- `29` auto university news sources powered by `university_news_auto`
-- `1` platform-level Twitter source with YAML cron scheduling and account-file driven crawling
+- `102` OpenAPI paths across source management, crawler control, knowledge graph, intelligence, and report generation
+- YAML-driven source inventory covering policy, technology, universities, events, personnel, and scholar workflows
+- Explicit institution list endpoints for flat list and hierarchy consumers
+- Repeatable OpenAPI generation via `python scripts/generate_openapi.py`
 - Dual runtime support: local PostgreSQL recommended, Supabase-compatible facade retained
 
 ## What Shipped
@@ -28,16 +26,16 @@ The current Nexus workspace includes:
 
 - Expanded source catalog APIs with facets, keyword search, grouping, health status, and pagination
 - Knowledge APIs for institutions, scholars, projects, events, students, AMiner lookup, and university leadership
+- Explicit institution list contracts for both paginated flat views and hierarchy views
 - Report APIs for dimension discovery and sentiment report generation
-- University news auto-crawling coverage for top-tier schools via `sources/universities-top-tier.yaml`
-- Unified Twitter KOL crawling with external account inventory (`sources/twitter_kol_accounts.yaml`)
+- Clearer OpenAPI output for institutions, dimensions, reports, and LLM tracking
 - RSS detail-image enrichment (`extract_detail_images`) and broader image metadata extraction (including OpenGraph/Twitter card fallbacks)
 - Improved CLI crawl workflow that persists directly to DB and closes Playwright/DB resources explicitly
 - Updated Next.js console with:
   - enhanced source directory and source health visibility
   - knowledge capability overview cards
   - intelligence panel for reports and leadership previews
-- Verification coverage for source filtering, source catalog, institution hierarchy, scholar filters, and crawler orchestration
+- Verification coverage for source filtering, source catalog, institution hierarchy, scholar filters, crawler orchestration, and API contracts
 
 ## Quick Start
 
@@ -116,6 +114,7 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:43817/api/v1 npm run dev
 ```bash
 python3 -m compileall app
 ./.venv/bin/pytest
+python scripts/generate_openapi.py
 
 cd frontend
 npm run lint
@@ -135,6 +134,8 @@ Core operations:
 Knowledge graph:
 
 - `/api/v1/institutions`
+- `/api/v1/institutions/flat`
+- `/api/v1/institutions/hierarchy`
 - `/api/v1/scholars`
 - `/api/v1/projects`
 - `/api/v1/events`
@@ -153,6 +154,7 @@ Intelligence and reports:
 Generated schema:
 
 - [`openapi.json`](openapi.json)
+- refresh command: `python scripts/generate_openapi.py`
 
 ## Repository Guide
 

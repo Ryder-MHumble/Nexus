@@ -11,9 +11,17 @@ This is the Next.js 16 operations console for Nexus.
 
 ## Local Development
 
+Prefer the repo-level runner for full-stack startup:
+
+```bash
+./nexus.sh start
+```
+
+Frontend-only development:
+
 ```bash
 cd frontend
-npm install
+npm ci
 NEXT_PUBLIC_API_BASE_URL=http://localhost:43817/api/v1 npm run dev
 ```
 
@@ -34,3 +42,8 @@ npm run build
 - `src/components/dashboard/IntelligencePanel.tsx`: report and leadership previews
 - `src/lib/api.ts`: typed API access layer
 - `src/types/index.ts`: shared frontend data contracts
+
+For future dedicated institution pages, prefer the explicit backend list endpoints:
+
+- `/api/v1/institutions/flat`
+- `/api/v1/institutions/hierarchy`

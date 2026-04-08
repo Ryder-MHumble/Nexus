@@ -1,6 +1,6 @@
 # Nexus Architecture
 
-> Last updated: 2026-03-31
+> Last updated: 2026-04-08
 
 Nexus is a crawler-driven knowledge platform. It ingests configured sources, normalizes the results into structured storage, enriches selected domains, and exposes the result through a typed API plus an operator-facing frontend.
 
@@ -20,19 +20,12 @@ sources/*.yaml
 ### 1. Source Configuration
 
 - `sources/*.yaml`
-- `245` configured sources in this checkout
-- `168` enabled by default
-- `10` source dimensions:
-  - `national_policy`
-  - `beijing_policy`
-  - `technology`
-  - `talent`
-  - `industry`
-  - `universities`
-  - `events`
-  - `personnel`
-  - `scholars`
-  - `sentiment`
+- the source inventory is configuration-driven and evolves with the checked-in YAML catalog
+- the current platform surfaces policy, technology, talent, industry, university, event, personnel, and scholar-oriented workflows
+
+Operational note:
+
+- platform-level Twitter monitoring is currently implemented as a source inside the `technology` dimension rather than a standalone dimension.
 
 ### 2. Crawl Execution
 
@@ -46,14 +39,14 @@ Key modules:
 
 Current configured crawl patterns by `crawl_method`:
 
-- `static`: `100`
-- `dynamic`: `24`
-- `rss`: `14`
-- `faculty`: `43`
-- `university_leadership`: `50`
-- parser-backed or source-specific: `14`
+- `static`
+- `dynamic`
+- `rss`
+- `faculty`
+- `university_leadership`
+- parser-backed or source-specific crawlers
 
-Additionally, `22` sources specify `crawler_class` and are routed through parser implementations or custom logic.
+Additionally, a subset of sources specify `crawler_class` and are routed through parser implementations or custom logic.
 
 ### 3. Storage and Data Access
 
@@ -89,12 +82,18 @@ Representative service modules:
 - `app/services/scholar/*`
 - `app/services/intel/*`
 
+Policy intelligence is currently assembled from:
+
+- `national_policy`
+- `beijing_policy`
+- cross-dimension policy signals from adjacent domain content when the enrichment pipeline classifies them as policy-relevant
+
 ### 5. Presentation Layer
 
 Backend:
 
 - FastAPI app in `app/main.py`
-- `100` OpenAPI paths in the current generated schema
+- `102` OpenAPI paths in the current generated schema
 - Scalar docs at `/docs`
 - Swagger UI at `/swagger`
 
@@ -121,6 +120,8 @@ Frontend:
 The current backend exposes dedicated CRUD and stats flows for:
 
 - institutions
+- `/api/v1/institutions/flat` for paginated list views
+- `/api/v1/institutions/hierarchy` for tree-style organization views
 - scholars
 - projects
 - events
@@ -153,5 +154,6 @@ Verification commands:
 ```bash
 python3 -m compileall app
 ./.venv/bin/pytest
+python scripts/generate_openapi.py
 cd frontend && npm run lint && npm run build
 ```

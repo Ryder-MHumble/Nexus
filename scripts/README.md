@@ -1,6 +1,12 @@
 # Scripts
 
-For normal local development, prefer `./nexus.sh`. The scripts below are useful for targeted crawler verification.
+For normal local development, prefer `./nexus.sh`. The scripts below are useful for targeted verification and schema refresh.
+
+## Schema
+
+| Script | Purpose |
+| --- | --- |
+| `scripts/generate_openapi.py` | Regenerate the checked-in `openapi.json` from the live FastAPI app |
 
 ## Crawl
 
@@ -14,7 +20,8 @@ For normal local development, prefer `./nexus.sh`. The scripts below are useful 
 ```bash
 ./nexus.sh start
 python scripts/crawl/run_single.py --source <source_id>
+python scripts/generate_openapi.py
 ./nexus.sh logs backend -f
 ```
 
-If you add or modify routes or schemas, refresh [`openapi.json`](../openapi.json) after verification.
+If you add or modify routes or schemas, refresh [`openapi.json`](../openapi.json) after verification with `python scripts/generate_openapi.py`.

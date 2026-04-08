@@ -1,5 +1,10 @@
 from __future__ import annotations
 
+import json
+import subprocess
+import sys
+from pathlib import Path
+
 import pytest
 from fastapi import HTTPException
 
@@ -40,6 +45,34 @@ def test_openapi_institution_helper_routes_are_typed():
     assert aminer_schema == {"$ref": "#/components/schemas/AminerOrganizationSearchResponse"}
     assert "400" in reports_generate
     assert "501" in reports_generate
+
+
+def test_openapi_schema_serializes_cleanly():
+    schema = app.openapi()
+    serialized = json.dumps(schema, ensure_ascii=False)
+    assert "InstitutionHierarchyResponse" in serialized
+
+
+def test_generate_openapi_script_writes_expected_schema(tmp_path):
+    repo_root = Path(__file__).resolve().parent.parent
+    script_path = repo_root / "scripts" / "generate_openapi.py"
+    output_path = tmp_path / "openapi.generated.json"
+
+    result = subprocess.run(
+        [sys.executable, str(script_path), "--output", str(output_path)],
+        cwd=repo_root,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    assert output_path.exists()
+    assert "OpenAPI schema written to" in result.stdout
+
+    schema = json.loads(output_path.read_text(encoding="utf-8"))
+    assert schema["info"]["title"] == "Nexus Data Intelligence API"
+    assert "/api/v1/institutions/flat" in schema["paths"]
+    assert "/api/v1/institutions/hierarchy" in schema["paths"]
 
 
 @pytest.mark.asyncio
