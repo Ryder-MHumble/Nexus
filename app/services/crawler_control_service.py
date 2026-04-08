@@ -23,6 +23,7 @@ class CrawlerControlService:
         self._is_running = False
         self._should_stop = False
         self._current_source: str | None = None
+        self._planned_source_count = 0
         self._completed_sources: list[str] = []
         self._failed_sources: list[str] = []
         self._total_items = 0
@@ -35,13 +36,16 @@ class CrawlerControlService:
 
     def get_status(self) -> dict[str, Any]:
         """Get current crawl job status."""
-        total = len(self._completed_sources) + len(self._failed_sources)
-        if self._current_source:
-            total += 1
+        total = self._planned_source_count
+        if total <= 0:
+            total = len(self._completed_sources) + len(self._failed_sources)
+            if self._current_source:
+                total += 1
 
+        processed = len(self._completed_sources) + len(self._failed_sources)
         progress = 0.0
         if total > 0:
-            progress = len(self._completed_sources) / total
+            progress = processed / total
 
         return {
             "is_running": self._is_running,
@@ -88,6 +92,7 @@ class CrawlerControlService:
         self._is_running = True
         self._should_stop = False
         self._current_source = None
+        self._planned_source_count = 0
         self._completed_sources = []
         self._failed_sources = []
         self._total_items = 0
@@ -108,6 +113,7 @@ class CrawlerControlService:
             selected_configs = [
                 config_map[sid] for sid in source_ids if sid in config_map
             ]
+            self._planned_source_count = len(selected_configs)
 
             if not selected_configs:
                 logger.warning("No valid source configs found")

@@ -23,6 +23,7 @@ logger = logging.getLogger(__name__)
 DIMENSION_MODULE_MAP: dict[str, str] = {
     "national_policy": "policy-intel",
     "beijing_policy": "policy-intel",
+    "regional_policy": "policy-intel",
     "technology": "tech-frontier",
     "talent": "talent-radar",
     "industry": "tech-frontier",
@@ -36,6 +37,7 @@ DIMENSION_MODULE_MAP: dict[str, str] = {
 DIMENSION_DISPLAY_NAME: dict[str, str] = {
     "national_policy": "国家政策",
     "beijing_policy": "北京政策",
+    "regional_policy": "区域政策",
     "technology": "技术动态",
     "talent": "人才政策",
     "industry": "产业动态",
@@ -145,7 +147,7 @@ def compute_metric_cards(
     cards: list[dict[str, Any]] = []
 
     # 1. Policy Intel card
-    policy_count = module_article_counts.get("policy-intel", 0)
+    policy_count = policy_feed.get("item_count", 0)
     cards.append({
         "id": "policy-intel",
         "title": "政策情报",
@@ -266,7 +268,7 @@ def prepare_llm_input(
 
     # Group dimensions by module for clearer LLM input structure
     module_groups: list[tuple[str, str, list[str]]] = [
-        ("政策情报", "policy-intel", ["national_policy", "beijing_policy"]),
+        ("政策情报", "policy-intel", ["national_policy", "beijing_policy", "regional_policy"]),
         ("科技前沿", "tech-frontier", ["technology", "industry", "twitter"]),
         ("高校动态", "university-eco", ["universities"]),
         ("人事动态", "talent-radar", ["talent", "personnel"]),
@@ -326,7 +328,7 @@ def prepare_llm_input(
 
                 extra_info = ""
                 # Include policy enrichment info if available
-                if dim in ("national_policy", "beijing_policy"):
+                if dim in ("national_policy", "beijing_policy", "regional_policy"):
                     extra = article.get("extra", {})
                     match_score = extra.get("matchScore")
                     funding = extra.get("funding")
@@ -375,13 +377,20 @@ def build_metric_summary(
     # Policy
     national_count = len(articles_by_dim.get("national_policy", []))
     beijing_count = len(articles_by_dim.get("beijing_policy", []))
-    policy_count = national_count + beijing_count
+    regional_count = len(articles_by_dim.get("regional_policy", []))
+    policy_feed = load_intel_json("policy_intel", "feed.json")
+    policy_count = max(
+        policy_feed.get("item_count", 0),
+        national_count + beijing_count + regional_count,
+    )
     if policy_count > 0:
         detail = []
         if national_count:
             detail.append(f"国家级 {national_count}条")
         if beijing_count:
             detail.append(f"北京市 {beijing_count}条")
+        if regional_count:
+            detail.append(f"区域级 {regional_count}条")
         parts.append(f"政策情报: {policy_count}条新政策（{', '.join(detail)}）")
 
     # Tech

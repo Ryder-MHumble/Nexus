@@ -129,7 +129,10 @@ def parse_list_items(
     """Parse a list page and extract title, link, and date for each item.
 
     Supports the "_self" convention: if title/link selector is "_self",
-    the list_item element itself is used.
+    the list_item element itself is used. When ``title_attr`` is configured,
+    the title is read from that attribute instead of visible text.
+    ``link_replace_from`` and ``link_replace_to`` can be used to rewrite
+    extracted links before resolution.
     """
     base_url = _normalize_base_url(base_url)
     list_elements = soup.select(selectors.get("list_item", "li"))
@@ -144,7 +147,11 @@ def parse_list_items(
             title_el = el.select_one(title_selector) if title_selector else el
         if title_el is None:
             continue
-        title = title_el.get_text(strip=True)
+        title_attr = selectors.get("title_attr")
+        if title_attr:
+            title = (title_el.get(title_attr, "") or "").strip()
+        else:
+            title = title_el.get_text(strip=True)
         if not title:
             continue
 
@@ -160,6 +167,10 @@ def parse_list_items(
         raw_link = link_el.get(link_attr, "").strip()
         if not raw_link:
             continue
+        link_replace_from = selectors.get("link_replace_from")
+        link_replace_to = selectors.get("link_replace_to", "")
+        if link_replace_from:
+            raw_link = raw_link.replace(link_replace_from, link_replace_to)
         url = urljoin(base_url, raw_link)
 
         # Keyword filtering

@@ -61,7 +61,7 @@ SYSTEM_PROMPT = """\
 ## 分段策略（必须按维度组织，每个有内容的维度至少一段）
 
 - 第1段：总览开头，概述当日信息全貌，点出最重要的1-2条跨维度亮点
-- 第2段：政策情报（policy-intel）— 国家+北京政策，高匹配度政策优先，提及资金/截止日
+- 第2段：政策情报（policy-intel）— 国家+北京+区域政策，高匹配度政策优先，提及资金/截止日
 - 第3段：科技前沿（tech-frontier）— 技术突破、AI进展、产业动态，按主题归纳
 - 第4段：高校动态（university-eco）— 高校科研成果、重要合作、学术进展
 - 第5段：人事动态（talent-radar）— 重要人事任免、人才政策变化
@@ -87,7 +87,7 @@ SYSTEM_PROMPT = """\
 - 中文输出，专业简洁，信息密度高
 
 ## moduleId 含义
-- policy-intel: 国家政策 + 北京政策
+- policy-intel: 国家政策 + 北京政策 + 区域政策
 - tech-frontier: 技术动态 + 产业动态 + Twitter/KOL
 - talent-radar: 人才政策 + 人事变动
 - university-eco: 高校动态
@@ -275,6 +275,7 @@ def build_fallback_briefing(
     policy_articles = (
         articles_by_dim.get("national_policy", [])
         + articles_by_dim.get("beijing_policy", [])
+        + articles_by_dim.get("regional_policy", [])
     )
     if policy_articles:
         opening.append("最新政策方面，")

@@ -1,0 +1,120 @@
+dimension: "regional_policy"
+dimension_name: "对区域"
+description: "聚焦上海、深圳的科技、产业与申报政策"
+
+default_keyword_filter:
+  - "人工智能"
+  - "AI"
+  - "大模型"
+  - "科技"
+  - "创新"
+  - "产业"
+  - "数字经济"
+  - "数据"
+  - "算力"
+  - "高新技术"
+  - "申报"
+  - "征集"
+  - "指南"
+  - "场景"
+  - "研发"
+  - "研发中心"
+  - "基金"
+  - "知识产权"
+  - "机器人"
+  - "制造"
+  - "孵化器"
+  - "专精特新"
+
+default_keyword_blacklist:
+  - "供水"
+  - "停水"
+  - "消防"
+  - "道路施工"
+  - "婚姻登记"
+  - "绿化"
+  - "环卫"
+  - "垃圾"
+  - "食品安全"
+
+sources:
+  - id: "shanghai_municipal_policy"
+    name: "上海市政府-市级文件"
+    group: "policy"
+    url: "https://www.shanghai.gov.cn/zzrysj/"
+    crawl_method: "static"
+    schedule: "4h"
+    priority: 1
+    is_enabled: true
+    selectors:
+      list_item: "div.row.list-content a[title][href*='/zzrysj/']"
+      title: "_self"
+      link: "_self"
+    base_url: "https://www.shanghai.gov.cn"
+    detail_selectors:
+      content: "div.container"
+    tags: ["policy", "regional", "shanghai", "municipal"]
+
+  - id: "shanghai_sheitc_notice"
+    name: "上海市经信委-公示公告"
+    group: "policy"
+    url: "https://www.sheitc.sh.gov.cn/gg/index.html"
+    crawl_method: "static"
+    schedule: "4h"
+    priority: 1
+    is_enabled: true
+    selectors:
+      list_item: "ul.j-list-ul li"
+      title: "a h2"
+      link: "a"
+      date: "a span"
+      date_format: "%Y-%m-%d"
+    base_url: "https://www.sheitc.sh.gov.cn"
+    detail_selectors:
+      content: "div.text-main.fs-2"
+    tags: ["policy", "regional", "shanghai", "industry", "ai"]
+
+  - id: "shenzhen_stic_notice"
+    name: "深圳市科技创新局-通知公告"
+    group: "policy"
+    url: "http://stic.sz.gov.cn/xxgk/tzgg/"
+    crawl_method: "static"
+    schedule: "4h"
+    priority: 1
+    is_enabled: true
+    selectors:
+      list_item: "div.conter_listCont li"
+      title: "a"
+      link: "a"
+      link_replace_from: "https://stic.sz.gov.cn"
+      link_replace_to: "http://stic.sz.gov.cn"
+      date: "span"
+      date_format: "%Y-%m-%d"
+    base_url: "http://stic.sz.gov.cn"
+    detail_selectors:
+      content: "div#szrContent"
+    tags: ["policy", "regional", "shenzhen", "science", "funding"]
+
+  - id: "shenzhen_gxj_policy"
+    name: "深圳市工信局-政策法规"
+    group: "policy"
+    url: "http://gxj.sz.gov.cn/xxgk/xxgkml/zcfgjzcjd/gygh/"
+    crawl_method: "static"
+    schedule: "4h"
+    priority: 1
+    is_enabled: true
+    keyword_filter: []
+    keyword_blacklist: []
+    selectors:
+      list_item: "div.ListconC"
+      title: "a"
+      title_attr: "title"
+      link: "a"
+      link_replace_from: "https://gxj.sz.gov.cn"
+      link_replace_to: "http://gxj.sz.gov.cn"
+      date: "span"
+      date_format: "%Y-%m-%d"
+    base_url: "http://gxj.sz.gov.cn"
+    detail_selectors:
+      content: "div.TRS_Editor"
+    tags: ["policy", "regional", "shenzhen", "industry", "funding"]

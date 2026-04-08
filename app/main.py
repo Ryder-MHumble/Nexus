@@ -1,5 +1,6 @@
 import logging
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -39,8 +40,9 @@ TAG_METADATA = [
     },
     {
         "name": "dimensions",
-        "description": "维度视图 — 按 9 大维度（国家政策、北京政策、技术动态、人才政策、"
-        "产业动态、高校动态、活动会议、人事变动、Twitter）浏览文章汇总。",
+        "description": "维度视图 — 按国家政策、北京政策、区域政策、技术动态、人才政策、"
+        "产业动态、高校动态、活动会议、人事变动、Twitter 等维度浏览文章汇总。"
+        "其中区域政策当前聚焦上海、深圳。",
     },
     {
         "name": "health",
@@ -49,7 +51,8 @@ TAG_METADATA = [
     {
         "name": "policy-intel",
         "description": "政策智能 — 基于规则引擎 + LLM 二级管线处理的政策情报。"
-        "提供政策动态 Feed、政策机会看板（含资金/截止日/匹配度评分）和汇总统计。",
+        "覆盖国家、北京、上海/深圳重点区域及跨维度政策信号，提供政策动态 Feed、政策机会看板"
+        "（含资金/截止日/匹配度评分）和汇总统计。",
     },
     {
         "name": "personnel-intel",
@@ -59,7 +62,7 @@ TAG_METADATA = [
     {
         "name": "daily-briefing",
         "description": "AI 早报 — LLM 生成的每日简报，包含叙事段落（带交互链接）和聚合指标卡片。"
-        "数据来自全部 9 个维度的爬取结果和已处理的政策/人事情报。",
+        "数据来自多维度爬取结果和已处理的政策/人事情报。",
     },
     {
         "name": "university-eco",
@@ -180,7 +183,9 @@ async def lifespan(app: FastAPI):
             await init_client(settings.SUPABASE_URL, settings.SUPABASE_KEY, backend="supabase")
             logger.info("Supabase client initialized")
         else:
-            logger.warning("No database backend configured; DB features will fallback to local JSON")
+            logger.warning(
+                "No database backend configured; DB features will fallback to local JSON"
+            )
     except Exception as e:
         logger.warning("Database client initialization failed: %s", e)
 
@@ -267,15 +272,17 @@ app = FastAPI(
         "| **System Health** | Scheduler, pipeline, and storage diagnostics |\n\n"
         "## Data Dimensions\n\n"
         "- `national_policy` — National policy and regulation tracking\n"
-        "- `beijing_policy` — Regional policy monitoring\n"
+        "- `beijing_policy` — Beijing municipal policy monitoring\n"
+        "- `regional_policy` — Shanghai and Shenzhen innovation and industry policy monitoring\n"
         "- `technology` — Research and technology frontier signals\n"
         "- `talent` — Talent and recruitment developments\n"
         "- `industry` — Industry trends and company activity\n"
         "- `universities` — University and research institution activity\n"
         "- `events` — Conferences, salons, and seminars\n"
         "- `personnel` — Leadership and appointment changes\n"
-        "- `twitter` — Social/KOL monitoring\n"
         "- `scholars` — Scholar and faculty knowledge imports\n"
+        "- `twitter` signals are currently ingested through the platform-level source "
+        "inside `technology`\n"
         "- `sentiment` — Social sentiment intelligence\n\n"
         "## Runtime\n\n"
         "FastAPI + APScheduler + httpx + BeautifulSoup4 + Playwright + "
@@ -310,7 +317,6 @@ app.add_middleware(
 app.include_router(v1_router)
 
 # Mount static files for frontend UI
-from pathlib import Path
 frontend_dir = Path(__file__).parent.parent / "frontend"
 if frontend_dir.exists():
     app.mount("/ui", StaticFiles(directory=str(frontend_dir), html=True), name="ui")

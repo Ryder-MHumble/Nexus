@@ -5,6 +5,7 @@ from app.services.stores.json_reader import get_dimension_stats
 DIMENSION_NAMES = {
     "national_policy": "对国家",
     "beijing_policy": "对北京",
+    "regional_policy": "对区域",
     "technology": "对技术",
     "talent": "对人才",
     "industry": "对产业",

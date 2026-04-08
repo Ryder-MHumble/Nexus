@@ -3,7 +3,7 @@
   "info": {
     "title": "Nexus Data Intelligence API",
     "summary": "Structured knowledge infrastructure for AI applications",
-    "description": "## Overview\n\nNexus turns multi-source web content into structured, queryable knowledge for AI applications. The platform combines configurable crawlers, scheduled processing pipelines, domain-specific intelligence modules, and management APIs.\n\n## Modules\n\n| Module | Description |\n|--------|-------------|\n| **Articles** | Search, filter, inspect, and analyze crawled content |\n| **Sources** | Source catalog, runtime overrides, health status, and facets |\n| **Crawler Control** | Batch crawl triggers, progress tracking, export workflows |\n| **Knowledge Graph** | Scholars, institutions, projects, students, events, leadership |\n| **Intelligence** | Policy, personnel, tech frontier, university, sentiment, reports |\n| **System Health** | Scheduler, pipeline, and storage diagnostics |\n\n## Data Dimensions\n\n- `national_policy` — National policy and regulation tracking\n- `beijing_policy` — Regional policy monitoring\n- `technology` — Research and technology frontier signals\n- `talent` — Talent and recruitment developments\n- `industry` — Industry trends and company activity\n- `universities` — University and research institution activity\n- `events` — Conferences, salons, and seminars\n- `personnel` — Leadership and appointment changes\n- `twitter` — Social/KOL monitoring\n- `scholars` — Scholar and faculty knowledge imports\n- `sentiment` — Social sentiment intelligence\n\n## Runtime\n\nFastAPI + APScheduler + httpx + BeautifulSoup4 + Playwright + PostgreSQL/Supabase-compatible data access",
+    "description": "## Overview\n\nNexus turns multi-source web content into structured, queryable knowledge for AI applications. The platform combines configurable crawlers, scheduled processing pipelines, domain-specific intelligence modules, and management APIs.\n\n## Modules\n\n| Module | Description |\n|--------|-------------|\n| **Articles** | Search, filter, inspect, and analyze crawled content |\n| **Sources** | Source catalog, runtime overrides, health status, and facets |\n| **Crawler Control** | Batch crawl triggers, progress tracking, export workflows |\n| **Knowledge Graph** | Scholars, institutions, projects, students, events, leadership |\n| **Intelligence** | Policy, personnel, tech frontier, university, sentiment, reports |\n| **System Health** | Scheduler, pipeline, and storage diagnostics |\n\n## Data Dimensions\n\n- `national_policy` — National policy and regulation tracking\n- `beijing_policy` — Beijing municipal policy monitoring\n- `regional_policy` — Shanghai and Shenzhen innovation and industry policy monitoring\n- `technology` — Research and technology frontier signals\n- `talent` — Talent and recruitment developments\n- `industry` — Industry trends and company activity\n- `universities` — University and research institution activity\n- `events` — Conferences, salons, and seminars\n- `personnel` — Leadership and appointment changes\n- `scholars` — Scholar and faculty knowledge imports\n- `twitter` signals are currently ingested through the platform-level source inside `technology`\n- `sentiment` — Social sentiment intelligence\n\n## Runtime\n\nFastAPI + APScheduler + httpx + BeautifulSoup4 + Playwright + PostgreSQL/Supabase-compatible data access",
     "contact": {
       "name": "Nexus",
       "url": "https://github.com/yourusername/nexus"
@@ -2000,7 +2000,7 @@
           "dimensions"
         ],
         "summary": "维度列表",
-        "description": "列出全部 9 个维度，返回每个维度的文章数量和最后更新时间。",
+        "description": "列出全部 10 个维度，返回每个维度的文章数量和最后更新时间。",
         "operationId": "list_dimensions_api_v1_dimensions_get",
         "responses": {
           "200": {
@@ -2020,7 +2020,7 @@
           "dimensions"
         ],
         "summary": "维度文章",
-        "description": "获取指定维度下的文章列表，支持关键词搜索、排序和分页。\n\n可用维度: `national_policy`, `beijing_policy`, `technology`, `talent`, `industry`, `universities`, `events`, `personnel`, `twitter`",
+        "description": "获取指定维度下的文章列表，支持关键词搜索、排序和分页。\n\n可用维度: `national_policy`, `beijing_policy`, `regional_policy`, `technology`, `talent`, `industry`, `universities`, `events`, `personnel`, `twitter`",
         "operationId": "get_dimension_articles_api_v1_dimensions__dimension__get",
         "parameters": [
           {
@@ -2139,10 +2139,10 @@
                   "type": "null"
                 }
               ],
-              "description": "政策分类: 国家政策 / 北京政策 / 领导讲话 / 政策机会",
+              "description": "政策分类: 国家政策 / 北京政策 / 区域政策 / 人才政策 / 高校政策 / 政策机会",
               "title": "Category"
             },
-            "description": "政策分类: 国家政策 / 北京政策 / 领导讲话 / 政策机会"
+            "description": "政策分类: 国家政策 / 北京政策 / 区域政策 / 人才政策 / 高校政策 / 政策机会"
           },
           {
             "name": "importance",
@@ -13517,7 +13517,7 @@
             "examples": [
               [
                 "AI领域",
-                "中关村",
+                "重点岗位",
                 "新任命"
               ]
             ]
@@ -14094,7 +14094,9 @@
                 "enum": [
                   "国家政策",
                   "北京政策",
-                  "领导讲话",
+                  "区域政策",
+                  "人才政策",
+                  "高校政策",
                   "政策机会",
                   "一般"
                 ]
@@ -14262,7 +14264,7 @@
               [
                 "人工智能",
                 "专项资金",
-                "中关村"
+                "算力"
               ]
             ]
           },
@@ -14398,6 +14400,7 @@
                 "enum": [
                   "national",
                   "beijing",
+                  "regional",
                   "ministry"
                 ]
               },
@@ -14406,7 +14409,7 @@
               }
             ],
             "title": "Agencytype",
-            "description": "机构级别: national（国家）/ beijing（北京）/ ministry（部委）"
+            "description": "机构级别: national（国家）/ beijing（北京）/ regional（区域）/ ministry（部委）"
           },
           "matchScore": {
             "anyOf": [
@@ -21817,7 +21820,7 @@
     },
     {
       "name": "dimensions",
-      "description": "维度视图 — 按 9 大维度（国家政策、北京政策、技术动态、人才政策、产业动态、高校动态、活动会议、人事变动、Twitter）浏览文章汇总。"
+      "description": "维度视图 — 按国家政策、北京政策、区域政策、技术动态、人才政策、产业动态、高校动态、活动会议、人事变动、Twitter 等维度浏览文章汇总。其中区域政策当前聚焦上海、深圳。"
     },
     {
       "name": "health",
@@ -21825,7 +21828,7 @@
     },
     {
       "name": "policy-intel",
-      "description": "政策智能 — 基于规则引擎 + LLM 二级管线处理的政策情报。提供政策动态 Feed、政策机会看板（含资金/截止日/匹配度评分）和汇总统计。"
+      "description": "政策智能 — 基于规则引擎 + LLM 二级管线处理的政策情报。覆盖国家、北京、上海/深圳重点区域及跨维度政策信号，提供政策动态 Feed、政策机会看板（含资金/截止日/匹配度评分）和汇总统计。"
     },
     {
       "name": "personnel-intel",
@@ -21833,7 +21836,7 @@
     },
     {
       "name": "daily-briefing",
-      "description": "AI 早报 — LLM 生成的每日简报，包含叙事段落（带交互链接）和聚合指标卡片。数据来自全部 9 个维度的爬取结果和已处理的政策/人事情报。"
+      "description": "AI 早报 — LLM 生成的每日简报，包含叙事段落（带交互链接）和聚合指标卡片。数据来自多维度爬取结果和已处理的政策/人事情报。"
     },
     {
       "name": "university-eco",

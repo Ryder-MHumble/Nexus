@@ -31,7 +31,7 @@ class Settings(BaseSettings):
     POSTGRES_PORT: int = 5432
     POSTGRES_USER: str = "postgres"
     POSTGRES_PASSWORD: str = ""
-    POSTGRES_DB: str = "zgci_db"
+    POSTGRES_DB: str = "nexus"
 
     # Supabase (legacy / optional fallback)
     SUPABASE_URL: str = ""
