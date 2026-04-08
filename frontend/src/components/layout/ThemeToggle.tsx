@@ -13,7 +13,7 @@ export function ThemeToggle() {
     () => false,
   )
 
-  if (!mounted) return <div className="w-9 h-9" />
+  if (!mounted) return <div className="w-9 h-9" aria-hidden="true" />
 
   return (
     <Button
@@ -21,6 +21,8 @@ export function ThemeToggle() {
       size="icon"
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
       className="rounded-full"
+      aria-label={theme === 'dark' ? '切换到浅色主题' : '切换到深色主题'}
+      title={theme === 'dark' ? '切换到浅色主题' : '切换到深色主题'}
     >
       {theme === 'dark' ? (
         <Sun className="h-4 w-4" />

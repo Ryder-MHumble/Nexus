@@ -6,13 +6,22 @@ from typing import Any
 
 from fastapi import APIRouter, Query
 
+from app.schemas.llm_tracking import (
+    LLMAuditTrailFilters,
+    LLMAuditTrailResponse,
+    LLMCallsByArticleResponse,
+    LLMCallsByStageResponse,
+    LLMCostByModelResponse,
+    LLMTrackingHealthResponse,
+    LLMSummaryResponse,
+)
 from app.services.llm.llm_call_tracker import get_tracker
 
 router = APIRouter(prefix="/llm-tracking", tags=["llm-tracking"])
 
 
-@router.get("/summary")
-async def get_llm_summary() -> dict[str, Any]:
+@router.get("/summary", response_model=LLMSummaryResponse)
+async def get_llm_summary() -> LLMSummaryResponse:
     """Get overall LLM usage summary and cost statistics.
 
     Returns:
@@ -24,8 +33,8 @@ async def get_llm_summary() -> dict[str, Any]:
     return tracker.get_summary()
 
 
-@router.get("/calls-by-stage/{stage}")
-async def get_calls_by_stage(stage: str) -> list[dict[str, Any]]:
+@router.get("/calls-by-stage/{stage}", response_model=LLMCallsByStageResponse)
+async def get_calls_by_stage(stage: str) -> LLMCallsByStageResponse:
     """Get all LLM calls for a specific pipeline stage.
 
     Args:
@@ -43,8 +52,8 @@ async def get_calls_by_stage(stage: str) -> list[dict[str, Any]]:
     }
 
 
-@router.get("/calls-by-article/{article_id}")
-async def get_calls_by_article(article_id: str) -> list[dict[str, Any]]:
+@router.get("/calls-by-article/{article_id}", response_model=LLMCallsByArticleResponse)
+async def get_calls_by_article(article_id: str) -> LLMCallsByArticleResponse:
     """Get all LLM calls for a specific article.
 
     Args:
@@ -62,12 +71,12 @@ async def get_calls_by_article(article_id: str) -> list[dict[str, Any]]:
     }
 
 
-@router.get("/audit-trail")
+@router.get("/audit-trail", response_model=LLMAuditTrailResponse)
 async def get_audit_trail(
     limit: int = Query(100, ge=1, le=1000),
     stage: str | None = None,
     start_date: str | None = None,
-) -> dict[str, Any]:
+) -> LLMAuditTrailResponse:
     """Export audit trail of LLM calls for review.
 
     Args:
@@ -93,12 +102,12 @@ async def get_audit_trail(
     return {
         "record_count": len(records),
         "records": records,
-        "filters_applied": filters,
+        "filters_applied": LLMAuditTrailFilters(**filters),
     }
 
 
-@router.get("/cost-by-model")
-async def get_cost_by_model() -> dict[str, Any]:
+@router.get("/cost-by-model", response_model=LLMCostByModelResponse)
+async def get_cost_by_model() -> LLMCostByModelResponse:
     """Get cost breakdown by model.
 
     Returns:
@@ -135,8 +144,8 @@ async def get_cost_by_model() -> dict[str, Any]:
     }
 
 
-@router.get("/health")
-async def llm_tracking_health() -> dict[str, Any]:
+@router.get("/health", response_model=LLMTrackingHealthResponse)
+async def llm_tracking_health() -> LLMTrackingHealthResponse:
     """Check LLM tracking system health."""
     return {
         "status": "healthy",

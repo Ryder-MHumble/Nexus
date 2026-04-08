@@ -24,13 +24,19 @@ logger = logging.getLogger(__name__)
 # Policy-specific keyword tables
 # ---------------------------------------------------------------------------
 
-# Tier A: Highly specific to the AI research institute
+# Tier A: High-intent policy signals
 KEYWORDS_TIER_A: list[tuple[str, int]] = [
     ("人工智能研究院", 30),
+    ("训力券", 28),
+    ("联合基金", 28),
+    ("申报指南", 28),
+    ("场景征集", 26),
     ("新型研发机构", 25),
     ("具身智能", 25),
+    ("垂类大模型", 22),
     ("大模型", 20),
     ("人工智能", 20),
+    ("AI+制造", 18),
     ("算力", 18),
     ("智能计算", 20),
     ("中关村", 18),
@@ -40,8 +46,18 @@ KEYWORDS_TIER_A: list[tuple[str, int]] = [
 
 # Tier B: Directly related fields
 KEYWORDS_TIER_B: list[tuple[str, int]] = [
+    ("高新技术企业", 15),
+    ("科技型企业孵化器", 15),
+    ("研发准备金", 15),
+    ("研发中心", 15),
+    ("产业用房", 15),
+    ("知识产权创新", 14),
+    ("区域创新发展联合基金", 14),
     ("科技成果转化", 12),
     ("科技人才", 12),
+    ("孵化器", 12),
+    ("专精特新", 12),
+    ("公共数据开放", 12),
     ("机器人", 12),
     ("卓越工程师", 10),
     ("自然科学基金", 10),
@@ -60,6 +76,10 @@ KEYWORDS_TIER_B: list[tuple[str, int]] = [
 # Tier C: Indirectly related
 KEYWORDS_TIER_C: list[tuple[str, int]] = [
     ("专项资金", 8),
+    ("场景开放", 8),
+    ("项目征集", 8),
+    ("政策解读", 8),
+    ("科技产业", 8),
     ("教育", 5),
     ("高校", 5),
     ("科学", 5),
@@ -80,6 +100,17 @@ SOURCE_SCORE_BONUS: dict[str, int] = {
     "most_policy": 10,
     "ndrc_policy": 5,
     "nsfc_news": 8,
+    "shanghai_municipal_policy": 12,
+    "shanghai_sheitc_notice": 14,
+    "shenzhen_stic_notice": 15,
+    "shenzhen_gxj_policy": 15,
+    "moe_talent": 8,
+    "nsfc_talent": 10,
+    "beijing_jw": 6,
+    "shanghai_jw": 6,
+    "zhejiang_jyt": 6,
+    "jiangsu_jyt": 6,
+    "guangdong_jyt": 6,
 }
 
 # ---------------------------------------------------------------------------
@@ -88,7 +119,8 @@ SOURCE_SCORE_BONUS: dict[str, int] = {
 
 OPPORTUNITY_TITLE_KW = [
     "征集", "申报", "通知", "补贴", "资助", "专项",
-    "课题", "评审", "遴选", "招标", "入围",
+    "课题", "评审", "遴选", "招标", "入围", "指南",
+    "场景", "券", "指南建议",
 ]
 
 # ---------------------------------------------------------------------------
@@ -116,6 +148,18 @@ AGENCY_MAP: dict[str, str] = {
     "mohrss_rsrm": "人社部",
     "moe_renshi": "教育部",
     "moe_renshi_si": "教育部人事司",
+    "shanghai_municipal_policy": "上海市人民政府",
+    "shanghai_sheitc_notice": "上海市经济和信息化委员会",
+    "shenzhen_stic_notice": "深圳市科技创新局",
+    "shenzhen_gxj_policy": "深圳市工业和信息化局",
+    "moe_talent": "教育部",
+    "nsfc_talent": "国家自然科学基金委",
+    "wrsa_talent": "欧美同学会",
+    "beijing_jw": "北京市教委",
+    "shanghai_jw": "上海市教委",
+    "zhejiang_jyt": "浙江省教育厅",
+    "jiangsu_jyt": "江苏省教育厅",
+    "guangdong_jyt": "广东省教育厅",
 }
 
 
@@ -140,17 +184,18 @@ def compute_match_score(article: dict[str, Any]) -> int:
 def detect_opportunity(article: dict[str, Any]) -> bool:
     """Detect if article is a policy opportunity.
 
-    Requires title contains opportunity keyword AND content contains
+    Requires title contains opportunity keyword AND article text contains
     funding amount or deadline mention.
     """
     title = article.get("title", "")
     content = article.get("content") or ""
+    text = f"{title}\n{content}"
 
     has_kw = any(kw in title for kw in OPPORTUNITY_TITLE_KW)
     if not has_kw:
         return False
 
-    return bool(extract_funding(content)) or bool(extract_deadline(content))
+    return bool(extract_funding(text)) or bool(extract_deadline(text))
 
 
 def extract_tags(article: dict[str, Any]) -> list[str]:

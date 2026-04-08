@@ -20,6 +20,10 @@ from fastapi import APIRouter, HTTPException, Query
 from app.schemas.institution import (
     InstitutionCreate,
     InstitutionDetailResponse,
+    InstitutionHierarchyResponse,
+    InstitutionListResponse,
+    InstitutionSearchResponse,
+    InstitutionSuggestionResponse,
     InstitutionStatsResponse,
     InstitutionUpdate,
 )
@@ -36,6 +40,7 @@ router = APIRouter()
 
 @router.get(
     "",
+    response_model=InstitutionListResponse | InstitutionHierarchyResponse,
     summary="机构列表（统一接口）",
     description=(
         "获取机构列表，支持扁平列表和层级结构两种视图。"
@@ -55,7 +60,11 @@ router = APIRouter()
 )
 async def list_institutions(
     # View control
-    view: str = Query(default="flat", description="视图类型：flat（扁平列表）| hierarchy（层级结构）"),
+    view: str = Query(
+        default="flat",
+        pattern="^(flat|hierarchy)$",
+        description="视图类型：flat（扁平列表）| hierarchy（层级结构）",
+    ),
     # Classification parameters
     entity_type: str | None = Query(default=None, description="实体类型：organization | department"),
     region: str | None = Query(default=None, description="地域：国内 | 国际"),
@@ -141,6 +150,7 @@ async def get_institution_taxonomy():
 
 @router.get(
     "/search",
+    response_model=InstitutionSearchResponse,
     summary="搜索机构（模糊匹配）",
     description=(
         "根据关键词搜索机构，支持模糊匹配。用于前端自动完成（autocomplete）功能。"
@@ -206,6 +216,7 @@ async def search_institutions_endpoint(
 
 @router.get(
     "/suggest",
+    response_model=InstitutionSuggestionResponse,
     summary="建议机构匹配",
     description=(
         "根据机构名称查找最佳匹配的机构。用于学者编辑时自动匹配已有机构。"

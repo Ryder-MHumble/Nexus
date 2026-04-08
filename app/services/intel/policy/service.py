@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from app.services.intel.shared import load_intel_json, parse_source_filter
+from app.services.intel.shared import load_required_intel_json, parse_source_filter
 
 MODULE = "policy_intel"
 
@@ -21,12 +21,12 @@ def get_policy_feed(
     offset: int = 0,
 ) -> dict[str, Any]:
     """Read feed.json and apply optional filters."""
-    data = load_intel_json(MODULE, "feed.json")
+    data = load_required_intel_json(MODULE, "feed.json")
     items = data.get("items", [])
 
     # 应用信源筛选（优先筛选，减少后续处理量）
     source_filter = parse_source_filter(source_id, source_ids, source_name, source_names)
-    if source_filter:
+    if source_filter is not None:
         items = [i for i in items if i.get("source_id") in source_filter]
 
     if category:
@@ -57,7 +57,7 @@ def get_policy_opportunities(
     offset: int = 0,
 ) -> dict[str, Any]:
     """Read opportunities.json and apply optional filters."""
-    data = load_intel_json(MODULE, "opportunities.json")
+    data = load_required_intel_json(MODULE, "opportunities.json")
     items = data.get("items", [])
 
     if status:
@@ -72,8 +72,8 @@ def get_policy_opportunities(
 
 def get_policy_stats() -> dict[str, Any]:
     """Get summary statistics without running filter logic."""
-    feed_data = load_intel_json(MODULE, "feed.json")
-    opps_data = load_intel_json(MODULE, "opportunities.json")
+    feed_data = load_required_intel_json(MODULE, "feed.json")
+    opps_data = load_required_intel_json(MODULE, "opportunities.json")
     return {
         "total_feed_items": feed_data.get("item_count", 0),
         "total_opportunities": opps_data.get("item_count", 0),

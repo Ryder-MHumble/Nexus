@@ -1,6 +1,7 @@
 # tests/test_source_filter.py
 from unittest.mock import patch
 
+from app.services.intel.policy.service import get_policy_feed
 from app.services.intel.shared import parse_source_filter, resolve_source_ids_by_names
 
 
@@ -115,3 +116,36 @@ def test_parse_source_filter_mixed_id_and_name():
         result = parse_source_filter("arxiv", "github", "政府", None)
         # arxiv, github (ID) + gov (from "政府" name match)
         assert result == {"arxiv", "github", "gov"}
+
+
+def test_parse_source_filter_name_without_match_returns_empty_set():
+    """显式传入名称筛选但没有命中时，返回空集合而不是 None。"""
+    mock_sources = [
+        {"id": "gov", "name": "中国政府网"},
+    ]
+    with patch("app.scheduler.manager.load_all_source_configs", return_value=mock_sources):
+        result = parse_source_filter(None, None, "不存在的信源", None)
+        assert result == set()
+
+
+def test_policy_feed_source_name_without_match_returns_empty_items():
+    """名称筛选未命中时，服务层应返回空结果而不是全量数据。"""
+    mock_sources = [
+        {"id": "gov", "name": "中国政府网"},
+    ]
+    mock_feed = {
+        "generated_at": "2026-04-08T00:00:00",
+        "items": [
+            {
+                "id": "item-1",
+                "title": "政策标题",
+                "source_id": "gov",
+                "source_name": "中国政府网",
+            }
+        ],
+    }
+    with patch("app.scheduler.manager.load_all_source_configs", return_value=mock_sources):
+        with patch("app.services.intel.policy.service.load_required_intel_json", return_value=mock_feed):
+            result = get_policy_feed(source_name="不存在的信源")
+            assert result["item_count"] == 0
+            assert result["items"] == []

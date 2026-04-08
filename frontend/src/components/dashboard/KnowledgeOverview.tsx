@@ -38,6 +38,8 @@ type OverviewState = {
   reports: ReportDimensionsResponse | null;
 };
 
+type OverviewAvailability = Record<keyof OverviewState, boolean>;
+
 function toCountLabel(items?: CountBucket[] | ScholarStatsBucket[]) {
   const first = items?.[0];
   if (!first) {
@@ -66,6 +68,14 @@ export function KnowledgeOverview() {
     reports: null,
   });
   const [loading, setLoading] = useState(true);
+  const [availability, setAvailability] = useState<OverviewAvailability>({
+    institutions: false,
+    scholars: false,
+    projects: false,
+    events: false,
+    leadership: false,
+    reports: false,
+  });
 
   useEffect(() => {
     let cancelled = false;
@@ -101,6 +111,14 @@ export function KnowledgeOverview() {
         leadership: leadership.status === "fulfilled" ? leadership.value : null,
         reports: reports.status === "fulfilled" ? reports.value : null,
       });
+      setAvailability({
+        institutions: institutions.status === "fulfilled",
+        scholars: scholars.status === "fulfilled",
+        projects: projects.status === "fulfilled",
+        events: events.status === "fulfilled",
+        leadership: leadership.status === "fulfilled",
+        reports: reports.status === "fulfilled",
+      });
       setLoading(false);
     };
 
@@ -110,75 +128,105 @@ export function KnowledgeOverview() {
     };
   }, []);
 
+  const unavailableCount = Object.values(availability).filter((item) => !item).length;
+
   const cards = [
     {
       title: "机构网络",
-      value: state.institutions?.total_universities ?? 0,
+      value: state.institutions?.total_universities,
+      valueLabel: state.institutions
+        ? state.institutions.total_universities.toLocaleString()
+        : "—",
       detail: state.institutions
         ? `${state.institutions.total_departments} 个二级机构`
-        : "未连接",
+        : availability.institutions
+          ? "等待统计生成"
+          : "统计接口未连通",
       subdetail: toCountLabel(state.institutions?.by_category),
+      available: availability.institutions,
       icon: Building2,
       tone: "from-blue-500/15 to-cyan-500/10 text-blue-600 dark:text-blue-300",
     },
     {
       title: "学者库",
-      value: state.scholars?.total ?? 0,
+      value: state.scholars?.total,
+      valueLabel: state.scholars ? state.scholars.total.toLocaleString() : "—",
       detail: state.scholars
         ? `${state.scholars.academicians} 位院士`
-        : "未连接",
+        : availability.scholars
+          ? "等待统计生成"
+          : "统计接口未连通",
       subdetail: toCountLabel(state.scholars?.by_university),
+      available: availability.scholars,
       icon: GraduationCap,
       tone: "from-violet-500/15 to-fuchsia-500/10 text-violet-600 dark:text-violet-300",
     },
     {
       title: "项目标签",
-      value: state.projects?.total ?? 0,
+      value: state.projects?.total,
+      valueLabel: state.projects ? state.projects.total.toLocaleString() : "—",
       detail: state.projects
         ? `${state.projects.total_related_scholars} 条学者关联`
-        : "未连接",
+        : availability.projects
+          ? "等待统计生成"
+          : "统计接口未连通",
       subdetail: toCountLabel(state.projects?.by_category),
+      available: availability.projects,
       icon: FolderKanban,
       tone: "from-emerald-500/15 to-teal-500/10 text-emerald-600 dark:text-emerald-300",
     },
     {
       title: "活动库",
-      value: state.events?.total ?? 0,
+      value: state.events?.total,
+      valueLabel: state.events ? state.events.total.toLocaleString() : "—",
       detail: state.events
         ? `${state.events.total_related_scholars} 条活动关联`
-        : "未连接",
+        : availability.events
+          ? "等待统计生成"
+          : "统计接口未连通",
       subdetail: toCountLabel(state.events?.by_series),
+      available: availability.events,
       icon: CalendarRange,
       tone: "from-amber-500/15 to-orange-500/10 text-amber-600 dark:text-amber-300",
     },
     {
       title: "高校领导",
-      value: state.leadership?.total ?? 0,
+      value: state.leadership?.total,
+      valueLabel: state.leadership ? state.leadership.total.toLocaleString() : "—",
       detail: state.leadership
         ? `${state.leadership.items.reduce((sum, item) => sum + item.leader_count, 0)} 位领导在库`
-        : "未连接",
+        : availability.leadership
+          ? "等待抓取结果"
+          : "领导接口未连通",
       subdetail:
         state.leadership?.items[0]?.university_name
           ? `最近样本：${state.leadership.items[0].university_name}`
           : "等待抓取结果",
+      available: availability.leadership,
       icon: Landmark,
       tone: "from-rose-500/15 to-pink-500/10 text-rose-600 dark:text-rose-300",
     },
     {
       title: "报告维度",
-      value: state.reports?.dimensions.length ?? 0,
+      value: state.reports?.dimensions.length,
+      valueLabel: state.reports
+        ? state.reports.dimensions.length.toLocaleString()
+        : "—",
       detail: state.reports
         ? `${state.reports.dimensions.filter((item) => item.status === "implemented").length} 个已实现`
-        : "未连接",
+        : availability.reports
+          ? "等待能力加载"
+          : "报告接口未连通",
       subdetail:
         state.reports?.dimensions[0]?.name ?? "等待报告能力加载",
+      available: availability.reports,
       icon: Sparkles,
       tone: "from-slate-500/15 to-zinc-500/10 text-slate-600 dark:text-slate-300",
     },
   ];
 
   return (
-    <section className="rounded-xl border bg-card overflow-hidden">
+    <section className="overflow-hidden rounded-2xl border bg-card/90 shadow-sm backdrop-blur-sm">
       <div className="flex items-center justify-between gap-3 border-b bg-muted/20 px-5 py-4">
         <div>
           <h2 className="text-sm font-semibold">知识能力总览</h2>
@@ -187,9 +235,21 @@ export function KnowledgeOverview() {
           </p>
         </div>
         <span className="text-[11px] text-muted-foreground">
-          {loading ? "同步中…" : "已对齐后端统计"}
+          {loading
+            ? "同步中…"
+            : unavailableCount > 0
+              ? `${unavailableCount} 项未连通`
+              : "已对齐后端统计"}
         </span>
       </div>
+
+      {!loading && unavailableCount > 0 && (
+        <div className="border-b border-amber-500/20 bg-amber-500/10 px-5 py-3">
+          <p className="text-xs text-amber-700 dark:text-amber-200">
+            部分统计接口未返回结果，卡片会明确显示为“未连通”，不会再把失败误显示成 0。
+          </p>
+        </div>
+      )}
 
       <div className="grid gap-4 p-5 md:grid-cols-2 xl:grid-cols-3">
         {cards.map((card) => {
@@ -205,13 +265,14 @@ export function KnowledgeOverview() {
                     {card.title}
                   </p>
                   <div className="mt-3 text-3xl font-black tracking-tight">
-                    {card.value.toLocaleString()}
+                    {card.valueLabel}
                   </div>
                 </div>
                 <div
                   className={cn(
                     "flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br",
                     card.tone,
+                    !card.available && "opacity-60 grayscale",
                   )}
                 >
                   <Icon className="h-5 w-5" />

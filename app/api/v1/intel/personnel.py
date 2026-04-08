@@ -1,5 +1,5 @@
 """Personnel Intelligence API endpoints."""
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, HTTPException, Query
 
 from app.schemas.intel.personnel import (
     PersonnelChangesResponse,
@@ -7,9 +7,17 @@ from app.schemas.intel.personnel import (
     PersonnelEnrichedStatsResponse,
     PersonnelFeedResponse,
 )
+from app.services.intel.intel_store import IntelDataLoadError
 from app.services.intel.personnel import service as personnel_service
 
 router = APIRouter()
+
+
+def _call_personnel_service(func, *args, **kwargs):
+    try:
+        return func(*args, **kwargs)
+    except IntelDataLoadError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
 
 
 @router.get(
@@ -36,7 +44,8 @@ async def get_personnel_feed(
     limit: int = Query(50, ge=1, le=200, description="返回条数上限"),
     offset: int = Query(0, ge=0, description="偏移量"),
 ):
-    return personnel_service.get_personnel_feed(
+    return _call_personnel_service(
+        personnel_service.get_personnel_feed,
         importance=importance,
         min_match_score=min_match_score,
         keyword=keyword,
@@ -65,7 +74,8 @@ async def get_personnel_changes(
     limit: int = Query(50, ge=1, le=200, description="返回条数上限"),
     offset: int = Query(0, ge=0, description="偏移量"),
 ):
-    return personnel_service.get_personnel_changes(
+    return _call_personnel_service(
+        personnel_service.get_personnel_changes,
         department=department,
         action=action,
         keyword=keyword,
@@ -80,7 +90,7 @@ async def get_personnel_changes(
     description="获取人事数据的汇总统计信息。",
 )
 async def get_personnel_stats():
-    return personnel_service.get_personnel_stats()
+    return _call_personnel_service(personnel_service.get_personnel_stats)
 
 
 @router.get(

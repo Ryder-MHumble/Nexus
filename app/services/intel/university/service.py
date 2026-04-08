@@ -183,17 +183,17 @@ async def get_feed(
     # 应用信源筛选（优先筛选，减少后续处理量）
     source_filter = parse_source_filter(source_id, source_ids, source_name, source_names)
 
-    # 如果有 source_filter，不传 source_id 给 get_articles，之后手动过滤
+    # 如果显式传入了信源筛选，不传 source_id 给 get_articles，之后手动过滤
     articles = await get_articles(
         DIMENSION,
         group=group,
-        source_id=None if source_filter else source_id,
+        source_id=None if source_filter is not None else source_id,
         date_from=date_from,
         date_to=date_to,
     )
 
     # 手动应用信源过滤
-    if source_filter:
+    if source_filter is not None:
         articles = [a for a in articles if a.get("source_id") in source_filter]
 
     # Keyword filter on title

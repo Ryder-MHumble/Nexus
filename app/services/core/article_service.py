@@ -122,10 +122,10 @@ async def list_articles(params: ArticleSearchParams) -> PaginatedResponse:
         params.source_id, params.source_ids, params.source_name, params.source_names
     )
 
-    # 如果有 source_filter，不传 source_id 给 get_all_articles，之后手动过滤
+    # 如果显式传入了信源筛选，不传 source_id 给 get_all_articles，之后手动过滤
     items = await get_all_articles(
         dimension=params.dimension,
-        source_id=None if source_filter else params.source_id,
+        source_id=None if source_filter is not None else params.source_id,
         keyword=params.keyword,
         tags=params.tags,
         date_from=date_from,
@@ -133,7 +133,7 @@ async def list_articles(params: ArticleSearchParams) -> PaginatedResponse:
     )
 
     # 手动应用信源过滤
-    if source_filter:
+    if source_filter is not None:
         items = [item for item in items if item.get("source_id") in source_filter]
 
     # custom_fields filtering (before transformation for efficiency)

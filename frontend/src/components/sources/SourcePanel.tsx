@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   CheckSquare,
   ChevronDown,
@@ -97,7 +97,6 @@ export function SourcePanel() {
     expandedDimensions,
     setSourceCatalog,
     toggleSource,
-    toggleDimension,
     expandDimension,
     status,
   } = useCrawlerStore();
@@ -108,26 +107,29 @@ export function SourcePanel() {
     null,
   );
   const [groupFilter, setGroupFilter] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
 
-  const loadSources = async () => {
+  const loadSources = useCallback(async () => {
+    setIsLoading(true);
+    setLoadError(null);
     try {
       const data = await fetchSourceCatalog();
       setSourceCatalog(data);
-    } catch {
-      /* silently fail */
+      setHasLoadedOnce(true);
+    } catch (error) {
+      setLoadError(
+        error instanceof Error ? error.message : "信源目录加载失败，请稍后重试",
+      );
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }, [setSourceCatalog]);
 
   useEffect(() => {
-    void (async () => {
-      try {
-        const data = await fetchSourceCatalog();
-        setSourceCatalog(data);
-      } catch {
-        /* silently fail */
-      }
-    })();
-  }, [setSourceCatalog]);
+    void loadSources();
+  }, [loadSources]);
 
   const visibleSources = useMemo(
     () =>
@@ -186,15 +188,40 @@ export function SourcePanel() {
     useCrawlerStore.setState({ selectedIds: next });
   };
 
+  const handleToggleVisibleDimension = (dimensionSources: Source[]) => {
+    const enabledSources = dimensionSources.filter((source) => source.is_enabled);
+    if (enabledSources.length === 0) {
+      return;
+    }
+
+    const next = new Set(useCrawlerStore.getState().selectedIds);
+    const everySelected = enabledSources.every((source) => next.has(source.id));
+
+    if (everySelected) {
+      enabledSources.forEach((source) => next.delete(source.id));
+    } else {
+      enabledSources.forEach((source) => next.add(source.id));
+    }
+
+    useCrawlerStore.setState({ selectedIds: next });
+  };
+
   const hasQuickFilters = Boolean(methodFilter || healthFilter || groupFilter);
+  const showNoResults =
+    !isLoading && !loadError && hasLoadedOnce && dimensions.length === 0;
+  const showLoadFailure = !isLoading && sources.length === 0 && Boolean(loadError);
+  const showStaleWarning = Boolean(loadError) && sources.length > 0;
 
   return (
-    <aside className="flex h-full flex-col border-r bg-muted/10">
-      <div className="space-y-3 border-b bg-background/70 px-4 py-3">
+    <aside className="flex h-full min-h-[640px] flex-col overflow-hidden rounded-2xl border bg-card/90 shadow-sm backdrop-blur-sm xl:max-h-[calc(100vh-6rem)]">
+      <div className="space-y-3 border-b bg-background/80 px-4 py-4">
         <div className="flex items-start justify-between gap-2">
           <div>
-            <p className="text-sm font-semibold">信源目录</p>
-            <p className="mt-0.5 text-xs text-muted-foreground">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-muted-foreground">
+              Source Directory
+            </p>
+            <h2 className="mt-2 text-lg font-semibold tracking-tight">信源目录</h2>
+            <p className="mt-1 text-xs text-muted-foreground">
               已选{" "}
               <span
                 className={cn(
@@ -213,6 +240,8 @@ export function SourcePanel() {
               size="sm"
               className="h-7 px-2 text-[11px] font-medium gap-1"
               onClick={handleSelectAll}
+              disabled={filteredEnabled.length === 0}
+              aria-label={allSelected ? "取消筛选结果全选" : "全选筛选结果"}
               title={allSelected ? "取消筛选结果全选" : "全选筛选结果"}
             >
               {allSelected ? (
@@ -232,9 +261,11 @@ export function SourcePanel() {
               size="icon"
               className="h-7 w-7"
               onClick={loadSources}
+              disabled={isLoading}
               title="刷新信源目录"
+              aria-label="刷新信源目录"
             >
-              <RefreshCw className="h-3.5 w-3.5" />
+              <RefreshCw className={cn("h-3.5 w-3.5", isLoading && "animate-spin")} />
             </Button>
           </div>
         </div>
@@ -273,11 +304,14 @@ export function SourcePanel() {
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             placeholder="搜索信源、标签或分组…"
+            aria-label="搜索信源、标签或分组"
             className="w-full rounded-md border border-input bg-background py-1.5 pl-8 pr-7 text-xs ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring transition-colors"
           />
           {search && (
             <button
+              type="button"
               onClick={() => setSearch("")}
+              aria-label="清空搜索关键词"
               className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
             >
               <X className="h-3 w-3" />
@@ -295,8 +329,10 @@ export function SourcePanel() {
                 const active = methodFilter === item.key;
                 return (
                   <button
+                    type="button"
                     key={item.key}
                     onClick={() => setMethodFilter(active ? null : item.key)}
+                    aria-pressed={active}
                     className={cn(
                       "rounded-full border px-2 py-1 text-[10px] font-medium transition-colors",
                       active
@@ -322,8 +358,10 @@ export function SourcePanel() {
                 const active = healthFilter === item;
                 return (
                   <button
+                    type="button"
                     key={item}
                     onClick={() => setHealthFilter(active ? null : item)}
+                    aria-pressed={active}
                     className={cn(
                       "rounded-full border px-2 py-1 text-[10px] font-medium transition-colors",
                       active
@@ -347,6 +385,7 @@ export function SourcePanel() {
               </div>
               {hasQuickFilters && (
                 <button
+                  type="button"
                   onClick={() => {
                     setMethodFilter(null);
                     setHealthFilter(null);
@@ -363,8 +402,10 @@ export function SourcePanel() {
                 const active = groupFilter === item.key;
                 return (
                   <button
+                    type="button"
                     key={item.key}
                     onClick={() => setGroupFilter(active ? null : item.key)}
+                    aria-pressed={active}
                     className={cn(
                       "rounded-full border px-2 py-1 text-[10px] font-medium transition-colors",
                       active
@@ -381,11 +422,52 @@ export function SourcePanel() {
         )}
       </div>
 
-      <div className="scrollbar-hide flex-1 overflow-y-auto py-2">
-        {dimensions.length === 0 && (
-          <p className="py-8 text-center text-xs text-muted-foreground">
-            未找到匹配的信源
-          </p>
+      <div className="flex-1 overflow-y-auto py-3 scrollbar-thin">
+        {showStaleWarning && (
+          <div className="mx-3 mb-3 rounded-xl border border-amber-500/20 bg-amber-500/10 px-3 py-2.5">
+            <p className="text-xs font-semibold text-amber-700 dark:text-amber-200">
+              信源目录同步失败
+            </p>
+            <p className="mt-1 text-[11px] text-amber-700/90 dark:text-amber-100/90">
+              {loadError} 当前展示的是最近一次成功同步的目录数据。
+            </p>
+          </div>
+        )}
+
+        {isLoading && sources.length === 0 && (
+          <div className="mx-3 rounded-xl border border-dashed bg-background/70 px-4 py-6">
+            <p className="text-sm font-medium">正在加载信源目录…</p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              首次同步可能需要几秒钟。
+            </p>
+          </div>
+        )}
+
+        {showLoadFailure && (
+          <div className="mx-3 rounded-xl border border-dashed bg-background/70 px-4 py-6">
+            <p className="text-sm font-medium">信源目录暂时不可用</p>
+            <p className="mt-1 text-xs text-muted-foreground">{loadError}</p>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="mt-4"
+              onClick={() => {
+                void loadSources();
+              }}
+            >
+              重试加载
+            </Button>
+          </div>
+        )}
+
+        {showNoResults && (
+          <div className="mx-3 rounded-xl border border-dashed bg-background/70 px-4 py-6">
+            <p className="text-sm font-medium">未找到匹配的信源</p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              可以调整搜索词或清空上方的快速筛选。
+            </p>
+          </div>
         )}
 
         {dimensions.map((dimension) => {
@@ -404,11 +486,8 @@ export function SourcePanel() {
           ).length;
 
           return (
-            <div key={dimension.name} className="mb-0.5">
-              <div
-                className="mx-1 flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 transition-colors hover:bg-muted/60"
-                onClick={() => expandDimension(dimension.name)}
-              >
+            <div key={dimension.name} className="mb-1 px-2">
+              <div className="flex items-center gap-2 rounded-xl border bg-background/60 px-2.5 py-2">
                 <Checkbox
                   checked={allDimensionSelected}
                   data-state={
@@ -416,32 +495,43 @@ export function SourcePanel() {
                       ? "indeterminate"
                       : undefined
                   }
-                  onCheckedChange={() => toggleDimension(dimension.name)}
-                  onClick={(event) => event.stopPropagation()}
+                  onCheckedChange={() => handleToggleVisibleDimension(dimension.sources)}
+                  aria-label={`切换 ${dimension.label} 维度的全部信源`}
                   className="h-3.5 w-3.5 shrink-0"
                 />
-                <span className="flex-1 text-xs font-semibold text-foreground/80">
-                  {dimension.label}
-                </span>
-                {selectedCount > 0 && (
-                  <Badge className="h-4 bg-primary/80 px-1.5 text-[10px]">
-                    {selectedCount}
-                  </Badge>
-                )}
-                <Badge variant="secondary" className="h-4 px-1.5 text-[10px]">
-                  {dimension.sources.length}
-                </Badge>
-                <span className="text-muted-foreground">
-                  {isExpanded ? (
-                    <ChevronDown className="h-3.5 w-3.5" />
-                  ) : (
-                    <ChevronRight className="h-3.5 w-3.5" />
+                <button
+                  type="button"
+                  onClick={() => expandDimension(dimension.name)}
+                  aria-expanded={isExpanded}
+                  aria-controls={`dimension-panel-${dimension.name}`}
+                  className="flex min-w-0 flex-1 items-center gap-2 text-left"
+                >
+                  <span className="flex-1 truncate text-xs font-semibold text-foreground/80">
+                    {dimension.label}
+                  </span>
+                  {selectedCount > 0 && (
+                    <Badge className="h-4 bg-primary/80 px-1.5 text-[10px]">
+                      {selectedCount}
+                    </Badge>
                   )}
-                </span>
+                  <Badge variant="secondary" className="h-4 px-1.5 text-[10px]">
+                    {dimension.sources.length}
+                  </Badge>
+                  <span className="text-muted-foreground">
+                    {isExpanded ? (
+                      <ChevronDown className="h-3.5 w-3.5" />
+                    ) : (
+                      <ChevronRight className="h-3.5 w-3.5" />
+                    )}
+                  </span>
+                </button>
               </div>
 
               {isExpanded && (
-                <div className="space-y-1 pb-1 pl-4 pr-2">
+                <div
+                  id={`dimension-panel-${dimension.name}`}
+                  className="space-y-1 pb-1 pl-3 pr-1 pt-1.5"
+                >
                   {dimension.sources.map((source) => {
                     const isSelected = selectedIds.has(source.id);
                     const isCurrent = status.current_source === source.id;
@@ -464,6 +554,7 @@ export function SourcePanel() {
                           checked={isSelected}
                           disabled={!source.is_enabled}
                           onCheckedChange={() => toggleSource(source.id)}
+                          aria-label={`选择信源 ${source.name}`}
                           className="mt-0.5 h-3.5 w-3.5 shrink-0"
                         />
                         <div className="min-w-0 flex-1">
@@ -488,6 +579,26 @@ export function SourcePanel() {
                           </div>
 
                           <div className="mt-1 flex flex-wrap items-center gap-1.5 text-[10px] text-muted-foreground">
+                            {(isCurrent || isCompleted || isFailed) && (
+                              <Badge
+                                className={cn(
+                                  "h-4 px-1.5 text-[10px]",
+                                  isCurrent &&
+                                    "bg-blue-500/15 text-blue-600 dark:text-blue-300",
+                                  isCompleted &&
+                                    !isCurrent &&
+                                    "bg-emerald-500/15 text-emerald-600 dark:text-emerald-300",
+                                  isFailed &&
+                                    "bg-destructive/15 text-destructive",
+                                )}
+                              >
+                                {isCurrent
+                                  ? "进行中"
+                                  : isCompleted
+                                    ? "完成"
+                                    : "失败"}
+                              </Badge>
+                            )}
                             {source.crawl_method && (
                               <Badge variant="secondary" className="h-4 px-1.5">
                                 {source.crawl_method}
@@ -509,9 +620,10 @@ export function SourcePanel() {
                               )}
                           </div>
 
-                          {(source.tags?.length ?? 0) > 0 && (
+                          {(source.tags?.length ?? 0) > 0 &&
+                            (isSelected || isCurrent || search.trim().length > 0) && (
                             <div className="mt-1 flex flex-wrap gap-1">
-                              {source.tags!.slice(0, 3).map((tag) => (
+                              {source.tags!.slice(0, 2).map((tag) => (
                                 <span
                                   key={`${source.id}-${tag}`}
                                   className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground"
@@ -519,9 +631,9 @@ export function SourcePanel() {
                                   #{tag}
                                 </span>
                               ))}
-                              {source.tags!.length > 3 && (
+                              {source.tags!.length > 2 && (
                                 <span className="text-[10px] text-muted-foreground">
-                                  +{source.tags!.length - 3}
+                                  +{source.tags!.length - 2}
                                 </span>
                               )}
                             </div>

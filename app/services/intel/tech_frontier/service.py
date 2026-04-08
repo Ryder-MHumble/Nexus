@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from app.services.intel.shared import load_intel_json, parse_source_filter
+from app.services.intel.shared import load_required_intel_json, parse_source_filter
 
 MODULE = "tech_frontier"
 
@@ -17,7 +17,7 @@ def get_topics(
     offset: int = 0,
 ) -> dict[str, Any]:
     """Get tech frontier topics with optional filters."""
-    data = load_intel_json(MODULE, "topics.json")
+    data = load_required_intel_json(MODULE, "topics.json")
     items = data.get("items", [])
 
     if heat_trend:
@@ -46,7 +46,7 @@ def get_topics(
 
 def get_topic_detail(topic_id: str) -> dict[str, Any] | None:
     """Get a single topic by ID."""
-    data = load_intel_json(MODULE, "topics.json")
+    data = load_required_intel_json(MODULE, "topics.json")
     for item in data.get("items", []):
         if item.get("id") == topic_id:
             return item
@@ -62,7 +62,7 @@ def get_opportunities(
     offset: int = 0,
 ) -> dict[str, Any]:
     """Get tech frontier opportunities with optional filters."""
-    data = load_intel_json(MODULE, "opportunities.json")
+    data = load_required_intel_json(MODULE, "opportunities.json")
     items = data.get("items", [])
 
     if priority:
@@ -90,7 +90,7 @@ def get_opportunities(
 
 def get_stats() -> dict[str, Any]:
     """Get tech frontier KPI statistics."""
-    data = load_intel_json(MODULE, "stats.json")
+    data = load_required_intel_json(MODULE, "stats.json")
     if not data or not data.get("totalTopics"):
         return {
             "generated_at": None,
@@ -123,7 +123,7 @@ def get_signals(
 
     Merges relatedNews and kolVoices from topics into a single time-sorted list.
     """
-    data = load_intel_json(MODULE, "topics.json")
+    data = load_required_intel_json(MODULE, "topics.json")
     topics = data.get("items", [])
 
     signals: list[dict] = []
@@ -166,7 +166,7 @@ def get_signals(
 
     # 应用信源筛选
     source_filter = parse_source_filter(source_id, source_ids, source_name, source_names)
-    if source_filter:
+    if source_filter is not None:
         unique = [s for s in unique if s["data"].get("source_id") in source_filter]
 
     # Keyword filter

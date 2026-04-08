@@ -29,11 +29,13 @@ from app.services.intel.extractors import (  # noqa: F401
     extract_leader,
 )
 from app.services.intel.intel_store import (  # noqa: F401
+    IntelDataLoadError,
     _EMPTY_RESPONSE,
     PROCESSED_BASE,
     deduplicate_articles,
     get_intel_stats,
     load_intel_json,
+    load_required_intel_json,
 )
 from app.services.intel.scoring import (  # noqa: F401
     clamp_score,
@@ -68,7 +70,9 @@ __all__ = [
     # intel_store
     "PROCESSED_BASE",
     "_EMPTY_RESPONSE",
+    "IntelDataLoadError",
     "load_intel_json",
+    "load_required_intel_json",
     "get_intel_stats",
     "deduplicate_articles",
     # source_filter

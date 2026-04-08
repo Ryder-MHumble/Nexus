@@ -232,14 +232,14 @@ def get_personnel_feed(
     offset: int = 0,
 ) -> dict[str, Any]:
     """Read feed.json and apply optional filters."""
-    from app.services.intel.shared import load_intel_json
+    from app.services.intel.shared import load_required_intel_json
 
-    data = load_intel_json("personnel_intel", "feed.json")
+    data = load_required_intel_json("personnel_intel", "feed.json")
     items = data.get("items", [])
 
     # 应用信源筛选（优先筛选，减少后续处理量）
     source_filter = parse_source_filter(source_id, source_ids, source_name, source_names)
-    if source_filter:
+    if source_filter is not None:
         items = [i for i in items if i.get("source_id") in source_filter]
 
     if importance:
@@ -269,9 +269,9 @@ def get_personnel_changes(
     offset: int = 0,
 ) -> dict[str, Any]:
     """Read changes.json and apply optional filters."""
-    from app.services.intel.shared import load_intel_json
+    from app.services.intel.shared import load_required_intel_json
 
-    data = load_intel_json("personnel_intel", "changes.json")
+    data = load_required_intel_json("personnel_intel", "changes.json")
     items = data.get("items", [])
 
     if department:
@@ -295,10 +295,10 @@ def get_personnel_changes(
 
 def get_personnel_stats() -> dict[str, Any]:
     """Get summary statistics about personnel data."""
-    from app.services.intel.shared import load_intel_json
+    from app.services.intel.shared import load_required_intel_json
 
-    feed_data = load_intel_json("personnel_intel", "feed.json")
-    changes_data = load_intel_json("personnel_intel", "changes.json")
+    feed_data = load_required_intel_json("personnel_intel", "feed.json")
+    changes_data = load_required_intel_json("personnel_intel", "changes.json")
 
     dept_counts: dict[str, int] = {}
     for item in changes_data.get("items", []):
@@ -335,7 +335,7 @@ async def get_enriched_feed(
 
     # 应用信源筛选（优先筛选，减少后续处理量）
     source_filter = parse_source_filter(source_id, source_ids, source_name, source_names)
-    if source_filter:
+    if source_filter is not None:
         items = [i for i in items if i.get("source_id") in source_filter]
 
     if group:

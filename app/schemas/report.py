@@ -44,6 +44,23 @@ class ReportResponse(BaseModel):
     format: str = Field(..., description="输出格式")
 
 
+class ReportDimensionItemResponse(BaseModel):
+    """单个报告维度定义。"""
+
+    id: str = Field(description="维度 ID", examples=["sentiment"])
+    name: str = Field(description="维度名称", examples=["舆情监测"])
+    description: str = Field(description="维度说明")
+    status: str = Field(description="实现状态", examples=["implemented"])
+
+
+class ReportDimensionsListResponse(BaseModel):
+    """GET /reports/dimensions 响应。"""
+
+    dimensions: List[ReportDimensionItemResponse] = Field(
+        description="支持的报告维度列表",
+    )
+
+
 class ReportListItem(BaseModel):
     """报告列表项"""
 

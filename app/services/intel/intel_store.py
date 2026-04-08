@@ -14,6 +14,26 @@ PROCESSED_BASE = BASE_DIR / "data" / "processed"
 _EMPTY_RESPONSE: dict[str, Any] = {"generated_at": None, "item_count": 0, "items": []}
 
 
+class IntelDataLoadError(RuntimeError):
+    """Raised when API-critical processed intel data is missing or unreadable."""
+
+    def __init__(self, module: str, filename: str, reason: str):
+        self.module = module
+        self.filename = filename
+        self.reason = reason
+        if reason == "missing":
+            message = (
+                f"Processed intel data unavailable: {module}/{filename} is missing. "
+                "Run the intel pipeline first."
+            )
+        else:
+            message = (
+                f"Processed intel data unavailable: {module}/{filename} is unreadable. "
+                "Regenerate the processed outputs."
+            )
+        super().__init__(message)
+
+
 def load_intel_json(module: str, filename: str) -> dict[str, Any]:
     """Load ``data/processed/{module}/{filename}``, returning empty response on failure."""
     path = PROCESSED_BASE / module / filename
@@ -25,6 +45,19 @@ def load_intel_json(module: str, filename: str) -> dict[str, Any]:
     except (json.JSONDecodeError, OSError) as e:
         logger.warning("Failed to load %s: %s", path, e)
         return dict(_EMPTY_RESPONSE)
+
+
+def load_required_intel_json(module: str, filename: str) -> dict[str, Any]:
+    """Load API-critical processed intel JSON, raising on missing/corrupt data."""
+    path = PROCESSED_BASE / module / filename
+    if not path.exists():
+        raise IntelDataLoadError(module, filename, "missing")
+    try:
+        with open(path, encoding="utf-8") as f:
+            return json.load(f)
+    except (json.JSONDecodeError, OSError) as e:
+        logger.warning("Failed to load required intel data %s: %s", path, e)
+        raise IntelDataLoadError(module, filename, "unreadable") from e
 
 
 def get_intel_stats(*modules_and_files: tuple[str, str]) -> dict[str, Any]:

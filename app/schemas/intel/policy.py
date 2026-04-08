@@ -15,7 +15,10 @@ class PolicyFeedItem(BaseModel):
         examples=["关于印发《新一代人工智能发展规划》的通知"],
     )
     summary: str | None = Field(default=None, description="政策摘要")
-    category: Literal["国家政策", "北京政策", "领导讲话", "政策机会", "一般"] | None = Field(
+    category: (
+        Literal["国家政策", "北京政策", "区域政策", "人才政策", "高校政策", "政策机会", "一般"]
+        | None
+    ) = Field(
         default=None, description="政策分类"
     )
     importance: Literal["紧急", "重要", "关注", "一般"] | None = Field(
@@ -33,7 +36,7 @@ class PolicyFeedItem(BaseModel):
         default=None, description="涉及资金规模", examples=["5000万元"]
     )
     daysLeft: int | None = Field(
-        default=None, description="截止日倒计时（天）", examples=[15]
+        default=None, description="截止日倒计时（天，负数表示已过期）", examples=[15]
     )
     leader: str | None = Field(
         default=None, description="相关领导", examples=["张某某"]
@@ -71,8 +74,12 @@ class PolicyItem(BaseModel):
     agency: str = Field(
         description="发布机构", examples=["北京市科委"]
     )
-    agencyType: Literal["national", "beijing", "ministry"] | None = Field(
-        default=None, description="机构级别: national（国家）/ beijing（北京）/ ministry（部委）"
+    agencyType: Literal["national", "beijing", "regional", "ministry"] | None = Field(
+        default=None,
+        description=(
+            "机构级别: national（国家）/ beijing（北京）/"
+            " regional（区域）/ ministry（部委）"
+        ),
     )
     matchScore: int | None = Field(
         default=None, description="匹配度得分（0-100）", examples=[95]
@@ -81,9 +88,17 @@ class PolicyItem(BaseModel):
     deadline: str | None = Field(
         default=None, description="申报截止日", examples=["2024-03-31"]
     )
-    daysLeft: int | None = Field(default=None, description="距截止日天数", examples=[45])
-    status: Literal["urgent", "active", "tracking"] | None = Field(
-        default=None, description="状态: urgent（紧急）/ active（进行中）/ tracking（跟踪中）"
+    daysLeft: int | None = Field(
+        default=None,
+        description="距截止日天数（负数表示已过期）",
+        examples=[45],
+    )
+    status: Literal["urgent", "active", "tracking", "expired"] | None = Field(
+        default=None,
+        description=(
+            "状态: urgent（紧急）/ active（进行中）/"
+            " tracking（跟踪中）/ expired（已过期）"
+        ),
     )
     aiInsight: str | None = Field(default=None, description="AI 分析建议")
     detail: str | None = Field(default=None, description="详细描述")

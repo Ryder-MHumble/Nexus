@@ -44,7 +44,7 @@ def parse_source_filter(
 
     Returns:
         None: 不筛选（返回所有信源）
-        set[str]: 信源 ID 集合（已去重）
+        set[str]: 信源 ID 集合（已去重）。如果显式传入筛选参数但未匹配到结果，返回空集合。
     """
     if not any([source_id, source_ids, source_name, source_names]):
         return None
@@ -73,4 +73,4 @@ def parse_source_filter(
             resolved_ids = resolve_source_ids_by_names(names)
             result.update(resolved_ids)
 
-    return result if result else set()
+    return result

@@ -1,10 +1,18 @@
 """Policy Intelligence API endpoints."""
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, HTTPException, Query
 
 from app.schemas.intel.policy import PolicyFeedResponse, PolicyOpportunitiesResponse
+from app.services.intel.intel_store import IntelDataLoadError
 from app.services.intel.policy import service as policy_service
 
 router = APIRouter()
+
+
+def _call_policy_service(func, *args, **kwargs):
+    try:
+        return func(*args, **kwargs)
+    except IntelDataLoadError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
 
 
 @router.get(
@@ -16,7 +24,8 @@ router = APIRouter()
 )
 async def get_policy_feed(
     category: str | None = Query(
-        None, description="政策分类: 国家政策 / 北京政策 / 领导讲话 / 政策机会"
+        None,
+        description="政策分类: 国家政策 / 北京政策 / 区域政策 / 人才政策 / 高校政策 / 政策机会",
     ),
     importance: str | None = Query(
         None, description="重要性级别: 紧急 / 重要 / 关注 / 一般"
@@ -34,7 +43,8 @@ async def get_policy_feed(
     limit: int = Query(50, ge=1, le=200, description="返回条数上限"),
     offset: int = Query(0, ge=0, description="偏移量"),
 ):
-    return policy_service.get_policy_feed(
+    return _call_policy_service(
+        policy_service.get_policy_feed,
         category=category,
         importance=importance,
         min_match_score=min_match_score,
@@ -57,7 +67,7 @@ async def get_policy_feed(
 )
 async def get_policy_opportunities(
     status: str | None = Query(
-        None, description="状态过滤: urgent / active / tracking"
+        None, description="状态过滤: urgent / active / tracking / expired"
     ),
     min_match_score: int | None = Query(
         None, ge=0, le=100, description="最低匹配度得分"
@@ -65,7 +75,8 @@ async def get_policy_opportunities(
     limit: int = Query(50, ge=1, le=200, description="返回条数上限"),
     offset: int = Query(0, ge=0, description="偏移量"),
 ):
-    return policy_service.get_policy_opportunities(
+    return _call_policy_service(
+        policy_service.get_policy_opportunities,
         status=status,
         min_match_score=min_match_score,
         limit=limit,
@@ -79,4 +90,4 @@ async def get_policy_opportunities(
     description="获取已处理政策数据的汇总统计信息。",
 )
 async def get_policy_stats():
-    return policy_service.get_policy_stats()
+    return _call_policy_service(policy_service.get_policy_stats)

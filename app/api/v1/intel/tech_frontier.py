@@ -7,9 +7,17 @@ from app.schemas.intel.tech_frontier import (
     TechFrontierStatsResponse,
     TechFrontierTopicsResponse,
 )
+from app.services.intel.intel_store import IntelDataLoadError
 from app.services.intel.tech_frontier import service as tf_service
 
 router = APIRouter()
+
+
+def _call_tf_service(func, *args, **kwargs):
+    try:
+        return func(*args, **kwargs)
+    except IntelDataLoadError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
 
 
 @router.get(
@@ -32,7 +40,8 @@ async def get_topics(
     limit: int = Query(50, ge=1, le=200, description="返回条数上限"),
     offset: int = Query(0, ge=0, description="偏移量"),
 ):
-    return tf_service.get_topics(
+    return _call_tf_service(
+        tf_service.get_topics,
         heat_trend=heat_trend,
         our_status=our_status,
         keyword=keyword,
@@ -47,7 +56,7 @@ async def get_topics(
     description="获取指定技术主题的完整详情，包含所有内嵌信号数据。",
 )
 async def get_topic_detail(topic_id: str):
-    topic = tf_service.get_topic_detail(topic_id)
+    topic = _call_tf_service(tf_service.get_topic_detail, topic_id)
     if topic is None:
         raise HTTPException(status_code=404, detail=f"Topic '{topic_id}' not found")
     return topic
@@ -72,7 +81,8 @@ async def get_opportunities(
     limit: int = Query(50, ge=1, le=200, description="返回条数上限"),
     offset: int = Query(0, ge=0, description="偏移量"),
 ):
-    return tf_service.get_opportunities(
+    return _call_tf_service(
+        tf_service.get_opportunities,
         priority=priority,
         opp_type=type,
         keyword=keyword,
@@ -89,7 +99,7 @@ async def get_opportunities(
     "信号总量、机会数以及维度/主题分布。",
 )
 async def get_stats():
-    return tf_service.get_stats()
+    return _call_tf_service(tf_service.get_stats)
 
 
 @router.get(
@@ -116,7 +126,8 @@ async def get_signals(
     limit: int = Query(50, ge=1, le=200, description="返回条数上限"),
     offset: int = Query(0, ge=0, description="偏移量"),
 ):
-    return tf_service.get_signals(
+    return _call_tf_service(
+        tf_service.get_signals,
         topic_id=topic_id,
         signal_type=signal_type,
         keyword=keyword,

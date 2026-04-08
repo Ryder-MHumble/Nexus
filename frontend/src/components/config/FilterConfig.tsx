@@ -12,12 +12,14 @@ function TagInput({
   value,
   onChange,
   placeholder,
+  ariaLabel,
   disabled,
   variant = 'default',
 }: {
   value: string
   onChange: (v: string) => void
   placeholder: string
+  ariaLabel: string
   disabled?: boolean
   variant?: 'default' | 'whitelist' | 'blacklist'
 }) {
@@ -39,6 +41,7 @@ function TagInput({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
+        aria-label={ariaLabel}
         disabled={disabled}
         className="w-full rounded-lg border border-input bg-background px-3 py-2 text-xs ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       />
@@ -55,7 +58,9 @@ function TagInput({
               {tag}
               {!disabled && (
                 <button
+                  type="button"
                   onClick={() => onChange(tags.filter((t) => t !== tag).join(', '))}
+                  aria-label={`移除关键词 ${tag}`}
                   className="hover:opacity-60 transition-opacity"
                 >
                   <X className="h-2.5 w-2.5" />
@@ -111,9 +116,13 @@ export function FilterConfig() {
   }
 
   const hasSelection = selectedSubs.size > 0 || currentKeywords.size > 0
+  const blacklistCount = blacklistInput
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean).length
 
   return (
-    <div className="rounded-xl border bg-card overflow-hidden">
+    <section className="overflow-hidden rounded-2xl border bg-card/90 shadow-sm backdrop-blur-sm">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b bg-muted/10">
         <div className="flex items-center gap-2">
@@ -125,6 +134,7 @@ export function FilterConfig() {
         </div>
         {hasSelection && !disabled && (
           <button
+            type="button"
             onClick={resetDomainFilter}
             className="flex items-center gap-1 text-[10px] text-muted-foreground hover:text-foreground transition-colors"
           >
@@ -135,6 +145,22 @@ export function FilterConfig() {
       </div>
 
       <div className="p-4 space-y-4">
+        <div className="rounded-xl border bg-background/70 px-3 py-2.5">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px]">
+            <span className="font-semibold text-foreground/80">当前过滤</span>
+            <span className="text-muted-foreground">
+              白名单 {currentKeywords.size}
+            </span>
+            <span className="text-muted-foreground">
+              黑名单 {blacklistCount}
+            </span>
+            <span className="text-muted-foreground">
+              子领域 {selectedSubs.size}
+            </span>
+            {disabled && <span className="text-amber-600 dark:text-amber-300">运行中锁定</span>}
+          </div>
+        </div>
+
         {/* Domain tabs - compact */}
         <div className="flex flex-wrap gap-1.5">
           {DOMAINS.map((dom) => {
@@ -146,9 +172,12 @@ export function FilterConfig() {
 
             return (
               <button
+                type="button"
                 key={dom.key}
                 disabled={disabled}
                 onClick={() => setActiveDomain(isActive ? null : dom.key)}
+                aria-pressed={isActive}
+                aria-controls={isActive ? `domain-panel-${dom.key}` : undefined}
                 className={cn(
                   'relative inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-[11px] font-semibold transition-all',
                   'disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-none',
@@ -168,7 +197,10 @@ export function FilterConfig() {
 
         {/* Subdomain chips */}
         {activeDomain && (
-          <div className="rounded-lg border bg-muted/20 p-3 space-y-2">
+          <div
+            id={`domain-panel-${activeDomain}`}
+            className="rounded-lg border bg-muted/20 p-3 space-y-2"
+          >
             {(() => {
               const dom = DOMAINS.find((d) => d.key === activeDomain)!
               const colors = DOMAIN_COLOR_MAP[dom.color]
@@ -183,9 +215,11 @@ export function FilterConfig() {
                       const isSelected = selectedSubs.has(subId)
                       return (
                         <button
+                          type="button"
                           key={sub.key}
                           disabled={disabled}
                           onClick={() => applySubdomain(sub, dom.key)}
+                          aria-pressed={isSelected}
                           className={cn(
                             'inline-flex items-center gap-1 rounded-md border px-2 py-1 text-[10px] font-medium transition-all',
                             'disabled:opacity-40 disabled:cursor-not-allowed',
@@ -210,7 +244,7 @@ export function FilterConfig() {
         )}
 
         {/* Keyword inputs - side by side */}
-        <div className="grid grid-cols-2 gap-3 pt-2 border-t">
+        <div className="grid gap-3 border-t pt-2 sm:grid-cols-2">
           <div className="space-y-1.5">
             <label className="flex items-center gap-1.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
               <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />
@@ -223,6 +257,7 @@ export function FilterConfig() {
                 if (!v.trim()) setSelectedSubs(new Set())
               }}
               placeholder="保留这些词..."
+              ariaLabel="白名单关键词输入"
               disabled={disabled}
               variant="whitelist"
             />
@@ -237,6 +272,7 @@ export function FilterConfig() {
               value={blacklistInput}
               onChange={setBlacklistInput}
               placeholder="排除这些词..."
+              ariaLabel="黑名单关键词输入"
               disabled={disabled}
               variant="blacklist"
             />
@@ -247,6 +283,6 @@ export function FilterConfig() {
           逗号分隔多个关键词 · 优先级：黑名单 &gt; 白名单
         </p>
       </div>
-    </div>
+    </section>
   )
 }

@@ -45,12 +45,17 @@ export function ExportConfig() {
   const disabled = status.is_running;
 
   return (
-    <div className="rounded-xl border bg-card overflow-hidden">
+    <section className="overflow-hidden rounded-2xl border bg-card/90 shadow-sm backdrop-blur-sm">
       <div className="flex items-center gap-2 px-4 py-3 border-b bg-muted/10">
         <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary/10">
           <HardDrive className="h-3 w-3 text-primary" />
         </div>
-        <h2 className="text-sm font-semibold">导出格式</h2>
+        <div>
+          <h2 className="text-sm font-semibold">导出格式</h2>
+          <p className="text-[10px] text-muted-foreground">
+            {disabled ? "任务运行中不可切换" : "开始前确认结果落地方式"}
+          </p>
+        </div>
       </div>
 
       <div className="p-4">
@@ -59,9 +64,11 @@ export function ExportConfig() {
             const isSelected = exportFormat === opt.value;
             return (
               <button
+                type="button"
                 key={opt.value}
                 disabled={disabled}
                 onClick={() => setExportFormat(opt.value)}
+                aria-pressed={isSelected}
                 className={cn(
                   "relative flex items-center gap-3 rounded-lg border-2 p-3 text-left transition-all",
                   "hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
@@ -94,6 +101,6 @@ export function ExportConfig() {
           })}
         </div>
       </div>
-    </div>
+    </section>
   );
 }

@@ -11,8 +11,10 @@ from typing import Optional
 from fastapi import APIRouter, HTTPException, Query
 
 from app.db.client import get_client
+from app.schemas.common import ErrorResponse
 from app.schemas.report import (
     ReportGenerateRequest,
+    ReportDimensionsListResponse,
     ReportMetadataResponse,
     ReportResponse,
 )
@@ -24,7 +26,15 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/reports", tags=["Reports"])
 
 
-@router.post("/generate", response_model=ReportResponse)
+@router.post(
+    "/generate",
+    response_model=ReportResponse,
+    responses={
+        400: {"model": ErrorResponse, "description": "不支持的报告维度"},
+        500: {"model": ErrorResponse, "description": "报告生成失败"},
+        501: {"model": ErrorResponse, "description": "该报告维度尚未实现"},
+    },
+)
 async def generate_report(request: ReportGenerateRequest):
     """
     生成 AI 分析报告
@@ -61,9 +71,11 @@ async def generate_report(request: ReportGenerateRequest):
                 status_code=400, detail=f"Unknown dimension: {request.dimension}"
             )
 
+    except HTTPException:
+        raise
     except Exception as e:
-        logger.error(f"Failed to generate report: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error("Failed to generate report", exc_info=True)
+        raise HTTPException(status_code=500, detail="Failed to generate report") from e
 
 
 async def _generate_sentiment_report(
@@ -151,7 +163,7 @@ def _parse_publish_time(value: int | str | None) -> datetime | None:
         return None
 
 
-@router.get("/sentiment/latest")
+@router.get("/sentiment/latest", response_model=ReportResponse)
 async def get_latest_sentiment_report(
     days: int = Query(7, ge=1, le=30, description="最近N天的数据"),
     output_format: str = Query("markdown", description="输出格式"),
@@ -175,7 +187,7 @@ async def get_latest_sentiment_report(
     return await generate_report(request)
 
 
-@router.get("/dimensions")
+@router.get("/dimensions", response_model=ReportDimensionsListResponse)
 async def list_dimensions():
     """
     列出所有支持的报告维度

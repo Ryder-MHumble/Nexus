@@ -79,6 +79,64 @@ class InstitutionListResponse(BaseModel):
     items: list[InstitutionListItem]
 
 
+class InstitutionHierarchyDepartment(BaseModel):
+    """层级视图中的二级机构节点。"""
+
+    id: str = Field(description="二级机构 ID")
+    name: str = Field(description="二级机构名称")
+    scholar_count: int = Field(default=0, description="学者数量")
+
+
+class InstitutionHierarchyOrganization(BaseModel):
+    """层级视图中的一级机构节点。"""
+
+    id: str = Field(description="一级机构 ID")
+    name: str = Field(description="一级机构名称")
+    entity_type: str | None = Field(default=None, description="实体类型")
+    region: str | None = Field(default=None, description="地域（国内 | 国际）")
+    org_type: str | None = Field(default=None, description="机构类型")
+    classification: str | None = Field(default=None, description="顶层分类")
+    sub_classification: str | None = Field(default=None, description="二级分类")
+    scholar_count: int = Field(default=0, description="机构下学者总数")
+    secondary_institutions: list[InstitutionHierarchyDepartment] = Field(
+        default_factory=list,
+        description="二级机构列表",
+    )
+    departments: list[InstitutionHierarchyDepartment] = Field(
+        default_factory=list,
+        description="[兼容] 等价于 secondary_institutions",
+    )
+
+    @model_validator(mode="after")
+    def _sync_departments_alias(self) -> "InstitutionHierarchyOrganization":
+        if not self.secondary_institutions and self.departments:
+            self.secondary_institutions = self.departments
+        elif self.secondary_institutions and not self.departments:
+            self.departments = self.secondary_institutions
+        return self
+
+
+class InstitutionHierarchyResponse(BaseModel):
+    """GET /institutions?view=hierarchy 响应。"""
+
+    primary_institutions: list[InstitutionHierarchyOrganization] = Field(
+        default_factory=list,
+        description="一级机构列表",
+    )
+    organizations: list[InstitutionHierarchyOrganization] = Field(
+        default_factory=list,
+        description="[兼容] 等价于 primary_institutions",
+    )
+
+    @model_validator(mode="after")
+    def _sync_organizations_alias(self) -> "InstitutionHierarchyResponse":
+        if not self.primary_institutions and self.organizations:
+            self.primary_institutions = self.organizations
+        elif self.primary_institutions and not self.organizations:
+            self.organizations = self.primary_institutions
+        return self
+
+
 # ---------------------------------------------------------------------------
 # Detail response (full institution record)
 # ---------------------------------------------------------------------------

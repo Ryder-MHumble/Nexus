@@ -13,6 +13,12 @@ from typing import Any
 from app.config import BASE_DIR, settings
 from app.services.intel.pipeline.base import HashTracker, save_output_json
 from app.services.intel.policy.rules import enrich_by_rules
+from app.services.intel.policy.source_scope import (
+    POLICY_PIPELINE_DIMENSIONS,
+    get_policy_agency_type,
+    get_policy_category,
+    is_policy_signal_article,
+)
 from app.services.intel.shared import article_date
 from app.services.stores.json_reader import get_articles
 
@@ -24,7 +30,6 @@ try:
 except ImportError:
     HAS_TQDM = False
 
-DIMENSIONS = ["national_policy", "beijing_policy"]
 PROCESSED_DIR = BASE_DIR / "data" / "processed" / "policy_intel"
 FEED_MIN_SCORE = 20  # Minimum matchScore for articles to appear in feed output
 ENRICHED_DIR = PROCESSED_DIR / "_enriched"
@@ -82,28 +87,18 @@ def _article_date(a: dict) -> str:
 
 
 def _determine_category(article: dict, llm_result: dict) -> str:
-    if llm_result.get("isOpportunity"):
-        return "政策机会"
-    dim = article.get("dimension", "")
-    if dim == "beijing_policy":
-        return "北京政策"
-    if dim == "national_policy":
-        return "国家政策"
-    return "一般"
+    return get_policy_category(article, is_opportunity=bool(llm_result.get("isOpportunity")))
 
 
 def _determine_agency_type(article: dict) -> str:
-    dim = article.get("dimension", "")
-    if dim == "national_policy":
-        return "national"
-    if dim == "beijing_policy":
-        return "beijing"
-    return "ministry"
+    return get_policy_agency_type(article)
 
 
 def _compute_status(days_left: int | None) -> str:
     if days_left is None:
         return "tracking"
+    if days_left < 0:
+        return "expired"
     if days_left <= 7:
         return "urgent"
     if days_left <= 30:
@@ -201,16 +196,13 @@ async def process_policy_pipeline(
 
     # Load raw articles from all relevant dimensions
     all_articles: list[dict] = []
-    for dim in DIMENSIONS:
+    for dim in POLICY_PIPELINE_DIMENSIONS:
         articles = await get_articles(dim)
         logger.info("  从 %s 加载 %d 篇文章", dim, len(articles))
         all_articles.extend(articles)
 
-    # Exclude personnel-related groups (belong in personnel pipeline)
-    all_articles = [
-        a for a in all_articles
-        if not (a.get("dimension") == "beijing_policy" and a.get("group") == "news_personnel")
-    ]
+    # Scope to policy-like articles only, including cross-dimension policy signals.
+    all_articles = [a for a in all_articles if is_policy_signal_article(a)]
 
     # Deduplicate by url_hash
     seen: set[str] = set()
@@ -255,8 +247,7 @@ async def process_policy_pipeline(
     # Rebuild output files from ALL enriched data (excluding personnel)
     all_enriched = [
         (a, llm) for a, llm in _load_all_enriched()
-        if a.get("dimension") not in ("personnel",)
-        and not (a.get("dimension") == "beijing_policy" and a.get("group") == "news_personnel")
+        if is_policy_signal_article(a)
     ]
     feed_count, opp_count = _rebuild_output_files(all_enriched)
 
@@ -337,6 +328,15 @@ async def process_policy_llm_enrichment(
                 logger.warning(
                     "LLM failed for %s: %s",
                     article.get("title", "?")[:40], e,
+                )
+                return False
+            except Exception as e:
+                errors += 1
+                logger.error(
+                    "Unexpected enrichment failure for %s: %s",
+                    article.get("title", "?")[:40],
+                    e,
+                    exc_info=True,
                 )
                 return False
 

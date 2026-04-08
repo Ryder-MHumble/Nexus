@@ -63,11 +63,11 @@ def extract_leader(text: str) -> str | None:
 
 
 def compute_days_left(deadline: str | None) -> int | None:
-    """Compute days from today to *deadline* (YYYY-MM-DD).  None if no deadline."""
+    """Compute signed days from today to *deadline* (YYYY-MM-DD)."""
     if not deadline:
         return None
     try:
         dl = datetime.strptime(deadline, "%Y-%m-%d").date()
-        return max(0, (dl - date.today()).days)
+        return (dl - date.today()).days
     except (ValueError, TypeError):
         return None
