@@ -1,6 +1,6 @@
 # Nexus Roadmap
 
-> Last updated: 2026-04-02
+> Last updated: 2026-04-08
 
 ## Done Recently
 
@@ -18,7 +18,7 @@
 
 ### Platform
 
-- [ ] Add a repeatable command or script for regenerating `openapi.json`
+- [x] Add a repeatable command or script for regenerating `openapi.json` (`python scripts/generate_openapi.py`)
 - [ ] Add CI coverage for backend tests plus frontend lint/build
 - [ ] Review source configs where `crawl_method` is `unknown` and document the intended routing more clearly
 - [ ] Add targeted regression tests for `university_news_auto` and `twitter_ai_kol_international` source behavior

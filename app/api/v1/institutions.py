@@ -18,19 +18,80 @@ import logging
 from fastapi import APIRouter, HTTPException, Query
 
 from app.schemas.institution import (
+    AminerOrganizationSearchResponse,
     InstitutionCreate,
     InstitutionDetailResponse,
     InstitutionHierarchyResponse,
     InstitutionListResponse,
     InstitutionSearchResponse,
+    InstitutionSearchResult,
     InstitutionSuggestionResponse,
     InstitutionStatsResponse,
+    InstitutionTaxonomyResponse,
     InstitutionUpdate,
 )
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
+
+
+def _build_search_result(inst: dict) -> InstitutionSearchResult:
+    return InstitutionSearchResult(
+        id=inst.get("id", ""),
+        name=inst.get("name", ""),
+        entity_type=inst.get("entity_type"),
+        region=inst.get("region"),
+        org_type=inst.get("org_type"),
+        parent_id=inst.get("parent_id"),
+        scholar_count=inst.get("scholar_count", 0),
+    )
+
+
+async def _list_institutions_flat_impl(
+    *,
+    entity_type: str | None,
+    region: str | None,
+    org_type: str | None,
+    classification: str | None,
+    sub_classification: str | None,
+    keyword: str | None,
+    page: int,
+    page_size: int,
+    is_adjunct_supervisor: bool | None,
+) -> InstitutionListResponse:
+    from app.services.core.institution import get_institutions_unified
+
+    return await get_institutions_unified(
+        view="flat",
+        entity_type=entity_type,
+        region=region,
+        org_type=org_type,
+        classification=classification,
+        sub_classification=sub_classification,
+        keyword=keyword,
+        page=page,
+        page_size=page_size,
+        is_adjunct_supervisor=is_adjunct_supervisor,
+    )
+
+
+async def _list_institutions_hierarchy_impl(
+    *,
+    region: str | None,
+    org_type: str | None,
+    classification: str | None,
+    is_adjunct_supervisor: bool | None,
+) -> InstitutionHierarchyResponse:
+    from app.services.core.institution import get_institutions_unified
+
+    return await get_institutions_unified(
+        view="hierarchy",
+        region=region,
+        org_type=org_type,
+        classification=classification,
+        is_adjunct_supervisor=is_adjunct_supervisor,
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -79,10 +140,14 @@ async def list_institutions(
     is_adjunct_supervisor: bool | None = Query(default=None, description="仅统计共建导师（用于学者页侧边栏）"),
 ):
     """统一的机构查询接口，支持扁平和层级两种视图."""
-    from app.services.core.institution import get_institutions_unified
-
-    return await get_institutions_unified(
-        view=view,
+    if view == "hierarchy":
+        return await _list_institutions_hierarchy_impl(
+            region=region,
+            org_type=org_type,
+            classification=classification,
+            is_adjunct_supervisor=is_adjunct_supervisor,
+        )
+    return await _list_institutions_flat_impl(
         entity_type=entity_type,
         region=region,
         org_type=org_type,
@@ -91,6 +156,62 @@ async def list_institutions(
         keyword=keyword,
         page=page,
         page_size=page_size,
+        is_adjunct_supervisor=is_adjunct_supervisor,
+    )
+
+
+@router.get(
+    "/flat",
+    response_model=InstitutionListResponse,
+    summary="机构列表（扁平视图）",
+    description=(
+        "推荐用于前端目录页和运营后台列表页。"
+        "相比 `/institutions?view=flat`，该端点在 OpenAPI 中具有明确的扁平响应模型。"
+    ),
+)
+async def list_institutions_flat(
+    entity_type: str | None = Query(default=None, description="实体类型：organization | department"),
+    region: str | None = Query(default=None, description="地域：国内 | 国际"),
+    org_type: str | None = Query(default=None, description="机构类型：高校 | 企业（公司） | 研究机构 | 行业学会 | 其他"),
+    classification: str | None = Query(default=None, description="顶层分类：共建高校 | 兄弟院校 | 海外高校 | 其他高校"),
+    sub_classification: str | None = Query(default=None, description="二级分类"),
+    keyword: str | None = Query(default=None, description="关键词搜索（机构名称或 ID）"),
+    page: int = Query(default=1, ge=1, description="页码"),
+    page_size: int = Query(default=20, ge=1, le=200, description="每页条数"),
+    is_adjunct_supervisor: bool | None = Query(default=None, description="仅统计共建导师"),
+):
+    return await _list_institutions_flat_impl(
+        entity_type=entity_type,
+        region=region,
+        org_type=org_type,
+        classification=classification,
+        sub_classification=sub_classification,
+        keyword=keyword,
+        page=page,
+        page_size=page_size,
+        is_adjunct_supervisor=is_adjunct_supervisor,
+    )
+
+
+@router.get(
+    "/hierarchy",
+    response_model=InstitutionHierarchyResponse,
+    summary="机构列表（层级视图）",
+    description=(
+        "推荐用于学者页、树状导航和二级机构展开视图。"
+        "相比 `/institutions?view=hierarchy`，该端点在 OpenAPI 中具有明确的层级响应模型。"
+    ),
+)
+async def list_institutions_hierarchy(
+    region: str | None = Query(default=None, description="地域：国内 | 国际"),
+    org_type: str | None = Query(default=None, description="机构类型：高校 | 企业（公司） | 研究机构 | 行业学会 | 其他"),
+    classification: str | None = Query(default=None, description="顶层分类：共建高校 | 兄弟院校 | 海外高校 | 其他高校"),
+    is_adjunct_supervisor: bool | None = Query(default=None, description="仅统计共建导师"),
+):
+    return await _list_institutions_hierarchy_impl(
+        region=region,
+        org_type=org_type,
+        classification=classification,
         is_adjunct_supervisor=is_adjunct_supervisor,
     )
 
@@ -109,6 +230,7 @@ async def get_institution_stats():
 
 @router.get(
     "/taxonomy",
+    response_model=InstitutionTaxonomyResponse,
     summary="分类体系统计",
     description=(
         "返回机构分类体系的层级结构和统计数据，用于前端动态渲染导航栏。"
@@ -189,20 +311,7 @@ async def search_institutions_endpoint(
         results = await search_institutions(
             q, limit=limit, region=region, org_type=org_type
         )
-
-        # Convert to response schema
-        search_results = [
-            InstitutionSearchResult(
-                id=inst.get("id", ""),
-                name=inst.get("name", ""),
-                entity_type=inst.get("entity_type"),
-                region=inst.get("region"),
-                org_type=inst.get("org_type"),
-                parent_id=inst.get("parent_id"),
-                scholar_count=inst.get("scholar_count", 0),
-            )
-            for inst in results
-        ]
+        search_results = [_build_search_result(inst) for inst in results]
 
         return InstitutionSearchResponse(
             query=q,
@@ -250,33 +359,8 @@ async def suggest_institution_endpoint(
 
     try:
         result = await suggest_institution(resolved_name)
-
-        # Convert to response schema
-        matched = None
-        if result.get("matched"):
-            inst = result["matched"]
-            matched = InstitutionSearchResult(
-                id=inst.get("id", ""),
-                name=inst.get("name", ""),
-                entity_type=inst.get("entity_type"),
-                region=inst.get("region"),
-                org_type=inst.get("org_type"),
-                parent_id=inst.get("parent_id"),
-                scholar_count=inst.get("scholar_count", 0),
-            )
-
-        suggestions = [
-            InstitutionSearchResult(
-                id=inst.get("id", ""),
-                name=inst.get("name", ""),
-                entity_type=inst.get("entity_type"),
-                region=inst.get("region"),
-                org_type=inst.get("org_type"),
-                parent_id=inst.get("parent_id"),
-                scholar_count=inst.get("scholar_count", 0),
-            )
-            for inst in result.get("suggestions", [])
-        ]
+        matched = _build_search_result(result["matched"]) if result.get("matched") else None
+        suggestions = [_build_search_result(inst) for inst in result.get("suggestions", [])]
 
         return InstitutionSuggestionResponse(
             institution_name=resolved_name,
@@ -291,6 +375,7 @@ async def suggest_institution_endpoint(
 
 @router.get(
     "/aminer/search-org",
+    response_model=AminerOrganizationSearchResponse,
     summary="搜索 AMiner 机构名",
     description=(
         "搜索 AMiner 数据库中的机构信息，获取标准化的英文机构名（org_name）。"

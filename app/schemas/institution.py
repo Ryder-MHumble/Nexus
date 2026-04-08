@@ -137,6 +137,67 @@ class InstitutionHierarchyResponse(BaseModel):
         return self
 
 
+class InstitutionOrgTypeTaxonomyCount(BaseModel):
+    """机构分类下的计数节点。"""
+
+    count: int = Field(description="该分类下的机构数")
+
+
+class InstitutionOrgTypeTaxonomyBucket(BaseModel):
+    """机构类型聚合桶。"""
+
+    count: int = Field(description="该机构类型下的机构数")
+    display_name: str = Field(description="前端展示名称")
+    classifications: dict[str, InstitutionOrgTypeTaxonomyCount] = Field(
+        default_factory=dict,
+        description="分类 -> 计数映射",
+    )
+
+
+class InstitutionRegionTaxonomyBucket(BaseModel):
+    """地域聚合桶。"""
+
+    count: int = Field(description="该地域下的机构数")
+    org_types: dict[str, InstitutionOrgTypeTaxonomyBucket] = Field(
+        default_factory=dict,
+        description="机构类型 -> 聚合桶映射",
+    )
+
+
+class InstitutionTaxonomyResponse(BaseModel):
+    """GET /institutions/taxonomy 响应。"""
+
+    total: int = Field(description="机构总数")
+    org_type_aliases: dict[str, str] = Field(
+        default_factory=dict,
+        description="机构类型别名映射，如 公司 -> 企业",
+    )
+    regions: dict[str, InstitutionRegionTaxonomyBucket] = Field(
+        default_factory=dict,
+        description="地域 -> 聚合桶映射",
+    )
+
+
+class AminerOrganizationSearchItem(BaseModel):
+    """AMiner 机构搜索结果项。"""
+
+    id: str | None = Field(default=None, description="AMiner 机构 ID")
+    name: str | None = Field(default=None, description="机构名称")
+    name_en: str | None = Field(default=None, description="英文名称")
+    country: str | None = Field(default=None, description="国家/地区")
+
+
+class AminerOrganizationSearchResponse(BaseModel):
+    """GET /institutions/aminer/search-org 响应。"""
+
+    query: str = Field(description="搜索关键词")
+    total: int = Field(description="结果总数")
+    items: list[AminerOrganizationSearchItem] = Field(
+        default_factory=list,
+        description="AMiner 机构结果列表",
+    )
+
+
 # ---------------------------------------------------------------------------
 # Detail response (full institution record)
 # ---------------------------------------------------------------------------
