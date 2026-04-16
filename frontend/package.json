@@ -3,9 +3,9 @@
   "version": "0.2.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p ${PORT:-43819}",
+    "dev": "next dev",
     "build": "next build",
-    "start": "next start -p ${PORT:-43819}",
+    "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {

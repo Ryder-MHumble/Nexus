@@ -308,10 +308,13 @@ function Get-EnvOrDefault($Map, [string]$Key, [string]$DefaultValue) {
 
 function Get-ListeningPid([int]$Port) {
     try {
-        $conn = Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue |
-            Select-Object -First 1
-        if ($conn) {
-            return [int]$conn.OwningProcess
+        $line = (netstat -ano -p tcp | Select-String -Pattern "^\s*TCP\s+\S+:$Port\s+\S+\s+LISTENING\s+(\d+)\s*$" | Select-Object -First 1).Line
+        if ($line) {
+            $tokens = $line -split "\s+"
+            $portOwnerPid = $tokens[-1]
+            if ($portOwnerPid -match "^\d+$") {
+                return [int]$portOwnerPid
+            }
         }
     } catch {
     }
@@ -503,8 +506,8 @@ function Show-Doctor {
 function Start-Backend {
     $pid = Read-Pid $BackendPidFile
     if ($pid -and (Test-PidRunning -Pid $pid)) {
-        Write-Ok "Backend already running (PID $pid)"
-        return
+        Write-Note "Backend already running (PID $pid), auto-restarting..."
+        Stop-PidTree -Pid $pid -Name "Backend"
     }
 
     if (Test-Path $BackendPidFile) {
@@ -513,10 +516,11 @@ function Start-Backend {
 
     $listener = Get-ListeningPid -Port $BackendPort
     if ($listener) {
-        if ($Force) {
-            Stop-PidTree -Pid $listener -Name "Backend port occupant"
+        if ($pid -and $listener -eq $pid) {
+            Write-Note "Backend port occupant matches previous PID $listener, already stopped."
         } else {
-            throw "Backend port $BackendPort is already in use by PID $listener. Re-run with -Force to stop it."
+            Write-WarnMsg "Backend port $BackendPort is occupied by PID $listener, auto-stopping occupant."
+            Stop-PidTree -Pid $listener -Name "Backend port occupant"
         }
     }
 
@@ -538,8 +542,8 @@ function Start-Backend {
 function Start-Frontend {
     $pid = Read-Pid $FrontendPidFile
     if ($pid -and (Test-PidRunning -Pid $pid)) {
-        Write-Ok "Frontend already running (PID $pid)"
-        return
+        Write-Note "Frontend already running (PID $pid), auto-restarting..."
+        Stop-PidTree -Pid $pid -Name "Frontend"
     }
 
     if (Test-Path $FrontendPidFile) {
@@ -548,10 +552,11 @@ function Start-Frontend {
 
     $listener = Get-ListeningPid -Port $FrontendPort
     if ($listener) {
-        if ($Force) {
-            Stop-PidTree -Pid $listener -Name "Frontend port occupant"
+        if ($pid -and $listener -eq $pid) {
+            Write-Note "Frontend port occupant matches previous PID $listener, already stopped."
         } else {
-            throw "Frontend port $FrontendPort is already in use by PID $listener. Re-run with -Force to stop it."
+            Write-WarnMsg "Frontend port $FrontendPort is occupied by PID $listener, auto-stopping occupant."
+            Stop-PidTree -Pid $listener -Name "Frontend port occupant"
         }
     }
 
