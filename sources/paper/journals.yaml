@@ -1,0 +1,110 @@
+dimension: "paper"
+dimension_name: "论文信源"
+description: "论文期刊与聚合类作者信号源，用于人才候选论文维度挖掘。"
+
+default_keyword_filter: []
+default_keyword_blacklist: []
+
+paper_defaults: &paper_defaults
+  crawl_method: "static"
+  schedule: "daily"
+  priority: 1
+  is_enabled: false
+  crawler_class: "paper_author_source"
+  entity_family: "paper_author"
+  fallback_mode: "evidence_only"
+  persist_to_db: false
+  request_timeout: 10
+  max_retries: 1
+  request_delay: 0.1
+
+sources:
+  - <<: *paper_defaults
+    id: "dblp_author"
+    name: "DBLP Author"
+    group: "paper_journals"
+    url: "https://dblp.org/search/publ/api"
+    capture_mode: "structured"
+    sheet_name: "DBLP"
+    tracks: ["ICML", "ICLR", "NeurIPS", "AAAI", "ACL", "EMNLP", "CVPR", "ICCV", "ECCV"]
+    requires_auth: false
+    adapter_key: "talent_signal_json"
+    local_results_path: "data/subagent_crawls/papers_2024_2025.json"
+    local_source_id_prefixes: ["dblp_"]
+    max_results: 80
+    seed_urls:
+      - "https://dblp.org/search/publ/api"
+    tags: ["paper", "journal", "dblp"]
+    enrichment:
+      primary_methods: ["dblp_api"]
+      fallback_methods: ["openalex"]
+      fields: ["authors", "doi"]
+      qps:
+        api: 1.0
+      notes: "DBLP 适合作者/DOI 校验，不适合作为机构或作者画像来源。"
+
+  - <<: *paper_defaults
+    id: "arxiv_author"
+    name: "arXiv Author"
+    group: "paper_journals"
+    url: "https://export.arxiv.org/api/query"
+    capture_mode: "structured"
+    sheet_name: "arXiv"
+    tracks: ["ICML", "ICLR", "NeurIPS", "AAAI", "ACL", "EMNLP", "CVPR", "ICCV", "ECCV"]
+    requires_auth: false
+    adapter_key: "arxiv_atom"
+    search_query: "cat:cs.AI OR cat:cs.LG"
+    max_results: 8
+    seed_urls:
+      - "https://export.arxiv.org/api/query"
+    tags: ["paper", "journal", "arxiv"]
+    enrichment:
+      primary_methods: ["arxiv_api"]
+      fields: ["authors", "abstract", "arxiv_id", "doi"]
+      qps:
+        arxiv: 0.3
+      notes: "arXiv 不提供机构；title search 必须低速，优先用于已有 arXiv ID 的校准。"
+
+  - <<: *paper_defaults
+    id: "semantic_scholar_author"
+    name: "Semantic Scholar Author"
+    group: "paper_journals"
+    url: "https://api.semanticscholar.org/graph/v1/paper/search"
+    capture_mode: "structured"
+    sheet_name: "SemanticScholar"
+    tracks: ["ICML", "ICLR", "NeurIPS", "AAAI", "ACL", "EMNLP", "CVPR", "ICCV", "ECCV"]
+    requires_auth: false
+    adapter_key: "semantic_scholar"
+    search_query: "machine learning"
+    max_results: 8
+    seed_urls:
+      - "https://api.semanticscholar.org/graph/v1/paper/search"
+    tags: ["paper", "journal", "semantic_scholar"]
+    enrichment:
+      primary_methods: ["semantic_scholar_api"]
+      fallback_methods: ["openalex"]
+      fields: ["authors", "abstract", "doi"]
+      qps:
+        api: 0.5
+      notes: "可作为作者/摘要/DOI 辅助来源；机构字段需视 API 返回情况谨慎使用。"
+
+  - <<: *paper_defaults
+    id: "academic_paper_authors"
+    name: "Academic Paper Authors"
+    group: "paper_journals"
+    url: "excellent_20260425/academic_papers/results.json"
+    capture_mode: "structured"
+    sheet_name: "AcademicAuthors"
+    tracks: ["foundation_models", "llm", "agents"]
+    requires_auth: false
+    adapter_key: "author_aggregate_json"
+    local_results_path: "excellent_20260425/academic_papers/results.json"
+    seed_urls:
+      - "excellent_20260425/academic_papers/results.json"
+    tags: ["paper", "journal", "academic_papers"]
+    enrichment:
+      primary_methods: ["local_author_aggregate_json"]
+      fields: ["authors", "affiliations"]
+      qps:
+        local: 0
+      notes: "本地聚合文件不触发外部限流；仅用于已有结构化证据合并。"

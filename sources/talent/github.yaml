@@ -1,0 +1,63 @@
+dimension: "talent_scout"
+dimension_name: "人才候选池"
+description: "潜在引入人才的 GitHub 信号源，仅用于手动任务导出 Excel。"
+
+default_keyword_filter: []
+default_keyword_blacklist: []
+
+github_defaults: &github_defaults
+  crawl_method: "static"
+  schedule: "daily"
+  priority: 1
+  is_enabled: false
+  crawler_class: "github_talent_source"
+  entity_family: "github_talent"
+  fallback_mode: "evidence_only"
+  persist_to_db: false
+  request_timeout: 10
+  max_retries: 1
+  request_delay: 0.1
+
+sources:
+  - <<: *github_defaults
+    id: "github_ai_users"
+    name: "GitHub AI Users"
+    group: "talent_github"
+    url: "https://api.github.com/search/users"
+    capture_mode: "structured"
+    sheet_name: "GitHubUsers"
+    tracks: ["llm", "cv", "nlp", "agents"]
+    requires_auth: false
+    adapter_key: "github_users"
+    search_query: "machine learning"
+    max_results: 10
+    seed_urls:
+      - "https://api.github.com/search/users"
+    tags: ["talent_scout", "github", "users"]
+
+  - <<: *github_defaults
+    id: "github_ai_repo_contributors"
+    name: "GitHub AI Repo Contributors"
+    group: "talent_github"
+    url: "https://api.github.com/repos"
+    capture_mode: "structured"
+    sheet_name: "GitHubContribs"
+    tracks: ["llm", "open_source"]
+    requires_auth: false
+    adapter_key: "github_contributors"
+    topics:
+      - "llm"
+      - "machine-learning"
+      - "deep-learning"
+      - "nlp"
+      - "reinforcement-learning"
+      - "autonomous-agents"
+    search_query: "stars:>1000 pushed:>2023-01-01"
+    min_contributions: 10
+    max_repos: 6
+    max_results_per_repo: 10
+    profile_enrichment: true
+    max_profile_enrichment: 10
+    seed_urls:
+      - "https://api.github.com/repos"
+    tags: ["talent_scout", "github", "contributors"]

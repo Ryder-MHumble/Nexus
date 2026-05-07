@@ -1,23 +1,35 @@
 # Nexus Workspace Context
 
-Nexus is a crawler-driven data infrastructure project with a FastAPI backend and a Next.js operations console.
+Nexus is a crawler-driven knowledge infrastructure project with a FastAPI backend and a Next.js operations console. After the May 2026 DeanAgent-Backend sync, it now includes a paper warehouse dimension and talent scout competition/GitHub signal sources.
 
 ## Current Reality
 
-- `245` configured sources
-- `168` enabled
-- `100` generated OpenAPI paths
+- `321` configured sources (up from 272)
+- `195` enabled (up from 168)
+- `102` generated OpenAPI paths
+- `11` dimensions: national_policy, beijing_policy, regional_policy, technology, talent, talent_scout, industry, universities, events, personnel, scholars, paper
 - local PostgreSQL is the recommended development backend
 - Supabase-compatible access is still supported for legacy compatibility
+- Sources now organized in subdirectories under `sources/`: paper/, policy/, talent/, social/, events/, industry/, personnel/, scholars/, technology/, universities/
 
 ## Main Areas
 
 - `app/api/v1/`: route surface
 - `app/services/core/`: source, institution, project, and event logic
-- `app/services/scholar/`: scholar-specific query and mutation flows
+- `app/services/scholar/`: scholar-specific query, achievement tags, and profile classification
 - `app/services/intel/`: intelligence and report logic
-- `app/crawlers/`: templates, parsers, registry, and crawl utilities
+- `app/services/paper_service.py`: paper warehouse queries and ingestion management (NEW)
+- `app/crawlers/`: templates, parsers (32+ custom parsers), registry, and crawl utilities
 - `frontend/`: Next.js 16 console
+- `sources/`: YAML-driven source inventory organized in 10 subdirectories
+
+## New Capabilities (from DeanAgent-Backend Sync)
+
+- **Paper Warehouse** (21 sources): Top AI conference/journal paper ingestion from ICLR, ICML, NeurIPS, CVPR, ACL, AAAI, IJCAI, JMLR, JAIR, TMLR etc. with year-configurable crawling and enrichment profiles
+- **Talent Scout** (28 sources): Competition signal sources (CCF BDCI, Kaggle, ICPC, CTFTime, etc.) and GitHub talent sources for candidate discovery
+- **Crawler parsers** (16 new): aclanthology, openreview_api, openreview_journal, nips_papers_cc, cvf_openaccess, ecva_papers, ijcai_proceedings, ojs_aaai, jmlr_papers, jair_oai, competition_source, github_talent_source, paper_author_source, evidence_only_source, _talent_scout_common, zhejianglab_website_api
+- **Talent Scout Metrics**: base crawler now supports `_apply_talent_scout_metrics` for candidate-name-based counting and `_should_apply_candidate_metrics` routing logic
+- **Source catalog sync**: startup now syncs source configs into DB source_states table
 
 ## Recommended Commands
 

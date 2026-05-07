@@ -61,7 +61,9 @@ def load_all_source_configs() -> list[dict[str, Any]]:
         logger.warning("Sources directory not found: %s", sources_dir)
         return all_sources
 
-    for yaml_file in sorted(sources_dir.glob("*.yaml")):
+    for yaml_file in sorted(sources_dir.rglob("*.yaml")):
+        if not yaml_file.is_file():
+            continue
         with open(yaml_file) as f:
             data = yaml.safe_load(f)
         if data is None:
@@ -78,6 +80,10 @@ def load_all_source_configs() -> list[dict[str, Any]]:
             source.setdefault("dimension_name", dimension_name)
             source.setdefault("dimension_description", dimension_description)
             source.setdefault("source_file", yaml_file.name)
+            source.setdefault(
+                "source_file_path",
+                yaml_file.relative_to(sources_dir).as_posix(),
+            )
             if "keyword_filter" not in source:
                 source["keyword_filter"] = default_keywords
             if "keyword_blacklist" not in source:

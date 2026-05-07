@@ -47,6 +47,11 @@ class Settings(BaseSettings):
     # OpenRouter LLM
     OPENROUTER_API_KEY: str = ""
     OPENROUTER_MODEL: str = "google/gemini-2.0-flash-001"
+    OPENROUTER_API_URL: str = "https://openrouter.ai/api/v1/chat/completions"
+    # SiliconFlow fallback LLM
+    SILICONFLOW_API_KEY: str = ""
+    SILICONFLOW_MODEL: str = "Pro/moonshotai/Kimi-K2.6"
+    SILICONFLOW_API_URL: str = "https://api.siliconflow.cn/v1/chat/completions"
     # Dedicated model for daily briefing (stronger model for better narrative)
     BRIEFING_LLM_MODEL: str = "google/gemini-2.5-pro"
 
@@ -58,6 +63,11 @@ class Settings(BaseSettings):
     AMINER_API_KEY: str = ""
     AMINER_SCHOLAR_DETAIL_URL: str = "https://data.ihainan.me/api/aminer/scholar/detail"
 
+    # DingTalk Workspace CLI
+    DINGTALK_DWS_BIN: str = "dws"
+    DINGTALK_DWS_TIMEOUT_SECONDS: float = 30.0
+    DINGTALK_CALENDAR_TIMEZONE: str = "Asia/Shanghai"
+
     # Pipeline schedule (UTC)
     PIPELINE_CRON_HOUR: int = 6
     PIPELINE_CRON_MINUTE: int = 0
@@ -68,6 +78,7 @@ class Settings(BaseSettings):
 
     # Startup behavior
     STARTUP_CRAWL_ENABLED: bool = True  # trigger pipeline on first start if no data
+    REQUIRE_DB_ON_STARTUP: bool = True  # fail fast if DB init fails
 
     # Paths
     SOURCES_DIR: Path = BASE_DIR / "sources"

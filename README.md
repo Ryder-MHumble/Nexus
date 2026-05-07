@@ -15,7 +15,9 @@ Nexus turns multi-source web content into structured, queryable knowledge for do
 ## Snapshot
 
 - `102` OpenAPI paths across source management, crawler control, knowledge graph, intelligence, and report generation
-- YAML-driven source inventory covering policy, technology, universities, events, personnel, and scholar workflows
+- `321` YAML-driven sources across 11 dimensions: policy (national/Beijing/regional), technology, talent, talent_scout, industry, universities, events, personnel, scholars, and paper
+- `32+` custom crawler parsers including top conference paper crawlers (ICLR/ICML/NeurIPS/CVPR/ACL/AAAI), talent scout competition/GitHub sources, and university/scholar/faculty parsers
+- Sources organized in 10 subdirectories under `sources/` for easier management
 - Explicit institution list endpoints for flat list and hierarchy consumers
 - Repeatable OpenAPI generation via `python scripts/generate_openapi.py`
 - Dual runtime support: local PostgreSQL recommended, Supabase-compatible facade retained
@@ -24,6 +26,8 @@ Nexus turns multi-source web content into structured, queryable knowledge for do
 
 The current Nexus workspace includes:
 
+- **Paper Warehouse** (21 sources): AI top conference/journal paper ingestion — ICLR, ICML, NeurIPS, CVPR, ICCV, ACL, EMNLP, ECCV, IJCAI, AAAI, JMLR, JAIR, TMLR — with year-configurable crawling, enrichment profiles (OpenReview/Official HTML/PDF/OpenAlex), and paper metadata schemas
+- **Talent Scout Signals** (28 sources): Competition winner/signal sources (CCF BDCI, Kaggle Grandmaster, ICPC, CTFTime, CISCN, NOI/IOI, Lanqiao, RoboMaster, etc.) and GitHub AI user/repo-contributor sources for candidate discovery
 - Expanded source catalog APIs with facets, keyword search, grouping, health status, and pagination
 - Knowledge APIs for institutions, scholars, projects, events, students, AMiner lookup, and university leadership
 - Explicit institution list contracts for both paginated flat views and hierarchy views
@@ -31,6 +35,8 @@ The current Nexus workspace includes:
 - Clearer OpenAPI output for institutions, dimensions, reports, and LLM tracking
 - RSS detail-image enrichment (`extract_detail_images`) and broader image metadata extraction (including OpenGraph/Twitter card fallbacks)
 - Improved CLI crawl workflow that persists directly to DB and closes Playwright/DB resources explicitly
+- Talent scout candidate metrics support in the base crawler class for targeted counting
+- Source catalog auto-sync on startup into DB source_states table
 - Updated Next.js console with:
   - enhanced source directory and source health visibility
   - knowledge capability overview cards
@@ -121,6 +127,23 @@ npm run lint
 npm run build
 ```
 
+## Source Dimensions
+
+| Dimension | Count | Enabled | Description |
+|-----------|------:|--------:|-------------|
+| `national_policy` | 8 | 8 | National policy and regulation |
+| `beijing_policy` | 16 | 15 | Beijing municipal policy |
+| `regional_policy` | 4 | 4 | Shanghai and Shenzhen policy |
+| `technology` | 34 | 27 | Research and tech frontier |
+| `talent` | 7 | 4 | Talent and recruitment |
+| `talent_scout` | 28 | 0 | Competition/GitHub talent signals (manual export) |
+| `industry` | 10 | 6 | Industry and company trends |
+| `universities` | 84 | 74 | University and institute activity |
+| `events` | 6 | 3 | Conferences and seminars |
+| `personnel` | 54 | 54 | Leadership changes |
+| `scholars` | 49 | 0 | Scholar import configs (disabled) |
+| `paper` | 21 | 0 | Top conference/journal paper warehouse (disabled by default) |
+
 ## Key API Areas
 
 Core operations:
@@ -166,6 +189,7 @@ Generated schema:
 
 ## Notes
 
-- Scholar sources are intentionally present in config but currently disabled by default in this checkout.
+- Paper warehouse and talent scout sources are present but disabled by default — enable manually when connected to the required APIs (OpenReview, GitHub, etc.)
+- Scholar sources are intentionally present in config but currently disabled by default.
 - The backend keeps a PostgreSQL-like query facade so newer modules can run locally while older Supabase-oriented code paths still work.
 - `openapi.json` is generated from the live FastAPI app and should be refreshed whenever routes or schema metadata change.

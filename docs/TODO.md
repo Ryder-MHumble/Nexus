@@ -1,9 +1,20 @@
 # Nexus Roadmap
 
-> Last updated: 2026-04-08
+> Last updated: 2026-05-06
 
 ## Done Recently
 
+- [x] Synchronized the DeanAgent-Backend capabilities into Nexus (May 2026)
+- [x] Added paper warehouse dimension: 21 sources across ICLR/ICML/NeurIPS/CVPR/ICC/VACL/EMNLP/ECCV/IJCAI/AAAI/JMLR/JAIR/TMLR with 10 new crawler parsers
+- [x] Added talent scout dimension: 28 competition/GitHub signal sources with 6 new crawler parsers
+- [x] Reorganized `sources/` into 10 subdirectories (paper/, talent/, policy/, social/, etc.) with `rglob` recursive loading
+- [x] Added `source_file_path` tracking in source configs for subdirectory awareness
+- [x] Added talent scout candidate metrics to base crawler (`_apply_talent_scout_metrics`, `_should_apply_candidate_metrics`)
+- [x] Registered 16 new custom parsers in crawler registry (total 32+)
+- [x] Added paper schemas (`app/schemas/paper.py`) and paper service (`app/services/paper_service.py`)
+- [x] Added publication service, scholar achievement tags, and profile classifier
+- [x] Added source catalog auto-sync on startup
+- [x] Added config fields: `REQUIRE_DB_ON_STARTUP`, `SILICONFLOW_API_*`, `DINGTALK_*`, `OPENROUTER_API_URL`
 - [x] Synchronized the newer crawler branch into Nexus
 - [x] Synced `university_news_auto` parser and `sources/universities-top-tier.yaml` for expanded top-tier university news crawling
 - [x] Synced unified Twitter platform crawling (`sources/twitter.yaml` + `sources/twitter_kol_accounts.yaml`) with YAML cron scheduling
@@ -22,6 +33,13 @@
 - [ ] Add CI coverage for backend tests plus frontend lint/build
 - [ ] Review source configs where `crawl_method` is `unknown` and document the intended routing more clearly
 - [ ] Add targeted regression tests for `university_news_auto` and `twitter_ai_kol_international` source behavior
+
+### Paper Warehouse
+
+- [ ] Add paper API routes (list, search, detail) to complement the paper_service
+- [ ] Add paper enrichment pipeline integration into the daily scheduler
+- [ ] Add paper-to-scholar linkage (match paper authors against scholar profiles)
+- [ ] Add paper warehouse frontend views in the console
 
 ### Knowledge Workflows
 

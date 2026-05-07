@@ -134,6 +134,36 @@ class BaseCrawler(ABC):
             result.duration_seconds = (result.finished_at - result.started_at).total_seconds()
         return result
 
+    def _apply_talent_scout_metrics(
+        self,
+        result: CrawlResult,
+        all_items: list[CrawledItem],
+        filtered_items: list[CrawledItem],
+    ) -> None:
+        """Count only rows with candidate names as talent_scout items."""
+        total_candidates = sum(1 for item in all_items if self._has_talent_candidate(item))
+        filtered_candidates = sum(
+            1 for item in filtered_items if self._has_talent_candidate(item)
+        )
+        result.items_total = total_candidates
+        result.items_new = filtered_candidates
+        result.status = (
+            CrawlStatus.SUCCESS if filtered_candidates else CrawlStatus.NO_NEW_CONTENT
+        )
+
+    def _should_apply_candidate_metrics(self) -> bool:
+        entity_family = str(self.config.get("entity_family") or "").strip().lower()
+        if entity_family == "paper_author":
+            return True
+        return self.config.get("dimension") == "talent_scout"
+
+    @staticmethod
+    def _has_talent_candidate(item: CrawledItem) -> bool:
+        signal = item.extra.get("talent_signal")
+        if not isinstance(signal, dict):
+            return bool(item.title)
+        return bool(str(signal.get("candidate_name") or "").strip())
+
     @abstractmethod
     async def fetch_and_parse(self) -> list[CrawledItem]:
         """Subclasses implement: fetch the source, parse, return items."""

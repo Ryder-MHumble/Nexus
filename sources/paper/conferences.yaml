@@ -1,0 +1,116 @@
+dimension: "paper"
+dimension_name: "论文信源"
+description: "论文会议类作者信号源，用于人才候选论文维度挖掘。"
+
+default_keyword_filter: []
+default_keyword_blacklist: []
+
+paper_defaults: &paper_defaults
+  crawl_method: "static"
+  schedule: "daily"
+  priority: 1
+  is_enabled: false
+  crawler_class: "paper_author_source"
+  entity_family: "paper_author"
+  fallback_mode: "evidence_only"
+  persist_to_db: false
+  request_timeout: 10
+  max_retries: 1
+  request_delay: 0.1
+
+sources:
+  - <<: *paper_defaults
+    id: "openreview_author"
+    name: "OpenReview Author"
+    group: "paper_conferences"
+    url: "https://openreview.net/group?id=ICLR.cc/2026/Conference"
+    capture_mode: "structured"
+    sheet_name: "OpenReview"
+    tracks: ["ICML", "ICLR", "NeurIPS"]
+    requires_auth: false
+    adapter_key: "talent_signal_json"
+    local_results_path: "data/subagent_crawls/papers_2024_2025.json"
+    local_source_id_prefixes: ["openreview_"]
+    max_results: 180
+    seed_urls:
+      - "https://openreview.net/group?id=ICLR.cc/2026/Conference"
+    tags: ["paper", "conference", "openreview"]
+    enrichment:
+      primary_methods: ["openreview_note", "openreview_profile"]
+      fields: ["authors", "affiliations", "author_descriptions", "author_experiences", "profile_flags"]
+      qps:
+        openreview: 0.8
+      notes: "作者画像只在 OpenReview profile 可用时高收益；剩余缺口多为 profile 原始信息缺失。"
+
+  - <<: *paper_defaults
+    id: "acl_anthology_author"
+    name: "ACL Anthology Author"
+    group: "paper_conferences"
+    url: "https://aclanthology.org/"
+    capture_mode: "structured"
+    sheet_name: "ACLAnthology"
+    tracks: ["ACL", "EMNLP", "CoNLL", "SemEval"]
+    requires_auth: false
+    adapter_key: "acl_anthology_events"
+    max_papers: 40
+    max_authors_per_paper: 3
+    seed_urls:
+      - url: "https://aclanthology.org/events/acl-2024/"
+        venue: "ACL"
+        year: 2024
+      - url: "https://aclanthology.org/events/acl-2025/"
+        venue: "ACL"
+        year: 2025
+      - url: "https://aclanthology.org/events/emnlp-2024/"
+        venue: "EMNLP"
+        year: 2024
+      - url: "https://aclanthology.org/events/emnlp-2025/"
+        venue: "EMNLP"
+        year: 2025
+      - url: "https://aclanthology.org/events/naacl-2024/"
+        venue: "NAACL"
+        year: 2024
+      - url: "https://aclanthology.org/events/naacl-2025/"
+        venue: "NAACL"
+        year: 2025
+    tags: ["paper", "conference", "acl"]
+    enrichment:
+      primary_methods: ["acl_anthology_html"]
+      fallback_methods: ["pdf_first_page", "openalex"]
+      fields: ["authors", "abstract", "doi", "affiliations"]
+      qps:
+        html_per_host: 0.5
+        pdf_per_host: 0.15
+      notes: "ACL/EMNLP 页面补基础元数据，机构主要依赖 PDF 首页。"
+
+  - <<: *paper_defaults
+    id: "cvf_openaccess_author"
+    name: "CVF OpenAccess Author"
+    group: "paper_conferences"
+    url: "https://openaccess.thecvf.com/"
+    capture_mode: "structured"
+    sheet_name: "CVFOpenAccess"
+    tracks: ["CVPR", "ICCV", "ECCV"]
+    requires_auth: false
+    adapter_key: "cvf_openaccess"
+    max_papers: 40
+    max_authors_per_paper: 3
+    seed_urls:
+      - url: "https://openaccess.thecvf.com/CVPR2024?day=all"
+        venue: "CVPR"
+        year: 2024
+      - url: "https://openaccess.thecvf.com/CVPR2025?day=all"
+        venue: "CVPR"
+        year: 2025
+      - url: "https://openaccess.thecvf.com/ICCV2025?day=all"
+        venue: "ICCV"
+        year: 2025
+    tags: ["paper", "conference", "cvf"]
+    enrichment:
+      primary_methods: ["cvf_openaccess_html", "openalex"]
+      fallback_methods: ["pdf_first_page", "arxiv_by_id"]
+      fields: ["authors", "abstract", "arxiv_id", "affiliations"]
+      qps:
+        html_per_host: 0.5
+        pdf_per_host: 0.15
+      notes: "CVF OpenAccess 适合补作者/摘要/arXiv；机构缺口用 PDF 首页兜底。"

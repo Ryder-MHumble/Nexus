@@ -189,6 +189,24 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.warning("Database client initialization failed: %s", e)
 
+    # Step 0.5: Sync source catalog metadata into source_states
+    try:
+        from app.services.stores.source_state import sync_source_catalog_from_configs
+        from app.scheduler.manager import load_all_source_configs
+
+        sync_result = await sync_source_catalog_from_configs(
+            source_configs=load_all_source_configs(),
+            mark_missing_unsupported=True,
+        )
+        logger.info(
+            "Source catalog synced: upserted=%d, marked_unsupported=%d, deleted_missing=%d",
+            sync_result.get("upserted", 0),
+            sync_result.get("marked_unsupported", 0),
+            sync_result.get("deleted_missing", 0),
+        )
+    except Exception as e:
+        logger.warning("Source catalog sync failed: %s", e)
+
     # Step 1: Validate dependencies
     startup_issues = await _validate_startup()
 
